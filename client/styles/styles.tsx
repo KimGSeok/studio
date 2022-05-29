@@ -1,4 +1,5 @@
 import { css, Global } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export const globalStyles = (
   <Global
@@ -26,6 +27,15 @@ export const globalStyles = (
     `}
   />
 )
+
+export const button = css`
+  display: block;
+  outline: 0;
+  border: 0;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+`
 
 /* Font Color */
 export const fontWhite = css`

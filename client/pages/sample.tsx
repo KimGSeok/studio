@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import Header from '../components/sample';
+import {
+  fontWhite,
+  button
+} from '../styles/styles';
 
 const Main = styled.div`
   width: 100%;
@@ -17,11 +21,39 @@ const Section1 = styled.section`
 `
 
 const Square_1 = styled.div`
-  width: 45%;
+  ${fontWhite}
+  width: 40%;
   height: calc(100vh - 80px);
   background: rgba(0,0,0, 0.35);
   position: absolute;
   top: 80px;
+`
+
+const IntroTitle = styled.h1`
+  text-align: center;
+  font-size: 2.8rem;
+  padding: 0 20px;
+`
+
+const IntroPointTitle = styled.div`
+  display: inline-block;
+  color: #fef7e5;
+`
+
+const Intro = styled.div`
+  padding: 0 50px;
+  line-height: 1.8rem;
+  font-size: 1.15rem;
+`
+
+const Button = styled.button`
+  ${button}
+  background-color: #fef7e5; // FF7645
+  color: #000;
+  padding: 10px 24px;
+  margin: 10px 0;
+  font-weight: 600;
+  margin-left: auto;
 `
 
 export default function Sample(){
@@ -30,8 +62,21 @@ export default function Sample(){
       <Header />
       <Main>
         <Section1>
+          <Square_1>
+            <IntroTitle>
+              [ Gallery <IntroPointTitle>Maison de SIRI</IntroPointTitle> ]
+            </IntroTitle>
+            <Intro>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum vel ex in auctor. Pellentesque ullamcorper consequat laoreet.<br />
+              Pellentesque varius leo non ipsum mollis, et rhoncus lectus dignissim. Maecenas ullamcorper purus velit. Nullam eu efficitur velit.<br /> 
+              Fusce pellentesque lectus a mi placerat facilisis. In eget turpis sit amet sapien maximus condimentum. <br />
+              Suspendisse hendrerit pellentesque justo, id pellentesque nulla interdum eget. Donec ipsum tortor, condimentum tristique aliquet ac, tincidunt vel ligula.<br />
+              Donec at facilisis nibh, id ultricies lacus. Donec lobortis eget sem rhoncus laoreet. Morbi porta vestibulum lorem, et aliquam odio ornare vel. <br />
+              Sed mauris enim, sodales vel ultricies non, volutpat in ante.
+              <Button>갤러리 더 보기</Button>
+            </Intro>
+          </Square_1>
         </Section1>
-        <Square_1 />
       </Main>
     </>
   )
