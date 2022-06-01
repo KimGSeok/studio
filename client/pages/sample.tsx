@@ -41,7 +41,7 @@ const IntroPointTitle = styled.div`
 `
 
 const Intro = styled.div`
-  padding: 0 50px;
+  padding: 0 60px;
   line-height: 1.8rem;
   font-size: 1.15rem;
 `
@@ -67,12 +67,16 @@ export default function Sample(){
               [ Gallery <IntroPointTitle>Maison de SIRI</IntroPointTitle> ]
             </IntroTitle>
             <Intro>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum vel ex in auctor. Pellentesque ullamcorper consequat laoreet.<br />
-              Pellentesque varius leo non ipsum mollis, et rhoncus lectus dignissim. Maecenas ullamcorper purus velit. Nullam eu efficitur velit.<br /> 
-              Fusce pellentesque lectus a mi placerat facilisis. In eget turpis sit amet sapien maximus condimentum. <br />
-              Suspendisse hendrerit pellentesque justo, id pellentesque nulla interdum eget. Donec ipsum tortor, condimentum tristique aliquet ac, tincidunt vel ligula.<br />
-              Donec at facilisis nibh, id ultricies lacus. Donec lobortis eget sem rhoncus laoreet. Morbi porta vestibulum lorem, et aliquam odio ornare vel. <br />
-              Sed mauris enim, sodales vel ultricies non, volutpat in ante.
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum vel ex in auctor. Pellentesque ullamcorper consequat laoreet.<br />
+                Pellentesque varius leo non ipsum mollis, et rhoncus lectus dignissim. Maecenas ullamcorper purus velit. Nullam eu efficitur velit.<br /> 
+                Fusce pellentesque lectus a mi placerat facilisis. In eget turpis sit amet sapien maximus condimentum. <br />
+              </p>
+              <p>
+                Suspendisse hendrerit pellentesque justo, id pellentesque nulla interdum eget. Donec ipsum tortor, condimentum tristique aliquet ac, tincidunt vel ligula.<br />
+                Donec at facilisis nibh, id ultricies lacus. Donec lobortis eget sem rhoncus laoreet. Morbi porta vestibulum lorem, et aliquam odio ornare vel. <br />
+                Sed mauris enim, sodales vel ultricies non, volutpat in ante.
+              </p>
               <Button>갤러리 더 보기</Button>
             </Intro>
           </Square_1>

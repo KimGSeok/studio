@@ -7,8 +7,9 @@ const Header = styled.header`
   ${fontWhite}
   width: 100%;
   height: 80px;
-  position: fixed;
+  position: relative;
   background: rgba(0,0,0, 0.35);
+  border-bottom: 1px solid #dedede;
   z-index: 2;
 `
 
@@ -21,7 +22,7 @@ const GnbWrap = styled.div`
 const Gnb = styled.div`
   width: 100%;
   height: 100%;
-  padding: 0 15%;
+  padding: 0 8%;
   display: flex;
   align-items: center;
   justify-content: space-between;

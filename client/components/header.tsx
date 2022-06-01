@@ -29,7 +29,6 @@ const Gnb = styled.div`
 `
 
 const Logo = styled.div`
-  font-family: 'Quicksand', sans-serif;
   font-weight: 300;
   font-size: 1.2rem;
   width: auto;

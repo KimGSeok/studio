@@ -4,12 +4,11 @@ import styled from '@emotion/styled';
 export const globalStyles = (
   <Global
     styles={css`
-      @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap);
-      @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Quicksand:wght@400;500&family=Rock+Salt&display=swap);
-
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+      
       *, *:after, *:before{
         box-sizing: border-box;
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: 'Pretendard';
       }
 
       :is(html,body){
