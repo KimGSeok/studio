@@ -8,7 +8,7 @@ const Header = styled.header`
   width: 100%;
   height: 80px;
   position: fixed;
-  border-bottom: 1px solid #dedede;
+  background: rgba(0,0,0, 0.35);
   z-index: 2;
 `
 
