@@ -23,6 +23,19 @@ export const globalStyles = (
         margin: 0;
         padding: 0;
       }
+
+      a{
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .swiper{
+        height: 100vh;
+      }
+
+      .swiper-pagination-bullet-active{
+        --swiper-theme-color: #fff;
+      }
     `}
   />
 )

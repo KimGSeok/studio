@@ -1,14 +1,38 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import {
   fontWhite
 } from '../styles/styles';
 
-const Header = styled.header`
+const Header = () => {
+  return(
+    <HeaderEl>
+      <GnbWrap>
+        <Gnb>
+          <Logo>
+            <Link href="/">Maison de Siri</Link>
+          </Logo>
+          <GnbLists>
+            <GnbList>
+              <Link href="/guide">Guide</Link>
+            </GnbList>
+            <GnbList>Space</GnbList>
+            <GnbList>Schedule</GnbList>
+            <GnbList>Reservation</GnbList>
+            <GnbList>Location</GnbList>
+          </GnbLists>
+        </Gnb>
+      </GnbWrap>
+    </HeaderEl>
+  )
+}
+
+const HeaderEl = styled.header`
   ${fontWhite}
   width: 100%;
   height: 80px;
   position: fixed;
-  background: rgba(0,0,0, 0.35);
+  background: rgba(0,0,0, 0.5);
   z-index: 2;
 `
 
@@ -21,7 +45,7 @@ const GnbWrap = styled.div`
 const Gnb = styled.div`
   width: 100%;
   height: 100%;
-  padding: 0 15%;
+  padding: 0 12%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,30 +71,6 @@ const GnbList = styled.li`
   transition: 0.5s;
   font-weight: 500;
   cursor: pointer;
-
-  &:hover{
-    transform: scale( 1.15 );
-  }
 `
 
-export default function header(){
-  return(
-    <Header>
-      <GnbWrap>
-        <Gnb>
-            <Logo>
-              Maison de SIRI
-            </Logo>
-            <GnbLists>
-              <GnbList>Gallery</GnbList>
-              <GnbList>Room</GnbList>
-              <GnbList>Guide</GnbList>
-              <GnbList>Notice</GnbList>
-              <GnbList>Reservation</GnbList>
-              <GnbList>Contact</GnbList>
-            </GnbLists>
-        </Gnb>
-      </GnbWrap>
-    </Header>
-  )
-}
+export default Header;

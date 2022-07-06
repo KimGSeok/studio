@@ -1,85 +1,135 @@
+import { NextPage } from 'next';
 import Image from 'next/image';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import {
   fontWhite,
   button
 } from '../styles/styles';
+
+const Home:NextPage = () =>{
+  return(
+    <Main>
+      <Square1>
+        <IntroTitle>Maison de Siri</IntroTitle>
+        <Intro>
+          <p>
+            메종 드 시리는 연희동과 서교동에 자리한 단독주택형 렌탈 공간으로, 매거진 에디터와 방송 PD, 광고기획자로 구성된 디자인&아티스트 그룹의 차별화된 감각과 아이디어가 더해진 라이프스타일 컨셉 스튜디오 입니다.
+          </p>
+          <p>
+            영상, 사진, 희화, 스타일링 등에 특화된 소속 크루들과의 협업을 통해 보다 돋보이는 광고, 홍보 컨텐츠 또한 별도 제작 가능합니다.
+          </p>
+          <p>
+            하이엔드 가구와 명품 벽지, 품격 있는 오브제들로 채워진 각각의 공간에서 보다 완성도 높은 컨텐츠를 만들어보세요.
+          </p>
+        </Intro>
+        <Button>갤러리 더 보기</Button>
+      </Square1>
+        <Swiper
+          modules={[Autoplay, Pagination, Navigation]}
+          slidesPerView={1}
+          speed={850}
+          loop={true}
+          pagination={{
+            clickable: true,
+          }}
+          centeredSlides={true}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+        >
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri05_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri13_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri25_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri30_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri34_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <SliderImage
+              src="/images/home/Salon de siri36_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+          </SwiperSlide>
+        </Swiper>
+    </Main>
+  )
+}
 
 const Main = styled.div`
   width: 100%;
   height: auto;
   overflow: hidden;
 `
-
-const Section1 = styled.section`
-  width: 100%;
-  height: 100vh;
-  background: url(/images/home/home_bg_2-1.jpg) no-repeat;
-  background-position: center;
-  background-size: cover;
+const SliderImage = styled(Image)`
 `
-
-const Square_1 = styled.div`
+const Square1 = styled.div`
   ${fontWhite}
-  width: 40%;
+  width: 30%;
+  padding: 20px 0;
   height: calc(100vh - 80px);
-  background: rgba(0,0,0, 0.35);
+  background: rgba(0,0,0, 0.5);
   position: absolute;
   top: 80px;
+  z-index: 2;
 `
-
 const IntroTitle = styled.h1`
   text-align: center;
   font-size: 2.8rem;
   padding: 0 20px;
 `
-
-const IntroPointTitle = styled.div`
-  display: inline-block;
-  color: #fef7e5;
-`
-
 const Intro = styled.div`
-  padding: 0 60px;
-  line-height: 1.8rem;
-  font-size: 1.15rem;
-`
+  padding: 0 40px;
+  line-height: 1.6rem;
+  font-size: 1.05rem;
+  text-align: center;
 
+  p{
+    word-break: keep-all;
+  }
+`
 const Button = styled.button`
   ${button}
-  background-color: #fef7e5; // FF7645
   color: #000;
   padding: 10px 24px;
-  margin: 10px 0;
+  margin: 70px 40px;
   font-weight: 600;
   margin-left: auto;
 `
 
-export default function Sample(){
-  return(
-    <>
-      <Main>
-        <Section1>
-          <Square_1>
-            <IntroTitle>
-              [ Gallery <IntroPointTitle>Maison de SIRI</IntroPointTitle> ]
-            </IntroTitle>
-            <Intro>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum vel ex in auctor. Pellentesque ullamcorper consequat laoreet.<br />
-                Pellentesque varius leo non ipsum mollis, et rhoncus lectus dignissim. Maecenas ullamcorper purus velit. Nullam eu efficitur velit.<br /> 
-                Fusce pellentesque lectus a mi placerat facilisis. In eget turpis sit amet sapien maximus condimentum. <br />
-              </p>
-              <p>
-                Suspendisse hendrerit pellentesque justo, id pellentesque nulla interdum eget. Donec ipsum tortor, condimentum tristique aliquet ac, tincidunt vel ligula.<br />
-                Donec at facilisis nibh, id ultricies lacus. Donec lobortis eget sem rhoncus laoreet. Morbi porta vestibulum lorem, et aliquam odio ornare vel. <br />
-                Sed mauris enim, sodales vel ultricies non, volutpat in ante.
-              </p>
-              <Button>갤러리 더 보기</Button>
-            </Intro>
-          </Square_1>
-        </Section1>
-      </Main>
-    </>
-  )
-}
+export default Home;
