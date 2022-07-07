@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next'
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import {
@@ -72,5 +73,17 @@ const GnbList = styled.li`
   font-weight: 500;
   cursor: pointer;
 `
+
+export const getServerSideProps:GetServerSideProps = async(context) =>{
+  try{
+    return {
+      props: {}
+    }
+  }catch(err){
+    return {
+      props: {}
+    }
+  }
+}
 
 export default Header;

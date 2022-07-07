@@ -16,6 +16,12 @@ export const globalStyles = (
         height: auto;
         margin: 0;
         padding: 0;
+        -ms-overflow-style: none;
+
+        ::-webkit-scrollbar {
+          scroll-behavior: smooth;
+          display: none;
+        }
       }
 
       :is(ul, li){
