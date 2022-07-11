@@ -1,11 +1,23 @@
-import { GetServerSideProps } from 'next'
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useEffect } from 'react';
 import {
   fontWhite
 } from '../styles/styles';
 
 const Header = () => {
+
+  const handleScroll = () =>{
+    console.log(window.pageYOffset);
+  }
+
+  useEffect(()=>{
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  },[])
+
   return(
     <HeaderEl>
       <GnbWrap>
@@ -20,6 +32,7 @@ const Header = () => {
             <GnbList>Space</GnbList>
             <GnbList>Schedule</GnbList>
             <GnbList>Reservation</GnbList>
+            <GnbList>Library</GnbList>
             <GnbList>Location</GnbList>
           </GnbLists>
         </Gnb>
@@ -73,17 +86,5 @@ const GnbList = styled.li`
   font-weight: 500;
   cursor: pointer;
 `
-
-export const getServerSideProps:GetServerSideProps = async(context) =>{
-  try{
-    return {
-      props: {}
-    }
-  }catch(err){
-    return {
-      props: {}
-    }
-  }
-}
 
 export default Header;

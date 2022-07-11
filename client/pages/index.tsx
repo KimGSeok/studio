@@ -95,6 +95,12 @@ const Main = styled.div`
   width: 100%;
   height: auto;
   overflow: hidden;
+
+  @media screen and (max-width: 1366px){
+    width: 200vw;
+    position: relative;
+    left: -50%;
+  }
 `
 const SliderImage = styled(Image)`
 `
@@ -107,6 +113,10 @@ const Square1 = styled.div`
   position: absolute;
   top: 80px;
   z-index: 2;
+
+  @media screen and (max-width: 1366px){
+    display: none;
+  }
 `
 const IntroTitle = styled.h1`
   text-align: center;

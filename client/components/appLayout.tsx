@@ -7,7 +7,7 @@ type AppLayoutProps = {
   children: React.ReactNode;  
 }
 
-export default function appLayout({ children }: AppLayoutProps){
+const appLayout = ({ children }: AppLayoutProps) => {
   return(
     <>
       <Head>
@@ -20,3 +20,5 @@ export default function appLayout({ children }: AppLayoutProps){
     </>
   )
 }
+
+export default appLayout;
