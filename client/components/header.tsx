@@ -1,12 +1,26 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {
   fontWhite
 } from '../styles/styles';
 
+interface Routing{
+  pathname: string;
+}
+
+interface HeaderProps{
+  bgColor: string;
+}
+
 const Header = () => {
+
+  const router = useRouter();
+  const { pathname }: Routing = router;
+
+  console.log(pathname);
 
   const handleScroll = () =>{
     console.log(window.pageYOffset);
@@ -19,7 +33,9 @@ const Header = () => {
   },[])
 
   return(
-    <HeaderEl>
+    <HeaderEl
+      bgColor="red"
+    >
       <GnbWrap>
         <Gnb>
           <Logo>
@@ -41,11 +57,12 @@ const Header = () => {
   )
 }
 
-const HeaderEl = styled.header`
+const HeaderEl = styled('header')<HeaderProps>`
   ${fontWhite}
   width: 100%;
   height: 80px;
   position: fixed;
+  color: ${props => props.bgColor};
   background: rgba(0,0,0, 0.5);
   z-index: 2;
 `
