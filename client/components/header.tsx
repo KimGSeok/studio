@@ -4,7 +4,8 @@ import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {
-  fontWhite
+  Button,
+  FontWhite
 } from '../styles/styles';
 
 interface Routing{
@@ -20,10 +21,10 @@ const Header = () => {
   const router = useRouter();
   const { pathname }: Routing = router;
 
-  console.log(pathname);
 
   const handleScroll = () =>{
-    console.log(window.pageYOffset);
+    
+    // console.log(window.pageYOffset);
   }
 
   useEffect(()=>{
@@ -34,7 +35,8 @@ const Header = () => {
 
   return(
     <HeaderEl
-      bgColor="red"
+      bgColor={pathname === '/' ? 'rgba(0,0,0, 0.5)' : 'rgba(247, 232, 213, 1)'}
+      color={pathname === '/' ? '#fff' : '#000'}
     >
       <GnbWrap>
         <Gnb>
@@ -45,11 +47,22 @@ const Header = () => {
             <GnbList>
               <Link href="/guide">Guide</Link>
             </GnbList>
-            <GnbList>Space</GnbList>
+            <GnbList>
+              Space
+              <LnbLists>
+                <LnbList>
+                  <Link href="/space/yeonhui">연희점</Link>
+                </LnbList>
+                <LnbList>
+                  <Link href="/space/seogyo">서교점</Link>
+                </LnbList>
+              </LnbLists>
+            </GnbList>
             <GnbList>Schedule</GnbList>
             <GnbList>Reservation</GnbList>
             <GnbList>Library</GnbList>
             <GnbList>Location</GnbList>
+            <GnbList>로그인</GnbList>
           </GnbLists>
         </Gnb>
       </GnbWrap>
@@ -58,21 +71,19 @@ const Header = () => {
 }
 
 const HeaderEl = styled('header')<HeaderProps>`
-  ${fontWhite}
+  ${FontWhite}
   width: 100%;
   height: 80px;
   position: fixed;
-  color: ${props => props.bgColor};
-  background: rgba(0,0,0, 0.5);
+  color: ${props => props.color};
+  background: ${props => props.bgColor};
   z-index: 2;
 `
-
 const GnbWrap = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 auto;
 `
-
 const Gnb = styled.div`
   width: 100%;
   height: 100%;
@@ -82,26 +93,44 @@ const Gnb = styled.div`
   justify-content: space-between;
   font-size: 1.15rem;
 `
-
 const Logo = styled.div`
-  font-weight: 300;
-  font-size: 1.2rem;
   width: auto;
+  font-weight: 500;
+  font-size: 1.2rem;
+  transition: 0.2s;
 `
-
 const GnbLists = styled.ul`
+  height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 `
-
-const GnbList = styled.li`
+const LnbLists = styled.ul`
   width: 100px;
-  padding: 5px 0;
-  text-align: center;
-  margin: 0 16px;
-  transition: 0.5s;
-  font-weight: 500;
+  display: block;
+  position: absolute;
+`
+const LnbList = styled.li`
+  line-height: 56px;
+  border: 1px solid #e6e6e6;
+  color: #000;
+  display: none;
+  background-color: #fff;
+  border-top: 0;
   cursor: pointer;
 `
+const GnbList = styled.li`
+  width: 100px;
+  line-height: 80px;
+  text-align: center;
+  margin: 0 16px;
+  transition: 0.2s;
+  font-weight: 500;
 
+  &:hover{
+    ${LnbList}{
+      display: block;
+    }
+  }
+`
 export default Header;

@@ -45,7 +45,7 @@ export const globalStyles = (
   />
 )
 
-export const button = css`
+export const Button = css`
   display: block;
   outline: 0;
   border: 0;
@@ -55,10 +55,10 @@ export const button = css`
 `
 
 /* Font Color */
-export const fontWhite = css`
+export const FontWhite = css`
   color: #FFFFFF;
 `
 
-export const fontBlack = css`
+export const FontBlack = css`
   color: #333333;
 `

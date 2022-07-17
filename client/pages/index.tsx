@@ -8,8 +8,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import {
-  fontWhite,
-  button
+  Button,
+  FontWhite
 } from '../styles/styles';
 
 const Home:NextPage = () =>{
@@ -28,7 +28,7 @@ const Home:NextPage = () =>{
             하이엔드 가구와 명품 벽지, 품격 있는 오브제들로 채워진 각각의 공간에서 보다 완성도 높은 컨텐츠를 만들어보세요.
           </p>
         </Intro>
-        <Button>갤러리 더 보기</Button>
+        <ButtonEl>갤러리 더 보기</ButtonEl>
       </Square1>
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
@@ -105,7 +105,7 @@ const Main = styled.div`
 const SliderImage = styled(Image)`
 `
 const Square1 = styled.div`
-  ${fontWhite}
+  ${FontWhite}
   width: 30%;
   padding: 20px 0;
   height: calc(100vh - 80px);
@@ -133,8 +133,8 @@ const Intro = styled.div`
     word-break: keep-all;
   }
 `
-const Button = styled.button`
-  ${button}
+const ButtonEl = styled.button`
+  ${Button}
   color: #000;
   padding: 10px 24px;
   margin: 70px 40px;
