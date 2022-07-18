@@ -62,7 +62,7 @@ const Header = () => {
             <GnbList>Reservation</GnbList>
             <GnbList>Library</GnbList>
             <GnbList>Location</GnbList>
-            <GnbList>로그인</GnbList>
+            {/* <GnbList>로그인</GnbList> */}
           </GnbLists>
         </Gnb>
       </GnbWrap>
