@@ -13,8 +13,6 @@ const Yeonhui:NextPage = () =>{
   const TabInfo = [ '1F', '2F', '3F', 'Garden' ];
   const [ checkTabList, setCheckTabList ] = useState(TabInfo[0]);
 
-  // , '/imags/space/yeonhui/Salon de siri36_L res.jpg'
-
   return(
     <Main>
       <PageIntroWrap>

@@ -58,10 +58,32 @@ const Header = () => {
                 </LnbList>
               </LnbLists>
             </GnbList>
-            <GnbList>Schedule</GnbList>
+            <GnbList>
+              Schedule
+              <LnbLists>
+                <LnbList>
+                  <Link href="/schedule/yeonhui">연희점</Link>
+                </LnbList>
+                <LnbList>
+                  <Link href="/schedule/seogyo">서교점</Link>
+                </LnbList>
+              </LnbLists>
+            </GnbList>
             <GnbList>Reservation</GnbList>
-            <GnbList>Library</GnbList>
-            <GnbList>Location</GnbList>
+            <GnbList>
+              Library
+              <LnbLists>
+                <LnbList>
+                  <Link href="/library/yeonhui">연희점</Link>
+                </LnbList>
+                <LnbList>
+                  <Link href="/library/seogyo">서교점</Link>
+                </LnbList>
+              </LnbLists>
+            </GnbList>
+            <GnbList>
+              <Link href="/location">Location</Link>
+            </GnbList>
             {/* <GnbList>로그인</GnbList> */}
           </GnbLists>
         </Gnb>

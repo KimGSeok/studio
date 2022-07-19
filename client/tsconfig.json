@@ -16,6 +16,11 @@
     "incremental": true,
     "types": ["react", "@emotion/react/types/css-prop"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+     "**/*.ts",
+     "**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }

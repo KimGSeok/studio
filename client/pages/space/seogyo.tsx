@@ -30,7 +30,7 @@ const PageTitle = styled.div`
 const PageContent = styled.div(
   {
     margin: '16px 0 16px 0',
-    padding: '16px 4px',
+    padding: '16px 8px',
     fontSize: '1.2rem',
     border: '1px solid #e6e6e6',
     borderRadius: '6px'
