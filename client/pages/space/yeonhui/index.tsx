@@ -311,6 +311,38 @@ const Yeonhui:NextPage = () =>{
               </ContentImageWrap>
             </> : ''
           }
+          {/* 3층 */
+            checkTabList === 'Garden' ? 
+            <>
+              <ContentTitle>Terrace</ContentTitle>
+              <ContentImageWrap>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3F Terrace/Salon de siri19_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3F Terrace/Salon de siri20_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3F Terrace/Salon de siri18_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+              </ContentImageWrap>
+            </> : ''
+          }
         </ContentWrap>
       </PageIntroWrap>
     </Main>

@@ -111,7 +111,8 @@ const LnbLists = styled.ul`
   position: absolute;
 `
 const LnbList = styled.li`
-  line-height: 56px;
+  font-size: 1.1rem;
+  line-height: 48px;
   border: 1px solid #e6e6e6;
   color: #000;
   display: none;

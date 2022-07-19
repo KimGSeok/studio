@@ -9,7 +9,9 @@ const Yeonhui:NextPage = () =>{
     <Main>
       <PageIntroWrap>
         <PageTitle>서교점</PageTitle>
-        2022년 7월 말 오픈 준비중입니다.
+        <PageContent>
+          2022년 7월 말 오픈 준비중입니다.
+        </PageContent>
       </PageIntroWrap>
     </Main>
   )
@@ -25,5 +27,13 @@ const PageTitle = styled.div`
   font-size: 1.6rem;
   font-weight: bold;
 `
-
+const PageContent = styled.div(
+  {
+    margin: '16px 0 16px 0',
+    padding: '16px 4px',
+    fontSize: '1.2rem',
+    border: '1px solid #e6e6e6',
+    borderRadius: '6px'
+  }
+)
 export default Yeonhui;
