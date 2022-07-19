@@ -131,30 +131,30 @@ const Yeonhui:NextPage = () =>{
               <ContentImageWrap
                 width={'calc(33%) !important'}
               >
-                <FirstImageArea width={'38%'}>
+                <ImageArea width={'38%'}>
                   <ContentImage
                     src='/images/space/yeonhui/2 Floor/Salon de siri29_L res.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
                   />
-                </FirstImageArea>
-                <SecondImageArea width={'38%'}>
+                </ImageArea>
+                <ImageArea width={'38%'}>
                   <ContentImage
                     src='/images/space/yeonhui/2 Floor/Salon de siri30_L res.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
                   />
-                </SecondImageArea>
-                <ThirdImageArea width={'calc(24% - 10px)'}>
+                </ImageArea>
+                <ImageArea width={'calc(24% - 10px)'}>
                   <ContentImage
                     src='/images/space/yeonhui/2 Floor/Salon de siri31_L res.jpg'
                     width={4}
                     height={4.9}
                     layout={'responsive'}
                   />
-                </ThirdImageArea>
+                </ImageArea>
               </ContentImageWrap>
               <ContentTitle>BathRoom</ContentTitle>
               <ContentImageWrap>
@@ -193,81 +193,121 @@ const Yeonhui:NextPage = () =>{
               </ContentImageWrap>
               <ContentTitle>Central Space</ContentTitle>
               <ContentImageWrap>
-                <FirstImageArea width={'60%'}>
+                <ImageArea width={'60%'}>
                   <ContentImage
                     src='/images/space/yeonhui/3 Floor/Salon de siri21_L res.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
                   />
-                </FirstImageArea>
-                <SecondImageArea width={'calc(40% - 5px)'}>
+                </ImageArea>
+                <ImageArea width={'calc(40% - 5px)'}>
                   <ContentImage
                     src='/images/space/yeonhui/3 Floor/Salon de siri03_L res.jpg'
                     width={16}
                     height={18.15}
                     layout={'responsive'}
                   />
-                </SecondImageArea>
+                </ImageArea>
               </ContentImageWrap>
               <ContentTitle>Room A</ContentTitle>
               <ContentImageWrap>
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/Salon de siri27_L res.jpg'
-                  width={16}
-                  height={12}
-                  layout={'responsive'}
-                />
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/Salon de siri28_L res.jpg'
-                  width={16}
-                  height={12}
-                  layout={'responsive'}
-                />
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri06_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri06_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri10_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'33%'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri06_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'33%'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri09_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
               </ContentImageWrap>
               <ContentTitle>Room B</ContentTitle>
               <ContentImageWrap
                 width={'calc(33%) !important'}
               >
-                <FirstImageArea width={'38%'}>
+                <ImageArea width={'38%'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/Salon de siri29_L res.jpg'
+                    src='/images/space/yeonhui/3 Floor/Salon de siri13_L res.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
                   />
-                </FirstImageArea>
-                <SecondImageArea width={'38%'}>
+                </ImageArea>
+                <ImageArea width={'38%'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/Salon de siri30_L res.jpg'
+                    src='/images/space/yeonhui/3 Floor/Salon de siri12_L res.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
                   />
-                </SecondImageArea>
-                <ThirdImageArea width={'calc(24% - 10px)'}>
+                </ImageArea>
+                <ImageArea width={'calc(24% - 10px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/Salon de siri31_L res.jpg'
+                    src='/images/space/yeonhui/3 Floor/Salon de siri14_L res.jpg'
                     width={4}
                     height={4.9}
                     layout={'responsive'}
                   />
-                </ThirdImageArea>
+                </ImageArea>
               </ContentImageWrap>
-              <ContentTitle>BathRoom</ContentTitle>
+              <ContentTitle>Room C</ContentTitle>
               <ContentImageWrap>
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0215(저해상).jpg'
-                  width={16}
-                  height={14}
-                  layout={'responsive'}
-                />
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0219(저해상).jpg'
-                  width={16}
-                  height={14}
-                  layout={'responsive'}
-                />
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri15_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri16_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri17_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
               </ContentImageWrap>
             </> : ''
           }
@@ -337,19 +377,7 @@ const ContentImageWrap = styled.div<IImageProps>(
     }
   })
 )
-const FirstImageArea = styled.div<IImageProps>(
-  props => ({
-    width: props.width,
-    display: 'inline-block'
-  })
-)
-const SecondImageArea = styled.div<IImageProps>(
-  props => ({
-    width: props.width,
-    display: 'inline-block'
-  })
-)
-const ThirdImageArea = styled.div<IImageProps>(
+const ImageArea = styled.div<IImageProps>(
   props => ({
     width: props.width,
     display: 'inline-block'
