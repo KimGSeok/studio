@@ -12,8 +12,8 @@ const TapYeonhui = () =>{
       </PageTitle>
       <ParkingInfo>1팀 당 1대 주차 가능하며, 초과 시 사전에 미리 상담 부탁드립니다.</ParkingInfo>
       <Map
-        latitude={1}
-        longitude={1}
+        latitude={37.57202689671381}
+        longitude={126.93041975183665}
       />
     </ComponentWrap>
   )
