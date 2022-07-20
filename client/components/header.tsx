@@ -69,7 +69,9 @@ const Header = () => {
                 </LnbList>
               </LnbLists>
             </GnbList>
-            <GnbList>Reservation</GnbList>
+            <GnbList>
+              <Link href="/reservation">Reservation</Link>
+            </GnbList>
             <GnbList>
               Library
               <LnbLists>
