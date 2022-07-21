@@ -1,0 +1,16 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/app.ts",
+    "build": "tsc -p .",
+    "dev": "nodemon --watch \"dist/**/*.ts\" --exec \"ts-node\" dist/app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

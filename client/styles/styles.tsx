@@ -29,6 +29,10 @@ export const globalStyles = (
         padding: 0;
       }
 
+      select{
+        outline: 0;
+      }
+
       a{
         text-decoration: none;
         color: inherit;

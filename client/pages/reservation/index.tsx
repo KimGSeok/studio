@@ -1,5 +1,9 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import axios from 'axios';
+
+const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 
 const Reservation:NextPage = () =>{
   return(
@@ -29,14 +33,78 @@ const Reservation:NextPage = () =>{
           </ReservationThead>
           <ReservationTbody>
             <ReservationTrow>
+              <ReservationTData width={'6%'}>1</ReservationTData>
+              <ReservationTData width={'60%'} css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData width={'10%'}>1</ReservationTData>
+              <ReservationTData width={'10%'}>1</ReservationTData>
+              <ReservationTData width={'14%'}>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>2</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
               <ReservationTData>1</ReservationTData>
               <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>3</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>4</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>5</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>6</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>7</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>8</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>9</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+              <ReservationTData>1</ReservationTData>
+            </ReservationTrow>
+            <ReservationTrow>
+              <ReservationTData>10</ReservationTData>
+              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
               <ReservationTData>1</ReservationTData>
               <ReservationTData>1</ReservationTData>
               <ReservationTData>1</ReservationTData>
             </ReservationTrow>
           </ReservationTbody>
         </ReservationTable>
+        <>페이징</>
       </PageContentWrap>
     </Main>
   )
@@ -44,7 +112,8 @@ const Reservation:NextPage = () =>{
 
 const Main = styled.div(
   {
-    padding: '80px 12% 40px 12%'
+    padding: '80px 12% 40px 12%',
+    height: 'calc(100vh - 220px)'
   }
 )
 const PageIntroWrap = styled.div(
@@ -83,26 +152,30 @@ const SearchCondition = styled.select(
 )
 const SearchInput = styled.input(
   {
-    minWidth: '240px',
+    minWidth: '320px',
     minHeight: '32px',
     padding: '0 8px',
     border: '1px solid #b3b3b3',
     borderLeft: '0',
     borderRight: '0',
-    fontSize: '1rem'
-  }
+    fontSize: '1rem',
+    ':focus, :active':{
+      outline: '0',
+    }
+  },
 )
 const SearchBtn = styled.div(
   {
     minHeight: '32px',
-    border: '1px solid #b3b3b3',
+    border: '1px solid #b8b8b8',
     padding: '5px 12px',
-    fontSize: '1rem'
+    fontSize: '1rem',
+    cursor: 'pointer'
   }
 )
 const PageContentWrap = styled.div(
   {
-
+    margin: '24px 0 0 0'
   }
 )
 const ReservationTable = styled.table(
@@ -114,7 +187,7 @@ const ReservationTable = styled.table(
 const ReservationThead = styled.thead(
   {
     borderTop: '1px solid #e6e6e6',
-    borderBottom: '1px solid #e6e6e6'
+    borderBottom: '1px solid #e6e6e6',
   }
 )
 const ReservationTbody = styled.tbody(
@@ -124,17 +197,47 @@ const ReservationTbody = styled.tbody(
 )
 const ReservationTrow = styled.tr(
   {
-    
+    borderBottom: '1px solid #e6e6e6',
   }
 )
 const ReservationTheader = styled.th(
   {
-    
+    padding: '8px 0',
+    fontSize: '1.1rem'
   }
 )
 const ReservationTData = styled.td(
   {
-    
-  }
+    textAlign: 'center',
+    padding: '12px 8px'
+  },
+  props => ({
+    width: props.width
+  })
 )
+
+export const getServerSideProps:GetServerSideProps = async (context) =>{
+
+  try{
+
+    const url = `${API_URL}/reservation`;
+    const result = await axios.get(url);
+
+    console.log(result.data);
+
+    return {
+      props: {
+        data: result.data
+      }
+    }
+  }catch(err){
+    console.log("예약페이지 에러발생");
+    return{
+      props: {
+        result: err
+      }
+    }
+  }
+}
+
 export default Reservation;
