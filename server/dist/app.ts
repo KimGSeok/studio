@@ -7,7 +7,7 @@ app.get('/', (req: Request, res: Response, next:NextFunction) => {
   res.send('홈페이지!');
 });
 
-app.use(`${fixPath}/reservation`, require('../dist/reservation')); // 예약하기
+app.use(`${fixPath}/reservation`, require('./reservation')); // 예약하기
 
 app.listen('3001',() => {
   console.log(`

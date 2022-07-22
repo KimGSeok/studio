@@ -2,10 +2,20 @@ import { GetServerSideProps, NextPage } from "next";
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import axios from 'axios';
+import Router from 'next/router';
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 
 const Reservation:NextPage = () =>{
+
+   /* 상세 페이지 */
+   const goDetail = (id: number) =>{
+    console.log(id);
+    Router.push({
+      pathname: `/reservation/${id}`,
+    })
+  }
+
   return(
     <Main>
       <PageIntroWrap>
@@ -20,19 +30,20 @@ const Reservation:NextPage = () =>{
           <SearchBtn>검색하기</SearchBtn>
         </SearchWrap>
       </PageIntroWrap>
+      <WriteBtn>글쓰기</WriteBtn>
       <PageContentWrap>
         <ReservationTable>
           <ReservationThead>
-            <ReservationTrow>
+            <ReservationThrow>
               <ReservationTheader>순번</ReservationTheader>
               <ReservationTheader>제목</ReservationTheader>
               <ReservationTheader>작성자</ReservationTheader>
               <ReservationTheader>조회수</ReservationTheader>
               <ReservationTheader>작성날짜</ReservationTheader>
-            </ReservationTrow>
+            </ReservationThrow>
           </ReservationThead>
           <ReservationTbody>
-            <ReservationTrow>
+            <ReservationTrow onClick={()=>goDetail(1)}>
               <ReservationTData width={'6%'}>1</ReservationTData>
               <ReservationTData width={'60%'} css={css`text-align: left;`}>3</ReservationTData>
               <ReservationTData width={'10%'}>1</ReservationTData>
@@ -173,9 +184,24 @@ const SearchBtn = styled.div(
     cursor: 'pointer'
   }
 )
+const WriteBtn = styled.div(
+  {
+    marginLeft: 'auto',
+    display: 'block',
+    minWidth: '80px',
+    maxWidth: '100px',
+    minHeight: '32px',
+    border: '1px solid #b8b8b8',
+    padding: '6px 12px',
+    fontSize: '1rem',
+    textAlign: 'center',
+    borderRadius: '4px',
+    cursor: 'pointer'
+  }
+)
 const PageContentWrap = styled.div(
   {
-    margin: '24px 0 0 0'
+    margin: '12px 0 0 0'
   }
 )
 const ReservationTable = styled.table(
@@ -190,14 +216,22 @@ const ReservationThead = styled.thead(
     borderBottom: '1px solid #e6e6e6',
   }
 )
+const ReservationThrow = styled.tr(
+  {
+    borderBottom: '1px solid #e6e6e6',
+  }
+)
 const ReservationTbody = styled.tbody(
   {
-    
   }
 )
 const ReservationTrow = styled.tr(
   {
     borderBottom: '1px solid #e6e6e6',
+    ':hover':{
+      backgroundColor: '#f4f8f8',
+      cursor: 'pointer'
+    }
   }
 )
 const ReservationTheader = styled.th(
