@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 /* 예약하기 조회 페이지 */
 const getReservationList = (req: Request, res: Response, next: NextFunction) =>{
   try{
+
     res.json({
       result: '헬로우1'
     })
@@ -18,6 +19,12 @@ const getReservationList = (req: Request, res: Response, next: NextFunction) =>{
 /* 예약 상세정보 페이지 */
 const getReservationDetailInfo = (req: Request, res: Response, next: NextFunction) =>{
   try{
+
+    // Request
+    const { id } = req.params;
+
+    console.log(id);
+    
     res.json({
       result: '헬로우2'
     })
