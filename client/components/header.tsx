@@ -101,7 +101,7 @@ const HeaderEl = styled('header')<HeaderProps>`
   position: fixed;
   color: ${props => props.color};
   background: ${props => props.bgColor};
-  z-index: 2;
+  z-index: 99;
 `
 const GnbWrap = styled.div`
   width: 100%;

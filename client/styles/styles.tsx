@@ -45,6 +45,10 @@ export const globalStyles = (
       .swiper-pagination-bullet-active{
         --swiper-theme-color: #fff;
       }
+
+      .sun-editor .se-wrapper{
+        height: 60vh;
+      }
     `}
   />
 )
