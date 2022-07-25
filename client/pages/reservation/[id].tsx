@@ -1,4 +1,5 @@
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import Router from "next/router";
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,11 +8,13 @@ import dynamic from "next/dynamic";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { useState } from "react";
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 interface FProps{
   title: string;
   name: string;
   password: string;
+  passwordConfirm: string;
 }
 
 interface EProps{
@@ -48,12 +51,11 @@ const DetailReservation:NextPage = () =>{
   const formValidation = yup.object().shape({
     name: yup.string()
       .required('성명을 입력해주세요.'),
-    // password: yup.string()
-    //   .required('· 비밀번호를 입력해주세요.')
-    //   .matches(passwordRegex, '· 영문, 숫자, 특수문자를 한가지씩 조합하여 8~16자 내외로 입력해주세요.'),
-    // passwordConfirm: yup.string()
-    //   .required('· 비밀번호를 다시 입력해주세요.')
-    //   .oneOf([yup.ref('password')], '· 비밀번호가 일치하지 않아요.'),
+    password: yup.string()
+      .required('비밀번호를 입력해주세요.'),
+    passwordConfirm: yup.string()
+      .required('비밀번호를 다시 입력해주세요.')
+      .oneOf([yup.ref('password')], '비밀번호가 일치하지 않아요.'),
   })
   
    /* useForm Destructuring */
@@ -62,8 +64,28 @@ const DetailReservation:NextPage = () =>{
   })
 
   /* Form Submit */
-  const onSubmit = (data:any) => {
-    console.log(data);
+  const onSubmit = async(formData:any) => {
+
+    const confirm = window.confirm('예약을 진행하시겠습니까?');
+    if(confirm){
+
+      // Set Data
+      formData.title = '예약합니다';
+      formData.content = content;
+
+      const { result } = (await axios.post(`${API_URL}/reservation`, formData)).data;
+      if(result.affectedRows > 0) {
+        alert('예약이 완료되었습니다.');
+        Router.push(
+          '/reservation/reservation'
+        )
+      }else{
+        alert('예약에 실패하였습니다.\n관리자에게 문의해주세요.');
+        Router.push(
+          '/reservation/reservation'
+        )
+      }
+    }
   }
 
   return(
@@ -72,13 +94,13 @@ const DetailReservation:NextPage = () =>{
         <PageIntro>정보를 양식에 맞추어 입력하시고, 예약을 진행해주세요!</PageIntro>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormRow>
-            <FormHead>제목</FormHead>
+            <FormHead>제목<FormSign> *</FormSign></FormHead>
             <FormValidationData>
               <FormInput value={"예약합니다"} readOnly/>
             </FormValidationData>
           </FormRow>
           <FormRow>
-            <FormHead>성명</FormHead>
+            <FormHead>성명<FormSign> *</FormSign></FormHead>
             <FormValidationData>
               <FormInput
                 {...register("name")}
@@ -86,31 +108,44 @@ const DetailReservation:NextPage = () =>{
                 name="name"
                 placeholder={'예약자의 성명을 입력해주세요.'}
               />
-              {errors?.name && <FormErrorMessage><FormErrorMessageSign>*</FormErrorMessageSign> {errors.name.message}</FormErrorMessage>}
+              {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
             </FormValidationData>
           </FormRow>
           <FormRow>
-            <FormHead>비밀번호</FormHead>
+            <FormHead>비밀번호<FormSign> *</FormSign></FormHead>
             <FormValidationData>
               <FormInput
                 {...register("password")}
                 type="password"
                 name="password"
-                placeholder={'비밀번호를 입력해주세요.'}/>
+                placeholder={'비밀번호를 입력해주세요.'}
+              />
+              {errors?.password && <FormErrorMessage><FormSign>*</FormSign> {errors.password.message}</FormErrorMessage>}
             </FormValidationData>
           </FormRow>
           <FormRow>
-            <FormHead>비밀번호 확인</FormHead>
+            <FormHead>비밀번호 확인<FormSign> *</FormSign></FormHead>
             <FormValidationData>
-              <FormInput placeholder={'비밀번호 다시 입력해주세요.'}/>
+              <FormInput
+                {...register('passwordConfirm')}
+                type="password"
+                name="passwordConfirm"
+                placeholder='비밀번호를 다시 입력해주세요.'
+                autoComplete='off'
+              />
+              {errors?.passwordConfirm && <FormErrorMessage><FormSign>*</FormSign> {errors.passwordConfirm.message}</FormErrorMessage>}
             </FormValidationData>
           </FormRow>
           <FormRow>
-            <FormHead height={'auto'}>내용</FormHead>
+            <FormHead height={'auto'}>내용<FormSign> *</FormSign></FormHead>
             <FormEditor>
               <SunEditor
                 name="content"
+                lang={"ko"}
                 defaultValue={content}
+                onChange={(content) => {
+                  setContent(content)
+                }}
                 setOptions={{
                   height: '60vh',
                   buttonList: [
@@ -161,13 +196,14 @@ const FormRow = styled.div(
   {
     width: '100%',
     display: 'flex',
-    margin: '0 0 12px 0'
+    margin: '0 0 8px 0'
   }
 )
-const FormErrorMessageSign = styled.span(
+const FormSign = styled.span(
   {
     position: 'relative',
-    top: '2px'
+    top: '2px',
+    color: 'red'
   }
 )
 const FormErrorMessage = styled.div(

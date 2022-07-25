@@ -4,9 +4,14 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import Router from 'next/router';
 
-const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
+interface RProps{
 
-const Reservation:NextPage = () =>{
+}
+
+const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
+const Reservation:NextPage = ({ result }: any) =>{
+
+  const reservationList = result;
 
    /* 상세 페이지 */
    const goDetail = (id: number) =>{
@@ -50,6 +55,15 @@ const Reservation:NextPage = () =>{
               <ReservationTData width={'10%'}>1</ReservationTData>
               <ReservationTData width={'14%'}>1</ReservationTData>
             </ReservationTrow>
+            {
+              reservationList.result.map((value ) => {
+                return(
+                  <>
+                    {value}
+                  </>
+                )
+              })
+            }
             <ReservationTrow>
               <ReservationTData>2</ReservationTData>
               <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
@@ -258,10 +272,12 @@ export const getServerSideProps: GetServerSideProps = async () =>{
     const result = await axios.get(url);
 
     console.log(result);
+    console.log(result.data);
+    console.log(result.data.result);
 
     return {
       props: {
-        data: result.data
+        result: result.data
       }
     }
   }catch(err){

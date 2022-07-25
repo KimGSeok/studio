@@ -1,7 +1,17 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from "cors";
+require('dotenv').config();
 
 const app = express();
 const fixPath = '/server';
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors({
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  credentials: true
+}));
 
 app.get('/', (req: Request, res: Response, next:NextFunction) => {
   res.send('홈페이지!');

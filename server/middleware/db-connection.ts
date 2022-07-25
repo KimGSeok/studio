@@ -1,16 +1,50 @@
 const mysql = require('mysql');
-const dbConfig = require('../config/db.ts');
+import { cafe24DB } from '../config/db';
 
 const connection = mysql.createConnection({
-  host: dbConfig.HOST,
-  user: dbConfig.USER,
-  password: dbConfig.PASSWORD,
-  database: dbConfig.DB
+  host: cafe24DB.HOST,
+  user: cafe24DB.USER,
+  password: cafe24DB.PASSWORD,
+  database: cafe24DB.DB,
+  multipleStatements: true,
+  insecureAuth: true,
+  typeCast: function (field: any, next: any) {
+    if (field.type === 'VAR_STRING') {
+        return field.string();
+    }
+    return next();
+  }
 })
 
-connection.connect(error=>{
-  if(error) throw error;
-  console.log("Successfully connected to the database. ");
-})
+const execute = (query: string)=>{
+  return new Promise((resolve,reject)=>{
+    connection.query(query, function (err: any, rows: any){
+      if(err){
+        reject(err);
+      }
+      else {
+        resolve(rows);
+      }
+    })
+  })
+}
 
-module.exports = connection;
+const executeForInput = (query: string, value: string|number)=>{
+  return new Promise((resolve,reject)=>{
+    connection.query(query, value, function (err: any, rows: any){
+      if(err){
+        console.log(err);
+        reject(err);
+      }
+      else {
+        resolve(rows);
+      }
+    })
+  })
+}
+
+module.exports = {
+  connection,
+  execute,
+  executeForInput
+};

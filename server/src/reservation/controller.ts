@@ -1,11 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
+import { hash, cryptCompareSync } from '../../module/crypt';
+const connect = require('../../middleware/db-connection');
+const reservationQuery = require('./query');
+
+interface BProps {
+  title: string;
+  name: string;
+  password: string;
+  passwordConfirm: string;
+  content: string;
+  salt: string;
+}
 
 /* 예약하기 조회 페이지 */
-const getReservationList = (req: Request, res: Response, next: NextFunction) =>{
+const getReservationList = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
+    const getReservationListQuery = reservationQuery.getReservationList();
+    const result = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
+
+    console.log(result);
+
     res.json({
-      result: '헬로우1'
+      result: result
     })
   }catch(err){
     console.log(err);
@@ -38,13 +55,18 @@ const getReservationDetailInfo = (req: Request, res: Response, next: NextFunctio
 }
 
 /* 예약하기 */
-const doReservation = (req: Request, res: Response, next: NextFunction) =>{
+const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
-    const {} = req.body;
+    // Parameter
+    const { title, name, password, content }: BProps = req.body;
+    const { salt, hashPassword } = await hash(password);
+
+    const doReservationQuery = reservationQuery.doReservation(title, name, hashPassword, content, salt);
+    const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
     res.json({
-      result: '헬로우3'
+      result: result
     })
   }catch(err){
     console.log(err);
