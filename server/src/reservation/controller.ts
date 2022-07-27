@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { hash, cryptCompareSync } from '../../module/crypt';
+import { pagination } from '../../module/paging';
 const connect = require('../../middleware/db-connection');
 const reservationQuery = require('./query');
 
@@ -16,17 +17,51 @@ interface BProps {
 const getReservationList = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
-    const getReservationListQuery = reservationQuery.getReservationList();
+    console.log("req.query :", req.query);
+
+    // Parameter
+    let page = req.query.page === undefined ? 1 : parseInt(req.query.page as string);
+    if(page < 1) page = 1;
+    const pageSize = 10;
+    const begin = (page - 1) * pageSize;
+    const category = req.query.category ? req.query.category : 'all'; // 검색 카테고리
+    const keyword = req.query.keyword ? `%${req.query.keyword}%` : '%%'; // 검색 키워드
+
+    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, begin, pageSize);
     const result = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
 
-    console.log(result);
+    // 페이징
+    const paging = pagination(page, result[1][0].rowCount, pageSize);
 
-    res.json({
-      result: result
+    res.send({
+      result: result[0],
+      paging: paging
     })
   }catch(err){
     console.log(err);
     console.log('예약페이지 조회중 에러발생');
+    return({
+      err: err
+    })
+  }
+}
+
+/* 예약 상세정보 비밀번호 검증 */
+const checkReservationPassword = (req:Request, res: Response, next: NextFunction) =>{
+  try{
+
+    // Request
+    const { password } = req.query;
+
+    console.log(password);
+
+    res.send({
+      result: '22'
+    })
+
+  }catch(err){
+    console.log(err);
+    console.log('예약 상세정보 비밀번호 검증중 에러발생');
     return({
       err: err
     })
@@ -79,6 +114,7 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
 
 module.exports = {
   getReservationList,
+  checkReservationPassword,
   getReservationDetailInfo,
-  doReservation
+  doReservation,
 }

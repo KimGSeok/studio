@@ -1,24 +1,83 @@
-import { GetServerSideProps, NextPage } from "next";
+import { useRef, useState } from 'react';
+import { GetServerSideProps } from "next";
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import axios from 'axios';
 import Router from 'next/router';
+import Modal from '../../components/Modal';
 
-interface RProps{
+interface THProps{
+  width: string;
+}
 
+interface LProps{
+  id: number;
+  title: string;
+  name: string;
+  view: number;
+  create_time: string;
+  recent_update_time: string;
+}
+
+interface PProps{
+  [key: string]: number;
+}
+
+interface ListProps{
+  data: LProps[];
+  paging: PProps;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
-const Reservation:NextPage = ({ result }: any) =>{
+const Reservation = ({ data, paging }: ListProps) =>{
 
-  const reservationList = result;
+  // State
+  const [ isReservationList, setIsReservationList ] = useState(data);
+  const [ isOpen, setIsOpen ] = useState<boolean>(false);
+  const [ isCertification, setIsCertification ] = useState<boolean>(false);
 
-   /* 상세 페이지 */
-   const goDetail = (id: number) =>{
-    console.log(id);
-    Router.push({
-      pathname: `/reservation/${id}`,
-    })
+  // Ref
+  const categoryRef = useRef<HTMLSelectElement>(null); // 검색 카테고리
+  const keywordRef = useRef<HTMLInputElement>(null); // 검색어
+  const passwordRef = useRef<HTMLInputElement>(null); // 비밀번호 확인
+
+  // Parameter
+  let isListSeq = paging.max;
+
+  /* 상세 페이지 */
+  const goDetail = (id: number) =>{
+
+    setIsOpen(!isOpen);
+
+    // Router.push({
+    //   pathname: `/reservation/${id}`,
+    // })
+  }
+
+  /* 비밀번호 일치여부 확인 */
+  const checkPassword = async() =>{
+
+    // Parameter
+    const password = passwordRef.current?.value;
+
+    // Fetching
+    const res = await fetch(`${API_URL}/reservation/checkReservationPassword?password=${password}`)
+    const { result } = await res.json();
+
+    console.log(result);
+  }
+
+  /* 검색하기 */
+  const search = async() =>{
+
+    // Parameter
+    const category = categoryRef.current?.value;
+    const keyword = keywordRef.current?.value;
+
+    // Fetching
+    const res = await fetch(`${API_URL}/reservation?category=${category}&keyword=${keyword}&page=${1}`)
+    const { result } = await res.json();
+
+    setIsReservationList(result);
   }
 
   return(
@@ -26,13 +85,12 @@ const Reservation:NextPage = ({ result }: any) =>{
       <PageIntroWrap>
         <SearchInfo>전체 검색결과는 &#91; <SearchCount>9,999</SearchCount> &#93; 건 입니다.</SearchInfo>
         <SearchWrap>
-          <SearchCondition>
-            <option>전체</option>
-            <option>예약자명</option>
-            <option>제목</option>
+          <SearchCondition ref={categoryRef}>
+            <option value="all">전체</option>
+            <option value="reservation">예약자명</option>
           </SearchCondition>
-          <SearchInput placeholder="검색어를 입력해주세요."/>
-          <SearchBtn>검색하기</SearchBtn>
+          <SearchInput ref={keywordRef} placeholder="검색어를 입력해주세요."/>
+          <SearchBtn onClick={() => search()}>검색하기</SearchBtn>
         </SearchWrap>
       </PageIntroWrap>
       <WriteBtn>글쓰기</WriteBtn>
@@ -40,97 +98,56 @@ const Reservation:NextPage = ({ result }: any) =>{
         <ReservationTable>
           <ReservationThead>
             <ReservationThrow>
-              <ReservationTheader>순번</ReservationTheader>
-              <ReservationTheader>제목</ReservationTheader>
-              <ReservationTheader>작성자</ReservationTheader>
-              <ReservationTheader>조회수</ReservationTheader>
-              <ReservationTheader>작성날짜</ReservationTheader>
+              <ReservationTheader width={'6%'}>순번</ReservationTheader>
+              <ReservationTheader width={'60%'}>제목</ReservationTheader>
+              <ReservationTheader width={'10%'}>예약자명</ReservationTheader>
+              <ReservationTheader width={'6%'}>조회수</ReservationTheader>
+              <ReservationTheader width={'18%'}>작성날짜</ReservationTheader>
             </ReservationThrow>
           </ReservationThead>
           <ReservationTbody>
-            <ReservationTrow onClick={()=>goDetail(1)}>
-              <ReservationTData width={'6%'}>1</ReservationTData>
-              <ReservationTData width={'60%'} css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData width={'10%'}>1</ReservationTData>
-              <ReservationTData width={'10%'}>1</ReservationTData>
-              <ReservationTData width={'14%'}>1</ReservationTData>
-            </ReservationTrow>
             {
-              reservationList.result.map((value ) => {
+              isReservationList.length != 0 ?
+              isReservationList.map((value)=>{
                 return(
-                  <>
-                    {value}
-                  </>
+                  <ReservationTrow key={value.id} onClick={()=>goDetail(value.id)}>
+                    <ReservationTData>{isListSeq--}</ReservationTData>
+                    <ReservationTData css={css`text-align: left;`}>{value.title}</ReservationTData>
+                    <ReservationTData>{value.name}</ReservationTData>
+                    <ReservationTData>{value.view}</ReservationTData>
+                    <ReservationTData>{value.create_time}</ReservationTData>
+                  </ReservationTrow>
                 )
               })
+              :
+              <ReservationTrow>
+                <ReservationTData colSpan={5}>검색 결과가 없어요.</ReservationTData>
+              </ReservationTrow>
             }
-            <ReservationTrow>
-              <ReservationTData>2</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>3</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>4</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>5</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>6</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>7</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>8</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>9</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
-            <ReservationTrow>
-              <ReservationTData>10</ReservationTData>
-              <ReservationTData css={css`text-align: left;`}>3</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-              <ReservationTData>1</ReservationTData>
-            </ReservationTrow>
           </ReservationTbody>
         </ReservationTable>
         <>페이징</>
       </PageContentWrap>
+      {
+        isOpen ?
+        <Modal
+          title={'예약시 입력하신 비밀번호를 입력해주세요.'}
+          subTitle={'작성자와 관리자만 열람하실 수 있습니다.'}
+          children={
+            <PasswordWrap>
+              <PasswordInput
+                ref={passwordRef}
+                type="password"
+                placeholder='비밀번호를 입력해주세요.'
+              />
+              <PasswordBtn onClick={() => checkPassword()}>확인</PasswordBtn>
+            </PasswordWrap>
+          }
+          isShow={isOpen}
+          setIsShow={setIsOpen}
+          setIsCertification={setIsCertification}
+        /> : ''
+      }
     </Main>
   )
 }
@@ -171,15 +188,15 @@ const SearchCondition = styled.select(
     right: '0',
     border: '1px solid #b3b3b3',
     minHeight: '32px',
-    padding: '0 2px',
+    padding: '0 8px',
     fontSize: '1rem'
   }
 )
 const SearchInput = styled.input(
   {
-    minWidth: '320px',
+    minWidth: '340px',
     minHeight: '32px',
-    padding: '0 8px',
+    padding: '0 12px',
     border: '1px solid #b3b3b3',
     borderLeft: '0',
     borderRight: '0',
@@ -193,7 +210,7 @@ const SearchBtn = styled.div(
   {
     minHeight: '32px',
     border: '1px solid #b8b8b8',
-    padding: '5px 12px',
+    padding: '5px 14px',
     fontSize: '1rem',
     cursor: 'pointer'
   }
@@ -248,36 +265,65 @@ const ReservationTrow = styled.tr(
     }
   }
 )
-const ReservationTheader = styled.th(
+const ReservationTheader = styled.th<THProps>(
   {
     padding: '8px 0',
     fontSize: '1.1rem'
-  }
-)
-const ReservationTData = styled.td(
-  {
-    textAlign: 'center',
-    padding: '12px 8px'
   },
   props => ({
     width: props.width
   })
 )
+const ReservationTData = styled.td(
+  {
+    textAlign: 'center',
+    padding: '12px 8px'
+  }
+)
+const PasswordWrap = styled.div(
+  {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '18px 0 0 0'
+  }
+)
+const PasswordInput = styled.input(
+  {
+    minWidth: '80%',
+    maxWidth: '80%',
+    outline: '0',
+    minHeight: '36px',
+    border: '1px solid #b8b8b8',
+    padding: '6px 12px',
+    fontSize: '1rem',
+    ':focus, :active': {
+      borderColor: '#5c4733'
+    }
+  }
+)
+const PasswordBtn = styled.div(
+  {
+    minWidth: '20%',
+    maxWidth: '20%',
+    minHeight: '36px',
+    border: '1px solid #b8b8b8',
+    padding: '7px 12px',
+    textAlign: 'center',
+    borderLeft: 0,
+    cursor: 'pointer'
+  }
+)
 
 export const getServerSideProps: GetServerSideProps = async () =>{
 
   try{
-
-    const url = `${API_URL}/reservation`;
-    const result = await axios.get(url);
-
-    console.log(result);
-    console.log(result.data);
-    console.log(result.data.result);
+    const res = await fetch(`${API_URL}/reservation`)
+    const data = await res.json();
 
     return {
       props: {
-        result: result.data
+        data: data.result,
+        paging: data.paging
       }
     }
   }catch(err){
