@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, MouseEvent, ReactElement, useEffect } from 'react';
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 

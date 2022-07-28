@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import Router from 'next/router';
 import axios from 'axios';
 import Modal from '../../components/Modal';
+import Pagination from '../../components/Pagination';
 
 interface THProps{
   width: string;
@@ -16,6 +17,7 @@ interface LProps{
   title: string;
   name: string;
   view: number;
+  isOverHour: number;
   create_time: string;
   recent_update_time: string;
 }
@@ -37,6 +39,7 @@ const Reservation = ({ data, paging }: ListProps) =>{
   const [ reservationId, setReservationId ] = useState<number>();
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isCertification, setIsCertification ] = useState<boolean>(false);
+  const [ page, setPage ] = useState();
 
   // Ref
   const categoryRef = useRef<HTMLSelectElement>(null); // 검색 카테고리
@@ -76,12 +79,12 @@ const Reservation = ({ data, paging }: ListProps) =>{
         pathname: `/reservation/${reservationId}`,
       })
     }else{
-      alert("패스워드가 일치하지 않습니다.");
+      alert("비밀번호가 일치하지 않습니다.");
     }
   }
 
   /* 검색하기 */
-  const search = async() =>{
+  const search = async(page: number) =>{
 
     // Parameter
     const category = categoryRef.current?.value;
@@ -97,17 +100,20 @@ const Reservation = ({ data, paging }: ListProps) =>{
   return(
     <Main>
       <PageIntroWrap>
-        <SearchInfo>전체 검색결과는 &#91; <SearchCount>9,999</SearchCount> &#93; 건 입니다.</SearchInfo>
+        <SearchInfo>전체 검색결과는 &#91; <SearchCount>{paging.max}</SearchCount> &#93; 건 입니다.</SearchInfo>
         <SearchWrap>
           <SearchCondition ref={categoryRef}>
             <option value="all">전체</option>
             <option value="reservation">예약자명</option>
           </SearchCondition>
           <SearchInput ref={keywordRef} placeholder="검색어를 입력해주세요."/>
-          <SearchBtn onClick={() => search()}>검색하기</SearchBtn>
+          <SearchBtn onClick={() => search(1)}>검색하기</SearchBtn>
         </SearchWrap>
       </PageIntroWrap>
-      <WriteBtn>글쓰기</WriteBtn>
+      <WriteBtn onClick={() =>
+        Router.push({
+        pathname: `/reservation/detail`,
+      })}>글쓰기</WriteBtn>
       <PageContentWrap>
         <ReservationTable>
           <ReservationThead>
@@ -137,12 +143,15 @@ const Reservation = ({ data, paging }: ListProps) =>{
                           margin-left: 2px !important;
                         `}
                         src="/icons/lock_black.svg"
-                        width={22}
-                        height={22}
+                        width={21}
+                        height={21}
                       />
+                      {
+                        value.isOverHour < 24 ? <NewList>N</NewList>: ''
+                      }
                     </ReservationTData>
                     <ReservationTData>{value.name}</ReservationTData>
-                    <ReservationTData>{value.view}</ReservationTData>
+                    <ReservationTData>{value.view}회</ReservationTData>
                     <ReservationTData>{value.create_time}</ReservationTData>
                   </ReservationTrow>
                 )
@@ -154,7 +163,10 @@ const Reservation = ({ data, paging }: ListProps) =>{
             }
           </ReservationTbody>
         </ReservationTable>
-        <>페이징</>
+        <Pagination
+          paging={paging}
+          search={search}
+        />
       </PageContentWrap>
       {
         isOpen ?
@@ -311,6 +323,16 @@ const ReservationTData = styled.td(
 const LockImg = styled(Image)(
   {
     cursor: 'pointer'
+  }
+)
+const NewList = styled.span(
+  {
+    fontWeigth: 'bold',
+    backgroundColor: '#ed4040',
+    padding: '2px 6px',
+    borderRadius: '6px',
+    margin: '0 0 0 12px',
+    color: '#fff'
   }
 )
 const PasswordWrap = styled.div(

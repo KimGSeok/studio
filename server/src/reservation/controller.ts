@@ -5,6 +5,7 @@ const connect = require('../../middleware/db-connection');
 const reservationQuery = require('./query');
 
 interface BProps {
+  id?: number;
   title: string;
   name: string;
   password: string;
@@ -40,6 +41,7 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
   }catch(err){
     console.log(err);
     console.log('예약페이지 조회중 에러발생');
+    next();
     return({
       err: err
     })
@@ -47,20 +49,32 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
 }
 
 /* 예약 상세정보 페이지 */
-const getReservationDetailInfo = (req: Request, res: Response, next: NextFunction) =>{
+const getReservationDetailInfo = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Request
     const { id } = req.params;
 
-    console.log(id);
-    
-    res.json({
-      result: '헬로우2'
-    })
+    if(id != 'detail'){
+      const getReservationDetailQuery = reservationQuery.getReservationDetail(id);
+      const result = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
+
+      // 페이지 조회수 업데이트
+      const updateReserviatonViewCountQuery = reservationQuery.updateReserviatonViewCount(id);
+      await connect.executeForInput(updateReserviatonViewCountQuery.query, updateReserviatonViewCountQuery.params);
+
+      res.json({
+        result: result.length === 0 ? { auth: 'deny' } : result[0]
+      })
+    }else{
+      res.json({
+        result: 'detail'
+      })
+    }
   }catch(err){
     console.log(err);
     console.log('예약 상세페이지 조회중 에러발생');
+    next();
     return({
       err: err
     })
@@ -78,12 +92,13 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
     const doReservationQuery = reservationQuery.doReservation(title, name, hashPassword, content, salt);
     const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
-    res.json({
+    res.send({
       result: result
     })
   }catch(err){
     console.log(err);
     console.log('예약중 에러발생');
+    next();
     return({
       err: err
     })
@@ -111,6 +126,53 @@ const checkReservationPassword = async(req:Request, res: Response, next: NextFun
   }catch(err){
     console.log(err);
     console.log('예약 상세정보 비밀번호 검증중 에러발생');
+    next();
+    return({
+      err: err
+    })
+  }
+}
+
+/* 예약 수정하기 */
+const modifyReservation = async(req:Request, res: Response, next: NextFunction) =>{
+  try{
+
+    // Parameter
+    const { id, title, name, password, content }: BProps = req.body;
+    const { salt, hashPassword } = await hash(password);
+
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, name, hashPassword, content, salt, id);
+    const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
+
+    res.send({
+      result: result
+    })
+  }catch(err){
+    console.log(err);
+    console.log('예약정보 수정중 에러발생');
+    next();
+    return({
+      err: err
+    })
+  }
+}
+
+/* 예약 삭제하기 */
+const deleteReservation = async(req:Request, res: Response, next: NextFunction) =>{
+  try{
+
+    // Parameter
+    const { id } = req.body;
+
+    const deleteReservationQuery = reservationQuery.deleteReservation(id);
+    const result = await connect.executeForInput(deleteReservationQuery.query, deleteReservationQuery.params);
+
+    res.json({
+      result: result
+    })
+  }catch(err){
+    console.log(err);
+    console.log('예약정보 삭제중 에러발생');
     return({
       err: err
     })
@@ -122,4 +184,6 @@ module.exports = {
   getReservationDetailInfo,
   checkReservationPassword,
   doReservation,
+  modifyReservation,
+  deleteReservation
 }

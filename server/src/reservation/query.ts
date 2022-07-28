@@ -9,6 +9,7 @@ const getReservationList = (keyword: string, category:string, begin: number, pag
       title,
       name,
       view,
+      TIMESTAMPDIFF(hour ,create_time, NOW()) AS isOverHour,
       DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
       DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
     FROM
@@ -83,8 +84,60 @@ const getReservationDetail = (reservationId: number) => {
   return { query, params };
 }
 
+/* 상세페이지 접근 시, 조회수 업데이트 */
+const updateReserviatonViewCount = (id: number) =>{
+  const query = `
+    UPDATE
+      reservation
+    SET
+      view = view + 1
+    WHERE
+      id = ?
+  `
+  let params = [ id ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
+/* 예약 수정하기 */
+const modifyReservation = (title: string, name: string, password: string, content: string, salt: string, id: number) =>{
+  const query = `
+    UPDATE
+      reservation
+    SET
+      title = ?,
+      name = ?,
+      password = ?,
+      content = ?,
+      salt = ?,
+      recent_update_time = NOW()
+    WHERE
+      id = ?
+  `
+  let params = [ title, name, password, content, salt, id ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
+/* 예약 삭제하기 */
+const deleteReservation = (id: number) =>{
+  const query = `
+    DELETE
+    FROM
+      reservation
+    WHERE
+      id = ?
+  `
+  let params = [ id ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
 module.exports = {
   getReservationList,
   doReservation,
-  getReservationDetail
+  getReservationDetail,
+  updateReserviatonViewCount,
+  modifyReservation,
+  deleteReservation
 }

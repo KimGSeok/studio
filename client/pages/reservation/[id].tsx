@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import Router from "next/router";
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from "next/dynamic";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import { useState } from "react";
+import { useState, MouseEvent, useEffect } from "react";
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
@@ -21,14 +21,27 @@ interface EProps{
   height? : string;
 }
 
+interface DProps{
+  id: number;
+  name: string;
+  password: string;
+  content: string;
+  auth?: string;
+}
+
+interface DetailProps{
+  data: DProps;
+}
+
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
 
-const DetailReservation:NextPage = () =>{
+const DetailReservation = ({ data }: DetailProps) =>{
 
+  // Result
   const defaultText: string = `
     1.	업체명과 담당자 성함 : </br>
     2.	연락처 : </br>
@@ -44,8 +57,9 @@ const DetailReservation:NextPage = () =>{
     ※	전체 대관 및 가구, CF 광고, 영상 촬영의 경우 별도 문의 바랍니다. </br>
     ※	예약 후 12시간 내에 예약금을 입금하지 않을 경우 예약이 자동 취소됩니다. </br>
   `
-
-  const [ content, setContent ] = useState<string>(defaultText);
+  const id = data.id ? data.id : ''; // 예약 고유 아이디
+  const name = data.name ? data.name : ''; // 성명
+  const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
 
   /* Form Validation */
   const formValidation = yup.object().shape({
@@ -70,23 +84,72 @@ const DetailReservation:NextPage = () =>{
     if(confirm){
 
       // Set Data
+      let result;
       formData.title = '예약합니다';
       formData.content = content;
 
-      const { result } = (await axios.post(`${API_URL}/reservation`, formData)).data;
-      if(result.affectedRows > 0) {
+      if(id === '')
+        result = (await axios.post(`${API_URL}/reservation`, formData)).data;
+      else{
+        formData.id = id;
+        result = (await axios.put(`${API_URL}/reservation`, formData)).data;
+      }
+
+      const response = result.result;
+      if(response.affectedRows > 0 && id === '') {
         alert('예약이 완료되었습니다.');
         Router.push(
-          '/reservation/reservation'
+          '/reservation'
+        )
+      }else if(response.affectedRows > 0 && id !== ''){
+        alert('예약이 수정되었습니다.');
+        Router.push(
+          '/reservation'
         )
       }else{
         alert('예약에 실패하였습니다.\n관리자에게 문의해주세요.');
         Router.push(
-          '/reservation/reservation'
+          '/reservation'
         )
       }
     }
   }
+
+  /* 예약 삭제하기 */
+  const deleteBtn = async(e: MouseEvent<HTMLDivElement>) =>{
+    e.stopPropagation();
+
+    const confirm = window.confirm('예약을 정말로 삭제하시겠습니까?');
+    if(confirm){
+      const { result } = (await axios.delete(`${API_URL}/reservation`, {
+        data: {
+          id: id
+        }
+      })).data;
+
+      if(result.affectedRows > 0 ) {
+        alert('예약이 삭제되었습니다.');
+        Router.push(
+          '/reservation'
+        )
+      }else{
+        alert('예약 삭제에 실패하였습니다.\n관리자에게 문의해주세요.');
+        Router.push(
+          '/reservation'
+        )
+      }
+    }
+  }
+
+  useEffect(() => {
+    const result = data.auth;
+    if(result === 'deny'){
+      alert("접근할 수 없는 페이지입니다.");
+      Router.push(
+        '/reservation'
+      )
+    }
+  },[])
 
   return(
     <Main>
@@ -106,6 +169,7 @@ const DetailReservation:NextPage = () =>{
                 {...register("name")}
                 type="text"
                 name="name"
+                defaultValue={name}
                 placeholder={'예약자의 성명을 입력해주세요.'}
               />
               {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
@@ -164,7 +228,19 @@ const DetailReservation:NextPage = () =>{
             </FormEditor>
           </FormRow>
           <FormBtnWrap>
-            <FormBtn>작성하기</FormBtn>
+            <ListBtn
+              onClick={() => Router.push({ pathname: `/reservation` })}
+            >목록보기</ListBtn>
+            <ActionBtnWrap>
+              {
+                id === '' ?
+                <FormBtn>작성하기</FormBtn> :
+                <>
+                  <FormBtn>수정하기</FormBtn>
+                  <DeleteBtn onClick={(e) => deleteBtn(e)}>삭제하기</DeleteBtn>
+                </>
+              }
+            </ActionBtnWrap>
           </FormBtnWrap>
         </Form>
       </PageWrap>
@@ -250,10 +326,34 @@ const FormInput = styled.input(
     padding: '7px 12px',
   }
 )
-const FormBtnWrap = styled.div({})
+const FormBtnWrap = styled.div(
+  {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+)
+const ListBtn = styled.div(
+  {
+    display: 'block',
+    minWidth: '80px',
+    maxWidth: '140px',
+    minHeight: '36px',
+    border: '1px solid #b8b8b8',
+    backgroundColor: '#fff',
+    padding: '8px 12px',
+    fontSize: '1rem',
+    textAlign: 'center',
+    borderRadius: '4px',
+    cursor: 'pointer'
+  }
+)
+const ActionBtnWrap = styled.div(
+  {
+    display: 'flex'
+  }
+)
 const FormBtn = styled.button(
   {
-    marginLeft: 'auto',
     display: 'block',
     minWidth: '80px',
     maxWidth: '100px',
@@ -267,17 +367,42 @@ const FormBtn = styled.button(
     cursor: 'pointer'
   }
 )
+const DeleteBtn = styled.div(
+  {
+    display: 'block',
+    minWidth: '80px',
+    maxWidth: '100px',
+    minHeight: '36px',
+    marginLeft: '12px',
+    backgroundColor: '#636366',
+    color: '#fff',
+    padding: '8px 12px',
+    fontSize: '1rem',
+    textAlign: 'center',
+    borderRadius: '4px',
+    cursor: 'pointer'
+  }
+)
 
 export const getServerSideProps: GetServerSideProps = async(context) =>{
 
-  const { id }: any = context.params;
+  try{
+    const { id }: any = context.params;
 
-  const url = `${API_URL}/reservation/${id}`;
-  const result = await axios.get(url);
+    const url = `${API_URL}/reservation/${id}`;
+    const result = await axios.get(url);
 
-  return{
-    props:{
-
+    return {
+      props: {
+        data: result.data.result
+      }
+    }
+  }catch(err){
+    console.log("예약 상세페이지 조회중 에러발생");
+    return{
+      props: {
+        result: err
+      }
     }
   }
 }
