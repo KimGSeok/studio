@@ -1,4 +1,4 @@
-/* 예약목록 조회하기 */
+/* 예약목록 조회 */
 const getReservationList = (keyword: string, category:string, begin: number, pageSize: number) =>{
 
   // TODO 검색조건이 추가되면 변경
@@ -59,7 +59,32 @@ const doReservation = (title: string, name: string, password: string, content: s
   return { query, params };
 }
 
+/* 예약 상세정보 조회 */
+const getReservationDetail = (reservationId: number) => {
+
+  const query = `
+    SELECT SQL_CALC_FOUND_ROWS
+      id,
+      title,
+      name,
+      password,
+      content,
+      view,
+      salt,
+      DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
+      DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
+    FROM
+      reservation
+    WHERE
+      id = ?
+  `;
+  let params: any = [ reservationId ];
+  params = params.filter(function(e: any){ return e === 0 || e });
+  return { query, params };
+}
+
 module.exports = {
   getReservationList,
-  doReservation
+  doReservation,
+  getReservationDetail
 }

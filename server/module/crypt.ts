@@ -10,5 +10,5 @@ export const hash = async(password: string) =>{
 export const cryptCompareSync = async(password: string, salt: string) =>{
 
   const hashPassword = bcrypt.hashSync(password, salt);
-  return hashPassword;
+  return { hashPassword };
 }

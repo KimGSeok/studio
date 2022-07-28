@@ -9,8 +9,10 @@ const connection = mysql.createConnection({
   multipleStatements: true,
   insecureAuth: true,
   typeCast: function (field: any, next: any) {
-    if (field.type === 'VAR_STRING') {
-        return field.string();
+    if(field.type === 'VAR_STRING') {
+      return field.string();
+    }else if(field.type === 'BLOB'){
+      return field.string();
     }
     return next();
   }

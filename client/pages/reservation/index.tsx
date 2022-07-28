@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { GetServerSideProps } from "next";
+import Image from 'next/image';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Router from 'next/router';
+import axios from 'axios';
 import Modal from '../../components/Modal';
 
 interface THProps{
@@ -32,6 +34,7 @@ const Reservation = ({ data, paging }: ListProps) =>{
 
   // State
   const [ isReservationList, setIsReservationList ] = useState(data);
+  const [ reservationId, setReservationId ] = useState<number>();
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isCertification, setIsCertification ] = useState<boolean>(false);
 
@@ -46,8 +49,10 @@ const Reservation = ({ data, paging }: ListProps) =>{
   /* 상세 페이지 */
   const goDetail = (id: number) =>{
 
+    setReservationId(id);
     setIsOpen(!isOpen);
 
+    // 관리자일 때
     // Router.push({
     //   pathname: `/reservation/${id}`,
     // })
@@ -60,10 +65,19 @@ const Reservation = ({ data, paging }: ListProps) =>{
     const password = passwordRef.current?.value;
 
     // Fetching
-    const res = await fetch(`${API_URL}/reservation/checkReservationPassword?password=${password}`)
-    const { result } = await res.json();
+    const { data } = await axios.post(`${API_URL}/reservation/checkReservationPassword`,{
+      reservationId: reservationId,
+      checkPassword: password
+    })
 
-    console.log(result);
+    setIsCertification(data.result);
+    if(data.result){
+      Router.push({
+        pathname: `/reservation/${reservationId}`,
+      })
+    }else{
+      alert("패스워드가 일치하지 않습니다.");
+    }
   }
 
   /* 검색하기 */
@@ -112,7 +126,21 @@ const Reservation = ({ data, paging }: ListProps) =>{
                 return(
                   <ReservationTrow key={value.id} onClick={()=>goDetail(value.id)}>
                     <ReservationTData>{isListSeq--}</ReservationTData>
-                    <ReservationTData css={css`text-align: left;`}>{value.title}</ReservationTData>
+                    <ReservationTData css={css`
+                      text-align: left;
+                      display: flex;
+                      align-items: center;
+                    `}>
+                      {value.title}
+                      <LockImg
+                        css={css`
+                          margin-left: 2px !important;
+                        `}
+                        src="/icons/lock_black.svg"
+                        width={22}
+                        height={22}
+                      />
+                    </ReservationTData>
                     <ReservationTData>{value.name}</ReservationTData>
                     <ReservationTData>{value.view}</ReservationTData>
                     <ReservationTData>{value.create_time}</ReservationTData>
@@ -278,6 +306,11 @@ const ReservationTData = styled.td(
   {
     textAlign: 'center',
     padding: '12px 8px'
+  }
+)
+const LockImg = styled(Image)(
+  {
+    cursor: 'pointer'
   }
 )
 const PasswordWrap = styled.div(
