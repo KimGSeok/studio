@@ -49,6 +49,14 @@ export const globalStyles = (
       .sun-editor .se-wrapper{
         height: 60vh;
       }
+
+      .fc-icon-chevron-left:before{
+        content: url("/icons/navigate_before_white.svg");
+      }
+
+      .fc-icon-chevron-right:before{
+        content: url("/icons/navigate_next_white.svg");
+      }
     `}
   />
 )

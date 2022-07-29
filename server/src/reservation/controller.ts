@@ -7,6 +7,7 @@ const reservationQuery = require('./query');
 interface BProps {
   id?: number;
   title: string;
+  space: string;
   name: string;
   password: string;
   passwordConfirm: string;
@@ -18,8 +19,6 @@ interface BProps {
 const getReservationList = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
-    console.log("req.query :", req.query);
-
     // Parameter
     let page = req.query.page === undefined ? 1 : parseInt(req.query.page as string);
     if(page < 1) page = 1;
@@ -27,8 +26,9 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
     const begin = (page - 1) * pageSize;
     const category = req.query.category ? req.query.category : 'all'; // 검색 카테고리
     const keyword = req.query.keyword ? `%${req.query.keyword}%` : '%%'; // 검색 키워드
+    const status = req.query.status ? req.query.status : undefined;
 
-    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, begin, pageSize);
+    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, begin, pageSize);
     const result = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
 
     // 페이징
@@ -86,10 +86,10 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { title, name, password, content }: BProps = req.body;
+    const { title, space, name, password, content }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const doReservationQuery = reservationQuery.doReservation(title, name, hashPassword, content, salt);
+    const doReservationQuery = reservationQuery.doReservation(title, space, name, hashPassword, content, salt);
     const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
     res.send({
@@ -138,10 +138,10 @@ const modifyReservation = async(req:Request, res: Response, next: NextFunction) 
   try{
 
     // Parameter
-    const { id, title, name, password, content }: BProps = req.body;
+    const { id, space, title, name, password, content }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const modifyReservationQuery = reservationQuery.modifyReservation(title, name, hashPassword, content, salt, id);
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, name, hashPassword, content, salt, id);
     const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
 
     res.send({

@@ -36,8 +36,18 @@ const Location:NextPage = () =>{
 
 const Main = styled.div(
   {
-    padding: '80px 12% 40px 12%'
-  }
+    padding: '80px 12% 40px 12%',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '80px 9% 40px 9%',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '80px 6% 40px 6%',
+    }
+  },
 )
 const PageWrap = styled.div(
   {
@@ -48,6 +58,16 @@ const PageTitle = styled.div(
   {
     fontSize: '1.6rem',
     fontWeight: 'bold',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.5rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1.4rem',
+    }
   }
 )
 const TabLists = styled.ul(
@@ -56,7 +76,7 @@ const TabLists = styled.ul(
     borderRadius: '6px',
     border: '1px solid #e6e6e6',
     padding: '6px 8px',
-    margin: '12px 0 12px 0'
+    margin: '12px 0 12px 0',
   }
 )
 const TabList = styled.li(

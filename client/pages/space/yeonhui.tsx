@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 interface IImageProps{
   width?: string;
+  margin?: string;
 }
 
 const Yeonhui:NextPage = () =>{
@@ -347,16 +348,40 @@ const Yeonhui:NextPage = () =>{
   )
 }
 
-const Main = styled.div`
-  padding: 80px 12% 40px 12%;
-`
+const Main = styled.div(
+  {
+    padding: '80px 12% 40px 12%',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '80px 9% 40px 9%',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '80px 6% 40px 6%',
+    }
+  },
+)
 const PageIntroWrap = styled.div`
   margin: 18px 0;
 `
-const PageTitle = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
-`
+const PageTitle = styled.div(
+  {
+    fontSize: '1.6rem',
+    fontWeight: 'bold',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.5rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1.4rem',
+    }
+  }
+)
 const TabListWrap = styled.div(
   {
     margin: '10px 0',
@@ -367,6 +392,16 @@ const TabLists = styled.ul(
     backgroundColor: '#E7E6E6',
     padding: '10px 12px',
     borderRadius: '6px',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '8px 10px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '6px 8px',
+    }
   }
 )
 const TabList = styled.li(
@@ -378,6 +413,20 @@ const TabList = styled.li(
     borderRadius: '6px',
     textAlign: 'center',
     cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      minWidth: '75px',
+      padding: '5px 18px',
+      margin: '0 12px 0 0',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      minWidth: '70px',
+      padding: '5px 14px',
+      margin: '0 4px 0 0',
+    }
   }
 )
 const ContentWrap = styled.div(
@@ -397,20 +446,34 @@ const ContentImageWrap = styled.div<IImageProps>(
   {
     margin: '10px 0 36px 0',
     '& > :not(:last-of-type)': {
-      margin: '0 5px 0 0 !important'
-    }
+      marginRight: '5px !important',
+    },
   },
   props => ({
     '& > span': {
       width: props.width ? props.width : 'calc(50% - 5px) !important',
       display: 'inline-block !important',
-    }
+    },
   })
 )
 const ImageArea = styled.div<IImageProps>(
   props => ({
     width: props.width,
-    display: 'inline-block'
+    display: 'inline-block',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '100% !important',
+      display: 'block',
+      margin: props.margin ? props.margin : '0 0 9px 0 !important'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '100% !important',
+      display: 'block',
+      margin: props.margin ? props.margin : '0 0 9px 0 !important'
+    }
   })
 )
 const ContentImage = styled(Image)(

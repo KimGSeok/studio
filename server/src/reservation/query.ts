@@ -1,21 +1,25 @@
 /* 예약목록 조회 */
-const getReservationList = (keyword: string, category:string, begin: number, pageSize: number) =>{
+const getReservationList = (keyword: string, category:string, status: string, begin: number, pageSize: number) =>{
 
   // TODO 검색조건이 추가되면 변경
   const orderCondition = category === 'all' ? 'name LIKE ?' : 'name LIKE ?';
+  const statusCondition = status ? `AND status = 'apply'` : '';
+
   const query = `
     SELECT SQL_CALC_FOUND_ROWS
       id,
       title,
+      status,
       name,
       view,
-      TIMESTAMPDIFF(hour ,create_time, NOW()) AS isOverHour,
+      TIMESTAMPDIFF(hour ,create_time, NOW()) AS is_over_hour,
       DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
       DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
     FROM
       reservation
     WHERE
       ${orderCondition}
+      ${statusCondition}
     ORDER BY
       id DESC
     LIMIT ?, ?;
@@ -28,12 +32,13 @@ const getReservationList = (keyword: string, category:string, begin: number, pag
 }
 
 /* 예약하기 */
-const doReservation = (title: string, name: string, password: string, content: string, salt: string) =>{
+const doReservation = (title: string, space:string, name: string, password: string, content: string, salt: string) =>{
   const query = `
     INSERT INTO
       reservation
       (
         title,
+        space,
         name,
         password,
         content,
@@ -49,13 +54,14 @@ const doReservation = (title: string, name: string, password: string, content: s
         ?,
         ?,
         ?,
+        ?,
         1,
         NOW(),
         NOW()
       )
   `;
 
-  let params = [ title, name, password, content, salt ];
+  let params = [ title, space, name, password, content, salt ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -67,6 +73,7 @@ const getReservationDetail = (reservationId: number) => {
     SELECT SQL_CALC_FOUND_ROWS
       id,
       title,
+      space,
       name,
       password,
       content,
@@ -100,12 +107,13 @@ const updateReserviatonViewCount = (id: number) =>{
 }
 
 /* 예약 수정하기 */
-const modifyReservation = (title: string, name: string, password: string, content: string, salt: string, id: number) =>{
+const modifyReservation = (title: string, space:string, name: string, password: string, content: string, salt: string, id: number) =>{
   const query = `
     UPDATE
       reservation
     SET
       title = ?,
+      space = ?,
       name = ?,
       password = ?,
       content = ?,
@@ -114,7 +122,7 @@ const modifyReservation = (title: string, name: string, password: string, conten
     WHERE
       id = ?
   `
-  let params = [ title, name, password, content, salt, id ];
+  let params = [ title, space, name, password, content, salt, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }

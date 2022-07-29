@@ -7,7 +7,7 @@ const Seogyo:NextPage = () =>{
     <Main>
       <PageWrap>
         <PageTitle>Schedule(서교점)</PageTitle>
-        <PageSubTitle>예약일정을 확인하신 후 양식에 맞추어 예약을 진행해주세요!</PageSubTitle>
+        <PageSubTitle>2022년 7월 말 오픈 준비중입니다.</PageSubTitle>
       </PageWrap>
     </Main>
   )
@@ -15,7 +15,8 @@ const Seogyo:NextPage = () =>{
 
 const Main = styled.div(
   {
-    padding: '80px 12% 40px 12%'
+    padding: '80px 12% 40px 12%',
+    height: 'calc(100vh - 220px)'
   }
 )
 const PageWrap = styled.div(

@@ -17,7 +17,7 @@ interface LProps{
   title: string;
   name: string;
   view: number;
-  isOverHour: number;
+  is_over_hour: number;
   create_time: string;
   recent_update_time: string;
 }
@@ -39,7 +39,6 @@ const Reservation = ({ data, paging }: ListProps) =>{
   const [ reservationId, setReservationId ] = useState<number>();
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isCertification, setIsCertification ] = useState<boolean>(false);
-  const [ page, setPage ] = useState();
 
   // Ref
   const categoryRef = useRef<HTMLSelectElement>(null); // 검색 카테고리
@@ -55,7 +54,7 @@ const Reservation = ({ data, paging }: ListProps) =>{
     setReservationId(id);
     setIsOpen(!isOpen);
 
-    // 관리자일 때
+    // TODO 관리자일 때
     // Router.push({
     //   pathname: `/reservation/${id}`,
     // })
@@ -147,7 +146,7 @@ const Reservation = ({ data, paging }: ListProps) =>{
                         height={21}
                       />
                       {
-                        value.isOverHour < 24 ? <NewList>N</NewList>: ''
+                        value.is_over_hour < 24 ? <NewList>N</NewList>: ''
                       }
                     </ReservationTData>
                     <ReservationTData>{value.name}</ReservationTData>

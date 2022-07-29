@@ -57,23 +57,79 @@ const Guide:NextPage = () => {
   )
 }
 
-const Main = styled.div`
-  padding: 80px 12% 40px 12%;
-`
-const PageIntroWrap = styled.div`
-  margin: 18px 0;
-`
-const PageTitle = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
-`
-const PageSubTitle = styled.div`
-  font-size: 1.15rem;
-  margin: 5px 0;
-`
-const PageContentWrap  = styled.div`
-  line-height: 1.5rem;
-`
+const Main = styled.div({
+  padding: '80px 12% 40px 12%',
+
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    padding: '80px 9% 40px 9%',
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    padding: '80px 6% 40px 6%',
+  }
+})
+const PageIntroWrap = styled.div({
+  margin: '18px 0',
+
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    margin: '16px 0'
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    margin: '14px 0'
+  }
+})
+const PageTitle = styled.div({
+  fontSize: '1.6rem',
+  fontWeight: 'bold',
+
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    fontSize: '1.4rem',
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    fontSize: '1.2rem',
+  }
+})
+const PageSubTitle = styled.div({
+  fontSize: '1.15rem',
+  margin: '5px 0',
+
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    fontSize: '1.1rem',
+    margin: '4px 0',
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    fontSize: '1.05rem',
+    margin: '3px 0',
+  }
+})
+const PageContentWrap  = styled.div({
+  lineHeight: '1.5rem',
+
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    lineHeight: '1.45rem',
+    fontSize: '1rem',
+    wordBreak: 'keep-all'
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    lineHeight: '1.4rem',
+    fontSize: '0.9rem',
+    wordBreak: 'keep-all'
+  }
+})
 const PageContent = styled.div`
   margin: 20px 0;
 `

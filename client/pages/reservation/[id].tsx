@@ -12,6 +12,7 @@ axios.defaults.withCredentials = true;
 
 interface FProps{
   title: string;
+  space: string;
   name: string;
   password: string;
   passwordConfirm: string;
@@ -24,6 +25,7 @@ interface EProps{
 interface DProps{
   id: number;
   name: string;
+  space: string;
   password: string;
   content: string;
   auth?: string;
@@ -59,6 +61,7 @@ const DetailReservation = ({ data }: DetailProps) =>{
   `
   const id = data.id ? data.id : ''; // 예약 고유 아이디
   const name = data.name ? data.name : ''; // 성명
+  const space = data.space ? data.space : ''; // 장소
   const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
 
   /* Form Validation */
@@ -160,6 +163,20 @@ const DetailReservation = ({ data }: DetailProps) =>{
             <FormHead>제목<FormSign> *</FormSign></FormHead>
             <FormValidationData>
               <FormInput value={"예약합니다"} readOnly/>
+            </FormValidationData>
+          </FormRow>
+          <FormRow>
+            <FormHead>장소선택<FormSign> *</FormSign></FormHead>
+            <FormValidationData>
+              <SpaceSelect
+                {...register("space")}
+                name="space"
+                defaultValue={space}
+              >
+                <option value="yeonhui">연희점</option>
+                <option value="seogyo">서교점</option>
+              </SpaceSelect>
+              {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
             </FormValidationData>
           </FormRow>
           <FormRow>
@@ -314,6 +331,18 @@ const FormEditor = styled.div(
     width: 'calc(85% + 4px)',
     borderRadius: '6px',
     fontSize: '1.05rem'
+  }
+)
+const SpaceSelect = styled.select(
+  {
+    position: 'relative',
+    right: '0',
+    border: '1px solid #b3b3b3',
+    minWidth: '120px',
+    minHeight: '32px',
+    padding: '0 8px',
+    borderRadius: '4px',
+    fontSize: '1rem'
   }
 )
 const FormInput = styled.input(

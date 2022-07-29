@@ -27,14 +27,40 @@ const ComponentWrap = styled.div(
 const PageTitle = styled.div(
   {
     fontWeight: '500',
-    lineHeight: '1.4rem'
+    lineHeight: '1.4rem',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '0.95rem',
+      lineHeight: '1.3rem',
+      wordBreak: 'keep-all'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '0.9rem',
+      lineHeight: '1.2rem',
+      wordBreak: 'keep-all'
+    }
   }
 )
 const ParkingInfo = styled.div(
   {
     fontSize: '1.2rem',
     fontWeight: 'bold',
-    padding: '12px 0;'
+    padding: '12px 0;',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+      wordBreak: 'keep-all'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+      wordBreak: 'keep-all'
+    }
   }
 )
 
