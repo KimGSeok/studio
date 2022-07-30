@@ -12,6 +12,12 @@ const getReservationList = (keyword: string, category:string, status: string, be
       status,
       name,
       view,
+      DATE_FORMAT(start_date, '%Y-%m-%d 00:00:00') AS reservation_start_date,
+      DATE_FORMAT(start_date, '%Y-%m-%d') AS reservation_start_date_day,
+      DATE_FORMAT(start_date, '%H:%i:%s') AS reservation_start_date_time,
+      DATE_FORMAT(end_date, '%Y-%m-%d 00:00:00') AS reservation_end_date,
+      DATE_FORMAT(end_date, '%Y-%m-%d') AS reservation_end_date_day,
+      DATE_FORMAT(end_date, '%H:%i:%s') AS reservation_end_date_time,
       TIMESTAMPDIFF(hour ,DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s'), NOW()) AS is_over_hour,
       DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
       DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time

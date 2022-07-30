@@ -36,9 +36,13 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
     // 페이징
     const paging = pagination(page, result[1][0].rowCount, pageSize);
 
+    // Schedule 페이지 예약현황 조회
+    const dayObject = onFilterReservationInfo(result[0]);
+
     res.send({
       result: result[0],
-      paging: paging
+      paging: paging,
+      dayObject: dayObject
     })
   }catch(err){
     console.log(err);
@@ -179,6 +183,61 @@ const deleteReservation = async(req:Request, res: Response, next: NextFunction) 
       err: err
     })
   }
+}
+
+const onFilterReservationInfo = (result: any) =>{
+
+  // Date Object
+  let dayObj:string[] = [];
+
+  result.map(function(obj: any){
+
+    let startDate = new Date(obj.reservation_start_date);
+    let endDate = new Date(obj.reservation_end_date);
+    let endDateFlag = true;
+
+    while(true){
+
+      let year: string | number = startDate.getFullYear(); // 연도
+      let month: string | number = startDate.getMonth() + 1; // 월
+      let date: string | number = startDate.getDate(); // 일
+
+      // 날짜 객체 Format 수정
+      month = month < 10 ? "0" + month : month;
+      date = date < 10 ? "0" + date : date;
+
+      dayObj.push(
+        year+'-'+month+'-'+date
+      );
+
+      if(obj.reservation_end_date_time === "00:00:00"){
+
+        if(endDateFlag){
+          endDate.setDate(endDate.getDate()-1);
+          endDateFlag = false;
+        }
+
+        // 날짜가 작거나 같은경우
+        if( startDate.getTime() === endDate.getTime() ){
+          break;
+        }
+      }else{
+
+        // 날짜가 같은경우
+        if( startDate.getTime() === endDate.getTime() ){
+          break;
+        }
+      }
+
+      startDate.setDate(startDate.getDate()+1)
+    }
+  })
+
+  dayObj = dayObj.filter((target, index, obj)=>{
+    return obj.indexOf(target) === index;
+  })
+
+  return dayObj;
 }
 
 module.exports = {

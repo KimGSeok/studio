@@ -14,11 +14,22 @@ interface LProps{
 
 interface ListProps{
   data: LProps[];
+  dayObject: any;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 
-const Yeonhui = ({ data }: ListProps) =>{
+const Yeonhui = ({ data, dayObject }: ListProps) =>{
+
+  let events: object[] = []; // Calendar Event Array
+  dayObject.map((obj: object) => {
+    events.push({
+      title: '예약현황',
+      start: obj,
+      end: obj
+    })
+  });
+
   return(
     <Main>
       <PageWrap>
@@ -27,6 +38,7 @@ const Yeonhui = ({ data }: ListProps) =>{
         <CalendarWrap>
           <Calendar
             data={data}
+            events= {events}
           />
         </CalendarWrap>
       </PageWrap>
@@ -36,7 +48,8 @@ const Yeonhui = ({ data }: ListProps) =>{
 
 const Main = styled.div(
   {
-    padding: '80px 12% 40px 12%'
+    padding: '80px 12% 40px 12%',
+    height: 'calc(100vh - 220px)'
   }
 )
 const PageWrap = styled.div(
@@ -69,7 +82,7 @@ export const getServerSideProps:GetServerSideProps = async() =>{
     return {
       props: {
         data: data.result,
-        paging: data.paging
+        dayObject: data.dayObject
       }
     }
   }catch(err){

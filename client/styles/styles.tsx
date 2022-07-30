@@ -57,6 +57,14 @@ export const globalStyles = (
       .fc-icon-chevron-right:before{
         content: url("/icons/navigate_next_white.svg");
       }
+
+      /* FullCalendar 예약현황 이벤트 */
+      .fc-h-event .fc-event-title-container{
+        font-size: 0.9rem;
+        padding: 2px;
+        text-align: center;
+        cursor: pointer;
+      }
     `}
   />
 )

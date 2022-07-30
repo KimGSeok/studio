@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from "next/router";
 import Head from 'next/head';
 import Header from './Header';
 import Footer from './Footer';
@@ -8,17 +9,34 @@ type AppLayoutProps = {
 }
 
 const appLayout = ({ children }: AppLayoutProps) => {
-  return(
-    <>
-      <Head>
-        <title>Maison de Siri</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
-      </Head>
-      <Header />
-      {children}
-      <Footer />
-    </>
-  )
+
+  // Hooks
+  const router = useRouter();
+  const firstPathName = router.pathname.split('/')[1]; // 1 Depth URL 주소
+
+  console.log(firstPathName);
+
+  if(firstPathName === 'admin'){
+    return(
+      <>
+        {children}
+      </>
+    )
+  }else if(firstPathName === 'login'){
+    return(
+      <>
+        {children}
+      </>
+    )
+  }else{
+    return(
+      <>
+        <Header />
+        {children}
+        <Footer />
+      </>
+    )
+  }
 }
 
 export default appLayout;

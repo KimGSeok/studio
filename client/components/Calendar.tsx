@@ -20,11 +20,18 @@ interface LProps{
 
 interface ListProps{
   data: LProps[];
+  events: any;
 }
 
-const Calendar = ({ data }: ListProps) =>{
+const Calendar = ({ data, events }: ListProps) =>{
 
   const [ isLoad, setIsLoad ] = useState(false);
+
+  const onClickEventHandler = (e: any) =>{
+
+    const date = e.event.startStr;
+    console.log(date);
+  }
 
   useEffect(() =>{
     setIsLoad(true);
@@ -35,12 +42,14 @@ const Calendar = ({ data }: ListProps) =>{
       {
         isLoad ?
         <FullCalendar
+          initialView="dayGridMonth"
           plugins={[
             dayGridPlugin,
             timeGridPlugin,
             interactionPlugin
           ]}
-          initialView="dayGridMonth"
+          events={events}
+          eventClick={onClickEventHandler}
         /> : ''
       }
     </FullCalendarWrap>
