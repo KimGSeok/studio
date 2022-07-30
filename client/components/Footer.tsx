@@ -30,7 +30,7 @@ const Footer = () =>{
 const FooterEl = styled.footer({
   height: '220px',
   backgroundColor: '#f4f8f8',
-  padding: '1.5% 12%',
+  padding: '30px 12%',
   lineHeight: '1.7rem',
 
   /* Tablet */

@@ -13,6 +13,8 @@ interface BProps {
   passwordConfirm: string;
   content: string;
   salt: string;
+  startDate: string;
+  endDate: string;
 }
 
 /* 예약하기 조회 페이지 */
@@ -86,10 +88,10 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { title, space, name, password, content }: BProps = req.body;
+    const { title, space, name, password, content, startDate, endDate }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const doReservationQuery = reservationQuery.doReservation(title, space, name, hashPassword, content, salt);
+    const doReservationQuery = reservationQuery.doReservation(title, space, name, hashPassword, content, startDate, endDate, salt);
     const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
     res.send({
@@ -138,10 +140,10 @@ const modifyReservation = async(req:Request, res: Response, next: NextFunction) 
   try{
 
     // Parameter
-    const { id, space, title, name, password, content }: BProps = req.body;
+    const { id, space, title, name, password, content, startDate, endDate }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, name, hashPassword, content, salt, id);
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, name, hashPassword, content, startDate, endDate, salt, id);
     const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
 
     res.send({

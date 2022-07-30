@@ -1,3 +1,4 @@
+import { useState, MouseEvent, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Router from "next/router";
 import styled from '@emotion/styled';
@@ -6,8 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from "next/dynamic";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import { useState, MouseEvent, useEffect } from "react";
+import moment from 'moment';
 import axios from 'axios';
+import DatePicker from "../../components/DatePicker";
 axios.defaults.withCredentials = true;
 
 interface FProps{
@@ -28,6 +30,10 @@ interface DProps{
   space: string;
   password: string;
   content: string;
+  start_date: string;
+  start_time: string;
+  end_date: string;
+  end_time: string;
   auth?: string;
 }
 
@@ -36,7 +42,6 @@ interface DetailProps{
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
-
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
@@ -58,11 +63,19 @@ const DetailReservation = ({ data }: DetailProps) =>{
     </br>
     ※	전체 대관 및 가구, CF 광고, 영상 촬영의 경우 별도 문의 바랍니다. </br>
     ※	예약 후 12시간 내에 예약금을 입금하지 않을 경우 예약이 자동 취소됩니다. </br>
-  `
+  `;
+
+  // Parameter
   const id = data.id ? data.id : ''; // 예약 고유 아이디
   const name = data.name ? data.name : ''; // 성명
   const space = data.space ? data.space : ''; // 장소
+
+  // State
   const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
+  const [ startDate, setStartDate ] = useState<any>(data.start_date ? data.start_date : null); // 시작날짜
+  const [ startTime, setStartTime ] = useState<any>(data.start_time ? data.start_time : '00:00'); // 시작시간
+  const [ endDate, setEndDate ] = useState<any>(data.end_date ? data.end_date : null); // 종료날짜
+  const [ endTime, setEndTime ] = useState<any>(data.end_time ? data.end_time : '01:00'); // 종료시간
 
   /* Form Validation */
   const formValidation = yup.object().shape({
@@ -83,6 +96,18 @@ const DetailReservation = ({ data }: DetailProps) =>{
   /* Form Submit */
   const onSubmit = async(formData:any) => {
 
+    // 시작날짜 Check
+    if(startDate === null){
+      alert("예약 시작날짜를 선택해주세요.");
+      return false;
+    }
+
+    // 종료날짜 Check
+    if(endDate === null){
+      alert("예약 종료날짜를 선택해주세요.");
+      return false;
+    }
+
     const confirm = window.confirm('예약을 진행하시겠습니까?');
     if(confirm){
 
@@ -90,6 +115,8 @@ const DetailReservation = ({ data }: DetailProps) =>{
       let result;
       formData.title = '예약합니다';
       formData.content = content;
+      formData.startDate = moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`);
+      formData.endDate = moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`);
 
       if(id === '')
         result = (await axios.post(`${API_URL}/reservation`, formData)).data;
@@ -177,6 +204,21 @@ const DetailReservation = ({ data }: DetailProps) =>{
                 <option value="seogyo">서교점</option>
               </SpaceSelect>
               {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
+            </FormValidationData>
+          </FormRow>
+          <FormRow>
+            <FormHead>날짜선택<FormSign> *</FormSign></FormHead>
+            <FormValidationData>
+              <DatePicker
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
+              />
             </FormValidationData>
           </FormRow>
           <FormRow>
@@ -337,7 +379,7 @@ const SpaceSelect = styled.select(
   {
     position: 'relative',
     right: '0',
-    border: '1px solid #b3b3b3',
+    border: '1px solid #d6d6d6',
     minWidth: '120px',
     minHeight: '32px',
     padding: '0 8px',

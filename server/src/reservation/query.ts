@@ -12,7 +12,7 @@ const getReservationList = (keyword: string, category:string, status: string, be
       status,
       name,
       view,
-      TIMESTAMPDIFF(hour ,create_time, NOW()) AS is_over_hour,
+      TIMESTAMPDIFF(hour ,DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s'), NOW()) AS is_over_hour,
       DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
       DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
     FROM
@@ -32,7 +32,7 @@ const getReservationList = (keyword: string, category:string, status: string, be
 }
 
 /* 예약하기 */
-const doReservation = (title: string, space:string, name: string, password: string, content: string, salt: string) =>{
+const doReservation = (title: string, space:string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string) =>{
   const query = `
     INSERT INTO
       reservation
@@ -42,6 +42,8 @@ const doReservation = (title: string, space:string, name: string, password: stri
         name,
         password,
         content,
+        start_date,
+        end_date,
         salt,
         view,
         create_time,
@@ -55,13 +57,15 @@ const doReservation = (title: string, space:string, name: string, password: stri
         ?,
         ?,
         ?,
+        ?,
+        ?,
         1,
         NOW(),
         NOW()
       )
   `;
 
-  let params = [ title, space, name, password, content, salt ];
+  let params = [ title, space, name, password, content, startDate, endDate, salt ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -77,10 +81,14 @@ const getReservationDetail = (reservationId: number) => {
       name,
       password,
       content,
+      DATE_FORMAT(start_date, '%Y-%m-%d') AS start_date,
+      DATE_FORMAT(start_date, '%H:00') AS start_time,
+      DATE_FORMAT(end_date, '%Y-%m-%d') AS end_date,
+      DATE_FORMAT(end_date, '%H:00') AS end_time,
       view,
       salt,
-      DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
-      DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
+      DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s') AS create_time,
+      DATE_FORMAT(recent_update_time, '%Y-%m-%d %H:%m:%s') AS recent_update_time
     FROM
       reservation
     WHERE
@@ -107,7 +115,7 @@ const updateReserviatonViewCount = (id: number) =>{
 }
 
 /* 예약 수정하기 */
-const modifyReservation = (title: string, space:string, name: string, password: string, content: string, salt: string, id: number) =>{
+const modifyReservation = (title: string, space:string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, id: number) =>{
   const query = `
     UPDATE
       reservation
@@ -117,12 +125,14 @@ const modifyReservation = (title: string, space:string, name: string, password: 
       name = ?,
       password = ?,
       content = ?,
+      start_date = ?,
+      end_date = ?,
       salt = ?,
       recent_update_time = NOW()
     WHERE
       id = ?
   `
-  let params = [ title, space, name, password, content, salt, id ];
+  let params = [ title, space, name, password, content, startDate, endDate, salt, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
