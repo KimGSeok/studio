@@ -51,7 +51,9 @@ const Login = () =>{
       alert(resultMessage);
       return false;
     }else{
-      setCookie(token);
+      const test = setCookie(token);
+
+      console.log(test);
       router.push({
         pathname: '/'
       })
