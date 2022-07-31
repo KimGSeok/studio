@@ -107,6 +107,8 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
     const response = await axios.put(`${API_URL}/reservation/changeReservationStatus`, {
       id: id,
       status: value
+    },{
+      withCredentials: true 
     })
 
     const result = response.data.result;
@@ -144,10 +146,14 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
       formData.endDate = moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`);
       
       if(id === '')
-        result = (await axios.post(`${API_URL}/reservation`, formData)).data;
+        result = (await axios.post(`${API_URL}/reservation`, formData, {
+          withCredentials: true 
+        })).data;
       else{
         formData.id = id;
-        result = (await axios.put(`${API_URL}/reservation`, formData)).data;
+        result = (await axios.put(`${API_URL}/reservation`, formData, {
+          withCredentials: true 
+        })).data;
       }
 
       const response = result.result;
