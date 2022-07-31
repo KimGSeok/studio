@@ -6,7 +6,6 @@ export default class MyDocument extends Document {
       <Html lang="ko-kr">
         <Head>
           <meta name="copyright" content="Copyright ©Maison de Siri. All Rights Reserved." />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
           <script type="text/javascript" src='//dapi.kakao.com/v2/maps/sdk.js?appkey=53042f3b6b72738927f3ce3f779d2f99'></script>
         </Head>
         <body>
