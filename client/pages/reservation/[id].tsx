@@ -144,6 +144,7 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
       formData.content = content;
       formData.startDate = moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`);
       formData.endDate = moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`);
+      status === '' ? formData.status = 'apply' : formData.status = status;
       
       if(id === '')
         result = (await axios.post(`${API_URL}/reservation`, formData, {
