@@ -174,7 +174,7 @@ const modifyReservation = async(req:Request, res: Response, next: NextFunction) 
     const { id, space, room, title, name, password, content, startDate, endDate, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, status, id);
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, id);
     const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
 
     res.send({

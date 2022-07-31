@@ -46,7 +46,7 @@ const getReservationList = (keyword: string, category:string, status: string, sp
 }
 
 /* 예약하기 */
-const doReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, status:string) =>{
+const doReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, reservationStatus: string) =>{
   const query = `
     INSERT INTO
       reservation
@@ -83,7 +83,7 @@ const doReservation = (title: string, space:string, room: string, name: string, 
       )
   `;
 
-  let params = [ title, space, room, name, password, content, startDate, endDate, salt, status ];
+  let params = [ title, space, room, name, password, content, startDate, endDate, salt, reservationStatus ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -134,7 +134,7 @@ const updateReserviatonViewCount = (id: number) =>{
 }
 
 /* 예약상태 변경 */
-const changeReservationStatus = (status: string, id: number) =>{
+const changeReservationStatus = (reservationStatus: string, id: number) =>{
   const query = `
     UPDATE
       reservation
@@ -143,13 +143,13 @@ const changeReservationStatus = (status: string, id: number) =>{
     WHERE
       id = ?
   `
-  let params = [ status, id ];
+  let params = [ reservationStatus, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
 
 /* 예약 수정하기 */
-const modifyReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, status: string, id: number) =>{
+const modifyReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, id: number) =>{
   const query = `
     UPDATE
       reservation
@@ -163,12 +163,11 @@ const modifyReservation = (title: string, space:string, room: string, name: stri
       start_date = ?,
       end_date = ?,
       salt = ?,
-      status = ?,
       recent_update_time = NOW()
     WHERE
       id = ?
   `
-  let params = [ title, space, room, name, password, content, startDate, endDate, salt, status, id ];
+  let params = [ title, space, room, name, password, content, startDate, endDate, salt, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
