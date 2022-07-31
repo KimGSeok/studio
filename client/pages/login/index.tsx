@@ -1,4 +1,3 @@
-import cookies from "next-cookies";
 import { GetServerSideProps } from "next";
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -8,6 +7,9 @@ import * as yup from 'yup';
 import { LoginAction } from '../../store/actions/auth';
 import { useDispatch } from 'react-redux';
 import { setCookie } from '../../modules/cookie';
+
+import { Cookies } from 'react-cookie';
+const cookies = new Cookies();
 
 interface FProps{
   id: string;
@@ -51,9 +53,7 @@ const Login = () =>{
       alert(resultMessage);
       return false;
     }else{
-      const test = setCookie(token);
-
-      console.log(test);
+      setCookie(token);
       router.push({
         pathname: '/'
       })

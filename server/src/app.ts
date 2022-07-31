@@ -3,17 +3,28 @@ import cors from "cors";
 require('dotenv').config();
 
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const app = express();
 const fixPath = '/server';
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(cors({
   origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true
 }));
+
+/* Set Session */
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.get('/', (req: Request, res: Response, next:NextFunction) => {
   res.send('홈페이지!');
