@@ -38,6 +38,9 @@ const checkLoginInfo = async(req: Request, res: Response, next: NextFunction) =>
         const userTokenResult = await connect.executeForInput(updateUserTokenQuery.query, updateUserTokenQuery.params);
 
         if(userTokenResult.affectedRows > 0){
+
+          res.cookie('ACT', accessToken);
+          res.cookie('RFT', refreshToken);
           res.json({
             status: 200,
             message: "success",
