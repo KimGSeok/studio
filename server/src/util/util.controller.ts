@@ -39,7 +39,7 @@ const checkLoginInfo = async(req: Request, res: Response, next: NextFunction) =>
 
         if(userTokenResult.affectedRows > 0){
 
-          res.cookie('ACT', accessToken);
+          res.cookie('userACT', accessToken);
           res.cookie('RFT', refreshToken);
           res.json({
             status: 200,
