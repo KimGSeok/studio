@@ -2,13 +2,15 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 require('dotenv').config();
 
+const cookieParser = require('cookie-parser');
 const app = express();
 const fixPath = '/server';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true
 }));
