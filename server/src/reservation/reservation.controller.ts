@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { hash, cryptCompareSync } from '../../module/crypt';
 import { pagination } from '../../module/paging';
 const connect = require('../../middleware/db-connection');
-const reservationQuery = require('./query');
+const reservationQuery = require('./reservation.query');
 
 interface BProps {
   id?: number;

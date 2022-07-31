@@ -88,8 +88,8 @@ const DetailReservation = ({ data }: DetailProps) =>{
       .oneOf([yup.ref('password')], '비밀번호가 일치하지 않아요.'),
   })
   
-   /* useForm Destructuring */
-   const { register, handleSubmit, formState: { errors } } = useForm<FProps>({
+  /* useForm Destructuring */
+  const { register, handleSubmit, formState: { errors } } = useForm<FProps>({
     resolver: yupResolver(formValidation)
   })
 

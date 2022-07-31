@@ -29,10 +29,13 @@ interface PProps{
 interface ListProps{
   data: LProps[];
   paging: PProps;
+  cookie: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
-const Reservation = ({ data, paging }: ListProps) =>{
+const Reservation = ({ data, paging, cookie }: ListProps) =>{
+
+  console.log(cookie);
 
   // State
   const [ isReservationList, setIsReservationList ] = useState(data);
@@ -50,14 +53,14 @@ const Reservation = ({ data, paging }: ListProps) =>{
 
   /* 상세 페이지 */
   const goDetail = (id: number) =>{
-
-    setReservationId(id);
-    setIsOpen(!isOpen);
-
-    // TODO 관리자일 때
-    // Router.push({
-    //   pathname: `/reservation/${id}`,
-    // })
+    if(cookie != 'empty'){
+      Router.push({
+        pathname: `/reservation/${id}`,
+      })
+    }else{
+      setReservationId(id);
+      setIsOpen(!isOpen);
+    }
   }
 
   /* 비밀번호 일치여부 확인 */
@@ -90,7 +93,7 @@ const Reservation = ({ data, paging }: ListProps) =>{
     const keyword = keywordRef.current?.value;
 
     // Fetching
-    const res = await fetch(`${API_URL}/reservation?category=${category}&keyword=${keyword}&page=${1}`)
+    const res = await fetch(`${API_URL}/reservation?category=${category}&keyword=${keyword}&page=${page}`)
     const { result } = await res.json();
 
     setIsReservationList(result);
@@ -368,16 +371,21 @@ const PasswordBtn = styled.div(
   }
 )
 
-export const getServerSideProps: GetServerSideProps = async () =>{
+export const getServerSideProps: GetServerSideProps = async (appContext) =>{
 
   try{
+
+    // Cookie
+    const cookie = appContext.req.cookies.userACT;
+
     const res = await fetch(`${API_URL}/reservation`)
     const data = await res.json();
 
     return {
       props: {
         data: data.result,
-        paging: data.paging
+        paging: data.paging,
+        cookie: cookie ? cookie : 'empty'
       }
     }
   }catch(err){

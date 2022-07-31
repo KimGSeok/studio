@@ -18,6 +18,7 @@ app.get('/', (req: Request, res: Response, next:NextFunction) => {
 });
 
 app.use(`${fixPath}/reservation`, require('./reservation')); // 예약하기
+app.use(`${fixPath}/util`, require('./util')); // etc
 
 app.listen('3001',() => {
   console.log(`

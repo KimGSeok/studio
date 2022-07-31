@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from "next/router";
-import Head from 'next/head';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -8,13 +7,11 @@ type AppLayoutProps = {
   children: React.ReactNode;  
 }
 
-const appLayout = ({ children }: AppLayoutProps) => {
+const AppLayout = ({ children }: AppLayoutProps) => {
 
   // Hooks
   const router = useRouter();
   const firstPathName = router.pathname.split('/')[1]; // 1 Depth URL 주소
-
-  console.log(firstPathName);
 
   if(firstPathName === 'admin'){
     return(
@@ -39,4 +36,4 @@ const appLayout = ({ children }: AppLayoutProps) => {
   }
 }
 
-export default appLayout;
+export default AppLayout;

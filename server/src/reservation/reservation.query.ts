@@ -19,8 +19,8 @@ const getReservationList = (keyword: string, category:string, status: string, be
       DATE_FORMAT(end_date, '%Y-%m-%d') AS reservation_end_date_day,
       DATE_FORMAT(end_date, '%H:%i:%s') AS reservation_end_date_time,
       TIMESTAMPDIFF(hour ,DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s'), NOW()) AS is_over_hour,
-      DATE_FORMAT(create_time, '%Y-%m-%d %h:%m:%s') AS create_time,
-      DATE_FORMAT(recent_update_time, '%Y-%m-%d %h:%m:%s') AS recent_update_time
+      DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s') AS create_time,
+      DATE_FORMAT(recent_update_time, '%Y-%m-%d %H:%m:%s') AS recent_update_time
     FROM
       reservation
     WHERE
@@ -78,9 +78,8 @@ const doReservation = (title: string, space:string, name: string, password: stri
 
 /* 예약 상세정보 조회 */
 const getReservationDetail = (reservationId: number) => {
-
   const query = `
-    SELECT SQL_CALC_FOUND_ROWS
+    SELECT
       id,
       title,
       space,

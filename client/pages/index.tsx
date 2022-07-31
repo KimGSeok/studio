@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import router from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from "swiper";
 import "swiper/css";
@@ -13,6 +13,7 @@ import {
 } from '../styles/styles';
 
 const Home:NextPage = () =>{
+
   return(
     <Main>
       <Square1>
@@ -28,7 +29,9 @@ const Home:NextPage = () =>{
             하이엔드 가구와 명품 벽지, 품격 있는 오브제들로 채워진 각각의 공간에서 보다 완성도 높은 컨텐츠를 만들어보세요.
           </p>
         </Intro>
-        <ButtonEl>갤러리 더 보기</ButtonEl>
+        <ButtonEl onClick={() => (router.push({
+          pathname: '/space/yeonhui'
+        }))}>갤러리 더 보기</ButtonEl>
       </Square1>
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
