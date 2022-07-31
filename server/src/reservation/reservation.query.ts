@@ -1,17 +1,23 @@
 /* 예약목록 조회 */
-const getReservationList = (keyword: string, category:string, status: string, begin: number, pageSize: number) =>{
+const getReservationList = (keyword: string, category:string, status: string, space: string, date: string, begin: number, pageSize: number) =>{
 
   // TODO 검색조건이 추가되면 변경
   const orderCondition = category === 'all' ? 'name LIKE ?' : 'name LIKE ?';
-  const statusCondition = status ? `AND status = 'apply'` : '';
+  const statusCondition = status ? `AND status = ?` : '';
+  const spaceCondition = space ? `AND space = ?` : '';
+  const dateCondition = date ? 'AND start_date < ? AND end_date > ?' : '';
 
   const query = `
     SELECT SQL_CALC_FOUND_ROWS
       id,
       title,
+      space,
+      room,
       status,
       name,
       view,
+      DATE_FORMAT(start_date, '%Y-%m-%d %H:%m:%s') AS start_date,
+      DATE_FORMAT(end_date, '%Y-%m-%d %H:%m:%s') AS end_date,
       DATE_FORMAT(start_date, '%Y-%m-%d 00:00:00') AS reservation_start_date,
       DATE_FORMAT(start_date, '%Y-%m-%d') AS reservation_start_date_day,
       DATE_FORMAT(start_date, '%H:%i:%s') AS reservation_start_date_time,
@@ -26,25 +32,28 @@ const getReservationList = (keyword: string, category:string, status: string, be
     WHERE
       ${orderCondition}
       ${statusCondition}
+      ${spaceCondition}
+      ${dateCondition}
     ORDER BY
       id DESC
     LIMIT ?, ?;
 
     SELECT FOUND_ROWS() AS rowCount;
   `;
-  let params: any = [ keyword, begin, pageSize ];
+  let params: any = [ keyword, status, space, date, date, begin, pageSize ];
   params = params.filter(function(e: any){ return e === 0 || e });
   return { query, params };
 }
 
 /* 예약하기 */
-const doReservation = (title: string, space:string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string) =>{
+const doReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, status:string) =>{
   const query = `
     INSERT INTO
       reservation
       (
         title,
         space,
+        room,
         name,
         password,
         content,
@@ -52,6 +61,7 @@ const doReservation = (title: string, space:string, name: string, password: stri
         end_date,
         salt,
         view,
+        status,
         create_time,
         recent_update_time
       )
@@ -65,13 +75,15 @@ const doReservation = (title: string, space:string, name: string, password: stri
         ?,
         ?,
         ?,
+        ?,
         1,
+        ?,
         NOW(),
         NOW()
       )
   `;
 
-  let params = [ title, space, name, password, content, startDate, endDate, salt ];
+  let params = [ title, space, room, name, password, content, startDate, endDate, salt, status ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -83,7 +95,9 @@ const getReservationDetail = (reservationId: number) => {
       id,
       title,
       space,
+      room,
       name,
+      status,
       password,
       content,
       DATE_FORMAT(start_date, '%Y-%m-%d') AS start_date,
@@ -119,25 +133,42 @@ const updateReserviatonViewCount = (id: number) =>{
   return { query, params };
 }
 
+/* 예약상태 변경 */
+const changeReservationStatus = (status: string, id: number) =>{
+  const query = `
+    UPDATE
+      reservation
+    SET
+      status = ?
+    WHERE
+      id = ?
+  `
+  let params = [ status, id ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
 /* 예약 수정하기 */
-const modifyReservation = (title: string, space:string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, id: number) =>{
+const modifyReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, status: string, id: number) =>{
   const query = `
     UPDATE
       reservation
     SET
       title = ?,
       space = ?,
+      room = ?,
       name = ?,
       password = ?,
       content = ?,
       start_date = ?,
       end_date = ?,
       salt = ?,
+      status = ?,
       recent_update_time = NOW()
     WHERE
       id = ?
   `
-  let params = [ title, space, name, password, content, startDate, endDate, salt, id ];
+  let params = [ title, space, room, name, password, content, startDate, endDate, salt, status, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -161,6 +192,7 @@ module.exports = {
   doReservation,
   getReservationDetail,
   updateReserviatonViewCount,
+  changeReservationStatus,
   modifyReservation,
   deleteReservation
 }

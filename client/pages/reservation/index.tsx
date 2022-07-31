@@ -35,8 +35,6 @@ interface ListProps{
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 const Reservation = ({ data, paging, cookie }: ListProps) =>{
 
-  console.log(cookie);
-
   // State
   const [ isReservationList, setIsReservationList ] = useState(data);
   const [ reservationId, setReservationId ] = useState<number>();

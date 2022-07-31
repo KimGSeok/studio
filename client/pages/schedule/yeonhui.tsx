@@ -18,7 +18,6 @@ interface ListProps{
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
-
 const Yeonhui = ({ data, dayObject }: ListProps) =>{
 
   let events: object[] = []; // Calendar Event Array
@@ -37,7 +36,6 @@ const Yeonhui = ({ data, dayObject }: ListProps) =>{
         <PageSubTitle>예약일정을 확인하신 후 양식에 맞추어 예약을 진행해주세요!</PageSubTitle>
         <CalendarWrap>
           <Calendar
-            data={data}
             events= {events}
           />
         </CalendarWrap>
@@ -49,7 +47,6 @@ const Yeonhui = ({ data, dayObject }: ListProps) =>{
 const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
-    height: 'calc(100vh - 220px)'
   }
 )
 const PageWrap = styled.div(
@@ -76,7 +73,7 @@ const CalendarWrap = styled.div(
 
 export const getServerSideProps:GetServerSideProps = async() =>{
   try{
-    const res = await fetch(`${API_URL}/reservation?status=apply`)
+    const res = await fetch(`${API_URL}/reservation?status=complete&space=yeonhui`)
     const data = await res.json();
 
     return {

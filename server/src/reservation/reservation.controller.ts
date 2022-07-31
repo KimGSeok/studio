@@ -8,6 +8,7 @@ interface BProps {
   id?: number;
   title: string;
   space: string;
+  room: string;
   name: string;
   password: string;
   passwordConfirm: string;
@@ -15,6 +16,7 @@ interface BProps {
   salt: string;
   startDate: string;
   endDate: string;
+  status: string;
 }
 
 /* 예약하기 조회 페이지 */
@@ -28,9 +30,11 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
     const begin = (page - 1) * pageSize;
     const category = req.query.category ? req.query.category : 'all'; // 검색 카테고리
     const keyword = req.query.keyword ? `%${req.query.keyword}%` : '%%'; // 검색 키워드
-    const status = req.query.status ? req.query.status : undefined;
+    const status = req.query.status ? req.query.status : undefined; // 예약상태
+    const space = req.query.space ? req.query.space : undefined; // 예약장소
+    const date = req.query.date ? req.query.date : undefined; // 예약조회 날짜
 
-    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, begin, pageSize);
+    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, space, date, begin, pageSize);
     const result = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
 
     // 페이징
@@ -92,10 +96,10 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { title, space, name, password, content, startDate, endDate }: BProps = req.body;
+    const { title, space, room, name, password, content, startDate, endDate, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const doReservationQuery = reservationQuery.doReservation(title, space, name, hashPassword, content, startDate, endDate, salt);
+    const doReservationQuery = reservationQuery.doReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, status);
     const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
     res.send({
@@ -139,15 +143,38 @@ const checkReservationPassword = async(req:Request, res: Response, next: NextFun
   }
 }
 
+/* 예약상태 변경 */
+const changeReservationStatus = async(req:Request, res: Response, next: NextFunction) =>{
+  try{
+
+    // Parameter
+    const { id, status }: BProps = req.body;
+
+    const changeReservationStatusQuery = reservationQuery.changeReservationStatus(status, id);
+    const result = await connect.executeForInput(changeReservationStatusQuery.query, changeReservationStatusQuery.params);
+
+    res.send({
+      result: result
+    })
+  }catch(err){
+    console.log(err);
+    console.log('예약정보 수정중 에러발생');
+    next();
+    return({
+      err: err
+    })
+  }
+}
+
 /* 예약 수정하기 */
 const modifyReservation = async(req:Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { id, space, title, name, password, content, startDate, endDate }: BProps = req.body;
+    const { id, space, room, title, name, password, content, startDate, endDate, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, name, hashPassword, content, startDate, endDate, salt, id);
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, status, id);
     const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
 
     res.send({
@@ -245,6 +272,7 @@ module.exports = {
   getReservationDetailInfo,
   checkReservationPassword,
   doReservation,
+  changeReservationStatus,
   modifyReservation,
   deleteReservation
 }

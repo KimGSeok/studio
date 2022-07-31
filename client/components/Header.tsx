@@ -79,7 +79,7 @@ const Header = () => {
               <GnbList>
                 <Link href="/reservation">Reservation</Link>
               </GnbList>
-              <GnbList>
+              {/* <GnbList>
                 Library
                 <LnbLists>
                   <LnbList>
@@ -89,7 +89,7 @@ const Header = () => {
                     <Link href="/library/seogyo">서교점</Link>
                   </LnbList>
                 </LnbLists>
-              </GnbList>
+              </GnbList> */}
               <GnbList>
                 <Link href="/location">Location</Link>
               </GnbList>

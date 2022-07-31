@@ -13,7 +13,6 @@ import {
 } from '../styles/styles';
 
 const Home:NextPage = () =>{
-
   return(
     <Main>
       <Square1>

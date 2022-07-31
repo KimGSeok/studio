@@ -1,4 +1,4 @@
-import { useState, MouseEvent, useEffect } from "react";
+import React, { useState, MouseEvent, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Router from "next/router";
 import styled from '@emotion/styled';
@@ -15,6 +15,8 @@ axios.defaults.withCredentials = true;
 interface FProps{
   title: string;
   space: string;
+  status: string;
+  room: string;
   name: string;
   password: string;
   passwordConfirm: string;
@@ -28,6 +30,8 @@ interface DProps{
   id: number;
   name: string;
   space: string;
+  status: string;
+  room: string;
   password: string;
   content: string;
   start_date: string;
@@ -39,6 +43,7 @@ interface DProps{
 
 interface DetailProps{
   data: DProps;
+  cookie: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
@@ -46,7 +51,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
 
-const DetailReservation = ({ data }: DetailProps) =>{
+const DetailReservation = ({ data, cookie }: DetailProps) =>{
 
   // Result
   const defaultText: string = `
@@ -69,6 +74,8 @@ const DetailReservation = ({ data }: DetailProps) =>{
   const id = data.id ? data.id : ''; // 예약 고유 아이디
   const name = data.name ? data.name : ''; // 성명
   const space = data.space ? data.space : ''; // 장소
+  const room = data.room ? data.room : ''; // 공간
+  const status = data.status ? data.status : ''; // 예약상태
 
   // State
   const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
@@ -92,6 +99,24 @@ const DetailReservation = ({ data }: DetailProps) =>{
   const { register, handleSubmit, formState: { errors } } = useForm<FProps>({
     resolver: yupResolver(formValidation)
   })
+
+  /* 예약상태 변경 */
+  const onChangeReservationStatusHandler = async(e: React.ChangeEvent<HTMLSelectElement>) =>{
+
+    const value = e.target.value;
+    const response = await axios.put(`${API_URL}/reservation/changeReservationStatus`, {
+      id: id,
+      status: value
+    })
+
+    const result = response.data.result;
+    if(result. affectedRows > 0){
+      alert("예약상태 변경이 완료되었습니다.");
+    }else{
+      alert("예약상태 변경중 에러가 발생하였습니다.\n관리자에게 문의해주세요.");
+    }
+  }
+
 
   /* Form Submit */
   const onSubmit = async(formData:any) => {
@@ -117,7 +142,7 @@ const DetailReservation = ({ data }: DetailProps) =>{
       formData.content = content;
       formData.startDate = moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`);
       formData.endDate = moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`);
-
+      
       if(id === '')
         result = (await axios.post(`${API_URL}/reservation`, formData)).data;
       else{
@@ -184,8 +209,22 @@ const DetailReservation = ({ data }: DetailProps) =>{
   return(
     <Main>
       <PageWrap>
-        <PageIntro>정보를 양식에 맞추어 입력하시고, 예약을 진행해주세요!</PageIntro>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <PageIntroWrap>
+            <PageIntro>정보를 양식에 맞추어 입력하시고, 예약을 진행해주세요!</PageIntro>
+            {
+              cookie != 'empty' ?
+              <ReservationStatusSelect
+                {...register("status")}
+                name="status"
+                onChange={(e) => onChangeReservationStatusHandler(e)}
+                defaultValue={status}
+              >
+                <option value='apply'>예약신청</option>
+                <option value='complete'>예약승인</option>
+              </ReservationStatusSelect> : ''
+            }
+          </PageIntroWrap>
           <FormRow>
             <FormHead>제목<FormSign> *</FormSign></FormHead>
             <FormValidationData>
@@ -201,9 +240,33 @@ const DetailReservation = ({ data }: DetailProps) =>{
                 defaultValue={space}
               >
                 <option value="yeonhui">연희점</option>
-                <option value="seogyo">서교점</option>
+                {/* <option value="seogyo">서교점</option> */}
               </SpaceSelect>
               {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
+            </FormValidationData>
+          </FormRow>
+          <FormRow>
+            <FormHead>공간선택<FormSign> *</FormSign></FormHead>
+            <FormValidationData>
+              <SpaceSelect
+                {...register("room")}
+                name="room"
+                defaultValue={room}
+              >
+                <option value="1F - Kitchen, Room A">1F - Kitchen, Room A</option>
+                <option value="1F - Room B, C">1F - Room B, C</option>
+                <option value="1F - Bathroom">1F - Bathroom</option>
+                <option value="2F - Living Room">2F - Living Room</option>
+                <option value="2F - Kitchen">2F - Kitchen</option>
+                <option value="2F - Room A">2F - Room A</option>
+                <option value="2F - Room B">2F - Room B</option>
+                <option value="2F - BathRoom">2F - BathRoom</option>
+                <option value="3F - Central Space">3F - Central Space</option>
+                <option value="3F - Room A">3F - Room A</option>
+                <option value="3F - Room B">3F - Room B</option>
+                <option value="3F - Room C">3F - Room C</option>
+                <option value="Garden - Terrace">Garden - Terrace</option>
+              </SpaceSelect>
             </FormValidationData>
           </FormRow>
           <FormRow>
@@ -312,13 +375,31 @@ const Main = styled.div(
     padding: '80px 12% 40px 12%'
   }
 )
+const PageIntroWrap = styled.div(
+  {
+    display: 'flex',
+    margin: '0 0 18px 0',
+    justifyContent: 'space-between'
+  }
+)
 const PageIntro = styled.div(
   {
-    margin: '0 0 18px 0',
     fontWeight: '500',
     boxShadow: 'inset 0 -7px rgb(247 232 213 / 60%)',
     fontSize: '1.2rem',
     display: 'inline-block'
+  }
+)
+const ReservationStatusSelect = styled.select(
+  {
+    position: 'relative',
+    right: '0',
+    border: '1px solid #d6d6d6',
+    minWidth: '120px',
+    minHeight: '32px',
+    padding: '0 8px',
+    borderRadius: '4px',
+    fontSize: '1rem'
   }
 )
 const PageWrap = styled.div(
@@ -460,12 +541,16 @@ export const getServerSideProps: GetServerSideProps = async(context) =>{
   try{
     const { id }: any = context.params;
 
+    // Cookie
+    const cookie = context.req.cookies.userACT;
+
     const url = `${API_URL}/reservation/${id}`;
     const result = await axios.get(url);
 
     return {
       props: {
-        data: result.data.result
+        data: result.data.result,
+        cookie: cookie ? cookie : 'empty'
       }
     }
   }catch(err){
