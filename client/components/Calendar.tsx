@@ -42,8 +42,10 @@ const Calendar = ({ events }: ListProps) =>{
     const date = e.event.startStr;
 
     // Fetching
-    const res = await fetch(`${API_URL}/reservation?status=apply&space=yeonhui&date=${date}`)
+    const res = await fetch(`${API_URL}/reservation?status=complete&space=yeonhui&date=${date}`)
     const data = await res.json();
+
+    console.log(data);
 
     // Result
     setReservationList(data.result);

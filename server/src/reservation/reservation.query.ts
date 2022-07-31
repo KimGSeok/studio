@@ -5,7 +5,7 @@ const getReservationList = (keyword: string, category:string, status: string, sp
   const orderCondition = category === 'all' ? 'name LIKE ?' : 'name LIKE ?';
   const statusCondition = status ? `AND status = ?` : '';
   const spaceCondition = space ? `AND space = ?` : '';
-  const dateCondition = date ? 'AND start_date < ? AND end_date > ?' : '';
+  const dateCondition = date ? 'AND start_date <= ? AND end_date >= ?' : '';
 
   const query = `
     SELECT SQL_CALC_FOUND_ROWS
