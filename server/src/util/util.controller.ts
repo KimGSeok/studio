@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { cryptCompareSync } from '../../module/crypt';
-const { createAccessToken, generateRefreshToken } = require('../../middleware/jwt');
-const connect = require('../../middleware/db-connection');
+import { createAccessToken, generateRefreshToken } from '../../middleware/jwt';
+import * as connect from '../../middleware/db-connection';
 const utilQuery = require('./util.query');
 
 /* 로그인 정보 확인 */
@@ -13,7 +13,7 @@ const checkLoginInfo = async(req: Request, res: Response, next: NextFunction) =>
 
     // Query
     const getUserLoginInfoQuery = utilQuery.getUserInfo(userId);
-    const userInfo = await connect.executeForInput(getUserLoginInfoQuery.query, getUserLoginInfoQuery.params);
+    const userInfo: any = await connect.executeForInput(getUserLoginInfoQuery.query, getUserLoginInfoQuery.params);
 
     // 로그인 검증
     if(userInfo.length <= 0){
@@ -35,7 +35,7 @@ const checkLoginInfo = async(req: Request, res: Response, next: NextFunction) =>
         const token = { accessToken, refreshToken };
 
         const updateUserTokenQuery = utilQuery.updateUserToken(accessToken, refreshToken, userId);
-        const userTokenResult = await connect.executeForInput(updateUserTokenQuery.query, updateUserTokenQuery.params);
+        const userTokenResult: any = await connect.executeForInput(updateUserTokenQuery.query, updateUserTokenQuery.params);
 
         if(userTokenResult.affectedRows > 0){
 

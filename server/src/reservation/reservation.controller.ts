@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { hash, cryptCompareSync } from '../../module/crypt';
 import { pagination } from '../../module/paging';
-const connect = require('../../middleware/db-connection');
+import * as connect from '../../middleware/db-connection';
 const reservationQuery = require('./reservation.query');
 
 interface BProps {
@@ -35,7 +35,7 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
     const date = req.query.date ? req.query.date : undefined; // 예약조회 날짜
 
     const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, space, date, begin, pageSize);
-    const result = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
+    const result: any = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
 
     // 페이징
     const paging = pagination(page, result[1][0].rowCount, pageSize);
@@ -67,7 +67,7 @@ const getReservationDetailInfo = async(req: Request, res: Response, next: NextFu
 
     if(id != 'detail'){
       const getReservationDetailQuery = reservationQuery.getReservationDetail(id);
-      const result = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
+      const result: any = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
 
       // 페이지 조회수 업데이트
       const updateReserviatonViewCountQuery = reservationQuery.updateReserviatonViewCount(id);
@@ -100,7 +100,7 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
     const { salt, hashPassword } = await hash(password);
 
     const doReservationQuery = reservationQuery.doReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, status);
-    const result = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
+    const result: any = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
 
     res.send({
       result: result
@@ -123,7 +123,7 @@ const checkReservationPassword = async(req:Request, res: Response, next: NextFun
     const { reservationId, checkPassword } = req.body;
 
     const getReservationDetailQuery = reservationQuery.getReservationDetail(reservationId);
-    const result = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
+    const result: any = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
 
     // Result
     const { password, salt } = result[0];

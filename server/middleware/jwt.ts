@@ -4,7 +4,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 /* Access Token 생성*/
-const createAccessToken = (userId: string) =>{
+export const createAccessToken = (userId: string) =>{
   if(userId != null){
     return jwt.sign(
       { userId },
@@ -17,7 +17,7 @@ const createAccessToken = (userId: string) =>{
 }
 
 /* Refresh Token 생성 */
-const generateRefreshToken = (userId: string) =>{
+export const generateRefreshToken = (userId: string) =>{
   if(userId != null){
     return jwt.sign(
       { userId },
@@ -27,9 +27,4 @@ const generateRefreshToken = (userId: string) =>{
   }else{
     return false;
   }
-}
-
-module.exports = {
-  createAccessToken,
-  generateRefreshToken
 }

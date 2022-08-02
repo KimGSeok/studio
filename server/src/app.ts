@@ -13,15 +13,6 @@ app.use(cors({
   credentials: true
 }));
 
-/* Set Session */
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true
-  })
-);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
