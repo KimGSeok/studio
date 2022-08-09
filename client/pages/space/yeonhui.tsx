@@ -321,6 +321,7 @@ const Yeonhui:NextPage = () =>{
                     width={16}
                     height={12}
                     layout={'responsive'}
+                    priority={true}
                   />
                 </ImageArea>
                 <ImageArea width={'calc(33% - 1px)'}>
@@ -329,6 +330,7 @@ const Yeonhui:NextPage = () =>{
                     width={16}
                     height={12}
                     layout={'responsive'}
+                    priority={true}
                   />
                 </ImageArea>
                 <ImageArea width={'calc(33% - 1px)'}>
@@ -337,6 +339,7 @@ const Yeonhui:NextPage = () =>{
                     width={16}
                     height={12}
                     layout={'responsive'}
+                    priority={true}
                   />
                 </ImageArea>
               </ContentImageWrap>

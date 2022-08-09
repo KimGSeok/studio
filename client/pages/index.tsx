@@ -8,15 +8,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import {
-  Button,
-  FontWhite
+  Button
 } from '../styles/styles';
 
 const Home:NextPage = () =>{
   return(
     <Main>
       <Square1>
-        <IntroTitle>Maison de Siri</IntroTitle>
         <Intro>
           <p>
             메종 드 시리는 연희동과 서교동에 자리한 단독주택형 렌탈 공간으로, 매거진 에디터와 방송 PD, 광고기획자로 구성된 디자인&아티스트 그룹의 차별화된 감각과 아이디어가 더해진 라이프스타일 컨셉 스튜디오 입니다.
@@ -107,11 +105,12 @@ const Main = styled.div`
 const SliderImage = styled(Image)`
 `
 const Square1 = styled.div`
-  ${FontWhite}
   width: 30%;
   padding: 20px 0;
   height: calc(100vh - 80px);
-  background: rgba(0,0,0, 0.5);
+  background: rgba(247, 232, 213, 0.45);
+  color: #632e24;
+  font-weight: 500;
   position: absolute;
   top: 80px;
   z-index: 2;
@@ -120,15 +119,10 @@ const Square1 = styled.div`
     display: none;
   }
 `
-const IntroTitle = styled.h1`
-  text-align: center;
-  font-size: 2.8rem;
-  padding: 0 20px;
-`
 const Intro = styled.div`
-  padding: 0 40px;
+  padding: 80px 40px;
   line-height: 1.6rem;
-  font-size: 1.05rem;
+  font-size: 1rem;
   text-align: center;
 
   p{
@@ -142,6 +136,7 @@ const ButtonEl = styled.button`
   margin: 70px 40px;
   font-weight: 600;
   margin-left: auto;
+  background: rgba(255, 255, 255, 0.7);
 `
 
 export default Home;

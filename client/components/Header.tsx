@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useState, MouseEvent } from 'react';
 import {
@@ -33,52 +33,63 @@ const Header = () => {
   })
 
   const showMobileMenu = (e:MouseEvent<HTMLImageElement | HTMLDivElement>) =>{
-    console.log(3);
     setShowMobileNav(!isShowMobileNav);
   }
 
   return(
     <HeaderEl
-      bgColor={pathname === '/' ? 'rgba(0,0,0, 0.5)' : 'rgba(247, 232, 213, 1)'}
-      color={pathname === '/' ? '#fff' : '#000'}
+      bgColor={pathname === '/' ? 'rgba(247, 232, 213, 0.45)' : 'rgba(247, 232, 213, 1)'}
+      color={pathname === '/' ? '#632e24' : '#000'}
     >
       <GnbWrap>
         <Gnb>
-          <Logo>
-            <Link href="/">Maison de Siri</Link>
-          </Logo>
-          <GnbListWrap
-            left={isShowMobileNav ? '0' : '100vw'}
-          >
+          <Link href='/'>
+            <Logo>
+              Maison de Siri
+            </Logo>
+          </Link>
+          <GnbListWrap left={isShowMobileNav ? '0' : '100vw'}>
             <GnbLists>
-              <GnbList>
-                <Link href="/guide">Guide</Link>
-              </GnbList>
+              <Link href='/guide'>
+                <GnbList>
+                  Guide
+                </GnbList>
+              </Link>
               <GnbList>
                 Space
                 <LnbLists>
-                  <LnbList>
-                    <Link href="/space/yeonhui">연희점</Link>
-                  </LnbList>
-                  <LnbList>
-                    <Link href="/space/seogyo">서교점</Link>
-                  </LnbList>
+                  <Link href='/space/yeonhui'>
+                    <LnbList>
+                      연희점
+                    </LnbList>
+                  </Link>
+                  <Link href='/space/seogyo'>
+                    <LnbList>
+                      서교점
+                    </LnbList>
+                  </Link>
                 </LnbLists>
               </GnbList>
               <GnbList>
                 Schedule
                 <LnbLists>
-                  <LnbList>
-                    <Link href="/schedule/yeonhui">연희점</Link>
-                  </LnbList>
-                  <LnbList>
-                    <Link href="/schedule/seogyo">서교점</Link>
-                  </LnbList>
+                  <Link href='/schedule/yeonhui'>
+                    <LnbList>
+                      연희점
+                    </LnbList>
+                  </Link>
+                  <Link href='/schedule/seogyo'>
+                    <LnbList>
+                      서교점
+                    </LnbList>
+                  </Link>
                 </LnbLists>
               </GnbList>
-              <GnbList>
-                <Link href="/reservation">Reservation</Link>
-              </GnbList>
+              <Link href='/reservation'>
+                <GnbList>
+                  Reservation
+                </GnbList>
+              </Link>
               {/* <GnbList>
                 Library
                 <LnbLists>
@@ -90,9 +101,11 @@ const Header = () => {
                   </LnbList>
                 </LnbLists>
               </GnbList> */}
-              <GnbList>
-                <Link href="/location">Location</Link>
-              </GnbList>
+              <Link href='/location'>
+                <GnbList>
+                  Location
+                </GnbList>
+              </Link>
               {/* <GnbList>로그인</GnbList> */}
             </GnbLists>
             {
@@ -142,7 +155,7 @@ const Gnb = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 
   /* Tablet */
   @media screen and (max-width: 1024px){
@@ -157,8 +170,9 @@ const Gnb = styled.div`
 const Logo = styled.div`
   width: auto;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   transition: 0.2s;
+  cursor: pointer;
 `
 const GnbListWrap = styled.div<MProps>(
   {
@@ -203,6 +217,7 @@ const GnbLists = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   /* Tablet */
   @media screen and (max-width: 1024px){
@@ -238,10 +253,10 @@ const LnbLists = styled.ul`
 const LnbList = styled.li`
   font-size: 1.1rem;
   line-height: 48px;
-  border: 1px solid #e6e6e6;
+  border: 1px solid #c4c4c4;
   color: #000;
   display: none;
-  background-color: #fff;
+  background-color: rgba(247, 232, 213, 0.45);
   border-top: 0;
   cursor: pointer;
 

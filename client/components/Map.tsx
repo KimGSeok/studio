@@ -49,16 +49,19 @@ const Map = (props: MProps) =>{
 
 const KakaoMap = styled.div(
   {
-    height: '80vh',
+    height: '60vh',
+    margin: '12px 40px',
 
     /* Tablet */
     '@media screen and (max-width: 1024px)': {
-      height: '70vh'
+      height: '60vh',
+      margin: '0 20px',
     },
 
     /* Phone */
     '@media screen and (max-width: 480px)': {
-      height: '60vh'
+      height: '55vh',
+      margin: '0',
     }
   }
 )

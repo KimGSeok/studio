@@ -13,15 +13,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const router = useRouter();
   const firstPathName = router.pathname.split('/')[1]; // 1 Depth URL 주소
 
-  if(firstPathName === 'admin'){
+  if(firstPathName === 'login'){
     return(
       <>
         {children}
       </>
     )
-  }else if(firstPathName === 'login'){
+  }else if(firstPathName === '/'){
     return(
       <>
+        <Header />
         {children}
       </>
     )
