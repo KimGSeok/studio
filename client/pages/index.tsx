@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { useState }  from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import router from 'next/router';
@@ -7,29 +7,41 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Header from '../components/Header';
 import {
   Button
 } from '../styles/styles';
 
-const Home:NextPage = () =>{
+const Home = () =>{
+
+  // Header Mouse Event
+  const [ isShowSquare, setIsShowSquare ] = useState(false);
+
   return(
-    <Main>
-      <Square1>
-        <Intro>
-          <p>
-            메종 드 시리는 연희동과 서교동에 자리한 단독주택형 렌탈 공간으로, 매거진 에디터와 방송 PD, 광고기획자로 구성된 디자인&아티스트 그룹의 차별화된 감각과 아이디어가 더해진 라이프스타일 컨셉 스튜디오 입니다.
-          </p>
-          <p>
-            영상, 사진, 희화, 스타일링 등에 특화된 소속 크루들과의 협업을 통해 보다 돋보이는 광고, 홍보 컨텐츠 또한 별도 제작 가능합니다.
-          </p>
-          <p>
-            하이엔드 가구와 명품 벽지, 품격 있는 오브제들로 채워진 각각의 공간에서 보다 완성도 높은 컨텐츠를 만들어보세요.
-          </p>
-        </Intro>
-        <ButtonEl onClick={() => (router.push({
-          pathname: '/space/yeonhui'
-        }))}>갤러리 더 보기</ButtonEl>
-      </Square1>
+    <>
+      <Header
+        setIsShowSquare={setIsShowSquare}
+      />
+      <Main>
+        {
+          isShowSquare ?
+          <Square1>
+            <Intro>
+              <p>
+                메종 드 시리는 연희동과 서교동에 자리한 단독주택형 렌탈 공간으로, 매거진 에디터와 방송 PD, 광고기획자로 구성된 디자인&아티스트 그룹의 차별화된 감각과 아이디어가 더해진 라이프스타일 컨셉 스튜디오 입니다.
+              </p>
+              <p>
+                영상, 사진, 희화, 스타일링 등에 특화된 소속 크루들과의 협업을 통해 보다 돋보이는 광고, 홍보 컨텐츠 또한 별도 제작 가능합니다.
+              </p>
+              <p>
+                하이엔드 가구와 명품 벽지, 품격 있는 오브제들로 채워진 각각의 공간에서 보다 완성도 높은 컨텐츠를 만들어보세요.
+              </p>
+            </Intro>
+            <ButtonEl onClick={() => (router.push({
+              pathname: '/space/yeonhui'
+            }))}>갤러리 더 보기</ButtonEl>
+          </Square1> : ''
+        }
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           slidesPerView={1}
@@ -87,7 +99,8 @@ const Home:NextPage = () =>{
             />
           </SwiperSlide>
         </Swiper>
-    </Main>
+      </Main>
+    </>
   )
 }
 

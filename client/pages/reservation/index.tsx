@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import Router from 'next/router';
 import axios from 'axios';
 import Modal from '../../components/Modal';
+import { masking } from '../../modules/validation';
 import Pagination from '../../components/Pagination';
 
 interface THProps{
@@ -150,7 +151,7 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
                         value.is_over_hour < 24 ? <NewList>N</NewList>: ''
                       }
                     </ReservationTData>
-                    <ReservationTData>{value.name}</ReservationTData>
+                    <ReservationTData>{masking(value.name)}</ReservationTData>
                     <ReservationTData>{value.view}회</ReservationTData>
                     <ReservationTData>{value.create_time}</ReservationTData>
                   </ReservationTrow>
@@ -195,7 +196,8 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
 const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
-    height: 'calc(100vh - 220px)'
+    height: 'calc(100vh - 220px)',
+    background: 'rgba(237, 221, 202, 1)',
   }
 )
 const PageIntroWrap = styled.div(

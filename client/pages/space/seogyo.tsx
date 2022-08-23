@@ -21,6 +21,7 @@ const Main = styled.div(
   {
     height: 'calc(100vh - 220px)',
     padding: '80px 12% 40px 12%',
+    background: 'rgba(237, 221, 202, 1)',
 
     /* Tablet */
     '@media screen and (max-width: 1024px)': {

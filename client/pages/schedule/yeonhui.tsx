@@ -47,6 +47,7 @@ const Yeonhui = ({ data, dayObject }: ListProps) =>{
 const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
+    background: 'rgba(237, 221, 202, 1)',
   }
 )
 const PageWrap = styled.div(
@@ -67,7 +68,10 @@ const PageSubTitle = styled.div(
 )
 const CalendarWrap = styled.div(
   {
-    
+    border: '1px solid #d6cbbf',
+    padding: '4px 12px',
+    margin: '16px 0',
+    borderRadius: '8px'
   }
 )
 

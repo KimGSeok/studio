@@ -59,18 +59,16 @@ const Guide:NextPage = () => {
 
 const Main = styled.div({
   padding: '80px 12% 40px 12%',
-  background: 'rgba(247, 232, 213, 1)',
+  background: 'rgba(237, 221, 202, 1)',
 
   /* Tablet */
   '@media screen and (max-width: 1024px)': {
     padding: '80px 9% 40px 9%',
-    background: 'rgba(247, 232, 213, 1)',
   },
 
   /* Phone */
   '@media screen and (max-width: 480px)': {
     padding: '80px 6% 40px 6%',
-    background: 'rgba(247, 232, 213, 1)',
   }
 })
 const PageIntroWrap = styled.div({

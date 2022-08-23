@@ -29,15 +29,15 @@ const Footer = () =>{
 
 const FooterEl = styled.footer({
   height: '220px',
-  background: 'rgba(247, 232, 213, 1)',
+  background: 'rgba(237, 221, 202, 1)',
   padding: '30px 12%',
   lineHeight: '1.7rem',
+  boxShadow: '0 1px 4px 1px rgb(5 5 5 / 20%)',
 
   /* Tablet */
   '@media screen and (max-width: 1024px)': {
     fontSize: '0.95rem',
     height: '200px',
-    backgroundColor: 'rgba(247, 232, 213, 1)',
     padding: '25px 8%',
     lineHeight: '1.55rem',
     wordBreak: 'keep-all'
@@ -48,7 +48,6 @@ const FooterEl = styled.footer({
     fontSize: '0.9rem',
     textAlign: 'right',
     height: '190px',
-    backgroundColor: 'rgba(247, 232, 213, 1)',
     padding: '18px 6%',
     lineHeight: '1.4rem',
     wordBreak: 'keep-all'

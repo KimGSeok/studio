@@ -65,6 +65,18 @@ export const globalStyles = (
         text-align: center;
         cursor: pointer;
       }
+
+      .fc-theme-standard .fc-scrollgrid{
+        border-bottom-width: 0;
+      }
+
+      .fc-theme-standard .fc-scrollgrid{
+        border-color: #d6cbbf;
+      }
+
+      .fc-theme-standard td, .fc-theme-standard th{
+        border: 1px solid #d6cbbf;
+      }
     `}
   />
 )

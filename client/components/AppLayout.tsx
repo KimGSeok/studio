@@ -1,28 +1,17 @@
-import React from 'react';
-import { useRouter } from "next/router";
+import { ReactNode, Dispatch, SetStateAction  }  from 'react';
 import Header from './Header';
 import Footer from './Footer';
 
 type AppLayoutProps = {
-  children: React.ReactNode;  
+  firstPathName: string;
+  children: ReactNode;
 }
 
-const AppLayout = ({ children }: AppLayoutProps) => {
-
-  // Hooks
-  const router = useRouter();
-  const firstPathName = router.pathname.split('/')[1]; // 1 Depth URL 주소
+const AppLayout = ({ firstPathName, children }: AppLayoutProps) => {
 
   if(firstPathName === 'login'){
     return(
       <>
-        {children}
-      </>
-    )
-  }else if(firstPathName === '/'){
-    return(
-      <>
-        <Header />
         {children}
       </>
     )

@@ -16,7 +16,8 @@ const Seogyo:NextPage = () =>{
 const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
-    height: 'calc(100vh - 220px)'
+    height: 'calc(100vh - 220px)',
+    background: 'rgba(237, 221, 202, 1)',
   }
 )
 const PageWrap = styled.div(

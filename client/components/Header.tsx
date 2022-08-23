@@ -1,13 +1,15 @@
-import { css } from '@emotion/react';
+import { useState, MouseEvent, Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
-import { useState, MouseEvent } from 'react';
 import {
-  Button,
   FontWhite
 } from '../styles/styles';
+
+interface SProps{
+  setIsShowSquare?: Dispatch<SetStateAction<boolean>>;
+}
 
 interface Routing{
   pathname: string;
@@ -15,19 +17,32 @@ interface Routing{
 
 interface HeaderProps{
   bgColor: string;
+  boxShadow: string;
 }
 
 interface MProps{
   left: string;  
 }
 
-const Header = () => {
+const Header = ({ setIsShowSquare }: SProps) => {
 
+  // Hooks
   const router = useRouter();
   const { pathname }: Routing = router;
-
   const [ isShowMobileNav, setShowMobileNav ] = useState(false);
 
+  // onMouseHoverEvent
+  const logoHoverEventHandler = (e: MouseEvent<HTMLDivElement>) =>{
+    if(setIsShowSquare){
+      if(e.type === 'mouseenter'){
+        setIsShowSquare(true);
+      }else if(e.type === 'mouseleave'){
+        setIsShowSquare(false);
+      }
+    }
+  }
+
+  // Router Event
   Router.events.on('routeChangeComplete', (url) => {
     setShowMobileNav(false);
   })
@@ -38,13 +53,17 @@ const Header = () => {
 
   return(
     <HeaderEl
-      bgColor={pathname === '/' ? 'rgba(247, 232, 213, 0.45)' : 'rgba(247, 232, 213, 1)'}
+      bgColor={pathname === '/' ? 'rgba(247, 232, 213, 0.45)' : 'rgba(237, 221, 202, 1)'}
+      boxShadow={pathname === '/' ? '' : '0 1px 5px 1px rgb(5 5 5 / 10%)'}
       color={pathname === '/' ? '#632e24' : '#000'}
     >
       <GnbWrap>
         <Gnb>
           <Link href='/'>
-            <Logo>
+            <Logo
+              onMouseEnter={(e) => (logoHoverEventHandler(e))}
+              onMouseLeave={(e) => (logoHoverEventHandler(e))}
+            >
               Maison de Siri
             </Logo>
           </Link>
@@ -101,11 +120,21 @@ const Header = () => {
                   </LnbList>
                 </LnbLists>
               </GnbList> */}
-              <Link href='/location'>
-                <GnbList>
-                  Location
-                </GnbList>
-              </Link>
+              <GnbList>
+                Location
+                <LnbLists>
+                <Link href='/location/yeonhui'>
+                  <LnbList>
+                    연희점
+                  </LnbList>
+                </Link>
+                <Link href='/location/seogyo'>
+                  <LnbList>
+                    서교점
+                  </LnbList>
+                </Link>
+              </LnbLists>
+              </GnbList>
               {/* <GnbList>로그인</GnbList> */}
             </GnbLists>
             {
@@ -141,6 +170,7 @@ const HeaderEl = styled('header')<HeaderProps>`
   position: fixed;
   color: ${props => props.color};
   background: ${props => props.bgColor};
+  box-shadow: ${props => props.boxShadow};
   z-index: 99;
 `
 const GnbWrap = styled.div`
@@ -253,7 +283,7 @@ const LnbLists = styled.ul`
 const LnbList = styled.li`
   font-size: 1.1rem;
   line-height: 48px;
-  border: 1px solid #c4c4c4;
+  border: 1px solid #d6cbbf;
   color: #000;
   display: none;
   background-color: rgba(247, 232, 213, 0.45);
