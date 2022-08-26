@@ -10,6 +10,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import moment from 'moment';
 import axios from 'axios';
 import DatePicker from "../../components/DatePicker";
+import SpaceCheckBox from "../../components/SpaceCheckBox";
 axios.defaults.withCredentials = true;
 
 interface FProps{
@@ -255,7 +256,7 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
           <FormRow>
             <FormHead>공간선택<FormSign> *</FormSign></FormHead>
             <FormValidationData>
-              <SpaceSelect
+              {/* <SpaceSelect
                 {...register("room")}
                 name="room"
                 defaultValue={room}
@@ -273,7 +274,9 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
                 <option value="3F - Room B">3F - Room B</option>
                 <option value="3F - Room C">3F - Room C</option>
                 <option value="Garden - Terrace">Garden - Terrace</option>
-              </SpaceSelect>
+              </SpaceSelect> */}
+              <SpaceCheckBox
+              />
             </FormValidationData>
           </FormRow>
           <FormRow>
@@ -466,6 +469,7 @@ const FormEditor = styled.div(
 )
 const SpaceSelect = styled.select(
   {
+    height: '100%',
     position: 'relative',
     right: '0',
     border: '1px solid #d6d6d6',

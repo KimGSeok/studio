@@ -354,6 +354,7 @@ const Yeonhui:NextPage = () =>{
 const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
+    minHeight: 'calc(100vh - 220px)',
     background: 'rgba(237, 221, 202, 1)',
 
     /* Tablet */
