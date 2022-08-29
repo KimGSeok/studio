@@ -37,7 +37,23 @@ const updateUserToken = (accessToken: string, refreshToken: string, userId: stri
   return { query, params };
 }
 
+/* 공간 목록 조회 */
+const getSpaceList = (space: string) => {
+  const query = `
+    SELECT
+      *
+    FROM
+      space
+    WHERE
+      location = ?
+  `;
+  let params: any = [ space ];
+  params = params.filter(function(e: any){ return e === 0 || e });
+  return { query, params };
+}
+
 module.exports = {
   getUserInfo,
-  updateUserToken
+  updateUserToken,
+  getSpaceList
 }

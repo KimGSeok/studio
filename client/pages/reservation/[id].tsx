@@ -74,12 +74,12 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
   // Parameter
   const id = data.id ? data.id : ''; // 예약 고유 아이디
   const name = data.name ? data.name : ''; // 성명
-  const space = data.space ? data.space : ''; // 장소
   const room = data.room ? data.room : ''; // 공간
   const status = data.status ? data.status : ''; // 예약상태
 
   // State
   const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
+  const [ space, setSpace ] = useState<string>(data.space ? data.space : 'yeonhui'); // 장소선택
   const [ startDate, setStartDate ] = useState<any>(data.start_date ? data.start_date : null); // 시작날짜
   const [ startTime, setStartTime ] = useState<any>(data.start_time ? data.start_time : '00:00'); // 시작시간
   const [ endDate, setEndDate ] = useState<any>(data.end_date ? data.end_date : null); // 종료날짜
@@ -246,9 +246,10 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
                 {...register("space")}
                 name="space"
                 defaultValue={space}
+                onChange={(e)=>{setSpace(e.target.value)}}
               >
                 <option value="yeonhui">연희점</option>
-                {/* <option value="seogyo">서교점</option> */}
+                <option value="seogyo">서교점</option>
               </SpaceSelect>
               {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
             </FormValidationData>
@@ -276,6 +277,7 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
                 <option value="Garden - Terrace">Garden - Terrace</option>
               </SpaceSelect> */}
               <SpaceCheckBox
+                space={space}
               />
             </FormValidationData>
           </FormRow>
@@ -443,11 +445,12 @@ const FormHead = styled.div<EProps>(
   {
     width: 'calc(15% - 4px)',
     height: '36px',
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#ffffff',
     borderRadius: '6px',
     padding: '8px 12px',
     fontSize: '1.05rem',
-    margin: '0 8px 0 0'
+    margin: '0 8px 0 0',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
   },
   props =>(
     {
@@ -457,14 +460,16 @@ const FormHead = styled.div<EProps>(
 )
 const FormValidationData = styled.div(
   {
-    width: '50%'
+    width: '60%'
   }
 )
 const FormEditor = styled.div(
   {
     width: 'calc(85% + 4px)',
     borderRadius: '6px',
-    fontSize: '1.05rem'
+    fontSize: '1.05rem',
+    border: '0',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
   }
 )
 const SpaceSelect = styled.select(
@@ -472,22 +477,24 @@ const SpaceSelect = styled.select(
     height: '100%',
     position: 'relative',
     right: '0',
-    border: '1px solid #d6d6d6',
+    border: '0',
     minWidth: '120px',
     minHeight: '32px',
     padding: '0 8px',
     borderRadius: '4px',
-    fontSize: '1rem'
+    fontSize: '1rem',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
   }
 )
 const FormInput = styled.input(
   {
     width: '100%',
     outline: '0',
-    border: '1px solid #d6d6d6',
+    border: '0',
     borderRadius: '6px',
     fontSize: '1.05rem',
     padding: '7px 12px',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
   }
 )
 const FormBtnWrap = styled.div(
@@ -502,12 +509,13 @@ const ListBtn = styled.div(
     minWidth: '80px',
     maxWidth: '140px',
     minHeight: '36px',
-    border: '1px solid #b8b8b8',
+    border: '0',
     backgroundColor: '#fff',
-    padding: '8px 12px',
+    padding: '8px 18px',
     fontSize: '1rem',
     textAlign: 'center',
-    borderRadius: '4px',
+    borderRadius: '25px',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     cursor: 'pointer'
   }
 )
@@ -522,12 +530,13 @@ const FormBtn = styled.button(
     minWidth: '80px',
     maxWidth: '100px',
     minHeight: '36px',
-    border: '1px solid #b8b8b8',
+    border: '0',
     backgroundColor: '#fff',
-    padding: '8px 12px',
+    padding: '8px 18px',
     fontSize: '1rem',
     textAlign: 'center',
-    borderRadius: '4px',
+    borderRadius: '25px',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     cursor: 'pointer'
   }
 )
@@ -540,10 +549,11 @@ const DeleteBtn = styled.div(
     marginLeft: '12px',
     backgroundColor: '#636366',
     color: '#fff',
-    padding: '8px 12px',
+    padding: '8px 18px',
     fontSize: '1rem',
     textAlign: 'center',
-    borderRadius: '4px',
+    borderRadius: '25px',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     cursor: 'pointer'
   }
 )

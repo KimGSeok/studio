@@ -70,6 +70,32 @@ const checkLoginInfo = async(req: Request, res: Response, next: NextFunction) =>
   }
 }
 
+/* 공간 목록 조회 */
+const getSpaceList = async(req: Request, res: Response, next: NextFunction) =>{
+  try{
+
+    // Parameter
+    const { space } = req.query;
+
+    console.log(space);
+
+    // Query
+    const getSpaceListQuery = utilQuery.getSpaceList(space);
+    const spaceList: any = await connect.executeForInput(getSpaceListQuery.query, getSpaceListQuery.params);
+
+    res.json({
+      status: 200,
+      result: spaceList
+    })
+
+  }catch(err){
+    console.log(err);
+    console.log('공간 목록 조회중 에러발생');
+    next();
+  }
+}
+
 module.exports = {
   checkLoginInfo,
+  getSpaceList
 }

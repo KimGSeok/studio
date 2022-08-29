@@ -209,9 +209,10 @@ const DatePickerWrap = styled.div(
 const DatePickerEl = styled(Datetime)({
   '& > input':{
     position: 'relative',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     outline: '0',
-    border: '1px solid #d6d6d6',
-    minHeight: '32px',
+    border: '0',
+    minHeight: '36px',
     padding: '0 8px',
     borderRadius: '4px',
     fontSize: '1rem',
@@ -225,9 +226,10 @@ const DatePickerEl = styled(Datetime)({
 const TimePicker = styled.select(
   {
     position: 'relative',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     outline: '0',
-    border: '1px solid #d6d6d6',
-    minHeight: '32px',
+    border: '0',
+    minHeight: '36px',
     padding: '0 8px',
     borderRadius: '4px',
     fontSize: '1rem',
