@@ -45,8 +45,6 @@ const Calendar = ({ events }: ListProps) =>{
     const res = await fetch(`${API_URL}/reservation?status=complete&space=yeonhui&date=${date}`)
     const data = await res.json();
 
-    console.log(data);
-
     // Result
     setReservationList(data.result);
 

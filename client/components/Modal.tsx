@@ -8,12 +8,12 @@ interface MProps{
   children: ReactElement;
   isShow: boolean;
   setIsShow: Dispatch<SetStateAction<boolean>>;
-  setIsCertification: Dispatch<SetStateAction<boolean>>;
+  setIsCertification?: Dispatch<SetStateAction<boolean>>;
 }
 
 const Modal = (props: MProps) => {
 
-  const { title, subTitle, children, isShow, setIsShow, setIsCertification } = props;
+  const { title, subTitle, children, isShow, setIsShow } = props;
 
   const onCloseModalHandler = (e: MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
