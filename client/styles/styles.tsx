@@ -59,11 +59,15 @@ export const globalStyles = (
       }
 
       /* FullCalendar 예약현황 이벤트 */
+      .fc-daygrid-dot-event .fc-event-title{
+        text-overflow: ellipsis;
+      }
+
       .fc-h-event .fc-event-title-container{
         font-size: 0.9rem;
         padding: 2px;
         text-align: center;
-        cursor: pointer;
+        cursor: pointer
       }
 
       .fc-theme-standard .fc-scrollgrid{

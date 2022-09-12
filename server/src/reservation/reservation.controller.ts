@@ -4,18 +4,25 @@ import { pagination } from '../../module/paging';
 import * as connect from '../../middleware/db-connection';
 const reservationQuery = require('./reservation.query');
 
+interface ReservationProps{
+  id: number;
+  startDate: string;
+  endDate: string;
+  [key: string]: any;
+}
+
 interface BProps {
   id?: number;
   title: string;
   space: string;
+  isAllSpace: string;
   room: string;
   name: string;
   password: string;
   passwordConfirm: string;
   content: string;
   salt: string;
-  startDate: string;
-  endDate: string;
+  reservationList: ReservationProps[];
   status: string;
 }
 
@@ -32,21 +39,16 @@ const getReservationList = async(req: Request, res: Response, next: NextFunction
     const keyword = req.query.keyword ? `%${req.query.keyword}%` : '%%'; // 검색 키워드
     const status = req.query.status ? req.query.status : undefined; // 예약상태
     const space = req.query.space ? req.query.space : undefined; // 예약장소
-    const date = req.query.date ? req.query.date : undefined; // 예약조회 날짜
 
-    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, space, date, begin, pageSize);
+    const getReservationListQuery = reservationQuery.getReservationList(keyword, category, status, space, begin, pageSize);
     const result: any = await connect.executeForInput(getReservationListQuery.query, getReservationListQuery.params);
 
     // 페이징
     const paging = pagination(page, result[1][0].rowCount, pageSize);
 
-    // Schedule 페이지 예약현황 조회
-    const dayObject = onFilterReservationInfo(result[0]);
-
     res.send({
       result: result[0],
-      paging: paging,
-      dayObject: dayObject
+      paging: paging
     })
   }catch(err){
     console.log(err);
@@ -66,15 +68,22 @@ const getReservationDetailInfo = async(req: Request, res: Response, next: NextFu
     const { id } = req.params;
 
     if(id != 'detail'){
+
+      // 예약현황 조회
       const getReservationDetailQuery = reservationQuery.getReservationDetail(id);
       const result: any = await connect.executeForInput(getReservationDetailQuery.query, getReservationDetailQuery.params);
+      
+      // 예약공간 조회
+      const getReservationSpaceListQuery = reservationQuery.getReservationSpaceList(id);
+      const reservationSpaceList: any = await connect.executeForInput(getReservationSpaceListQuery.query, getReservationSpaceListQuery.params);
 
       // 페이지 조회수 업데이트
       const updateReserviatonViewCountQuery = reservationQuery.updateReserviatonViewCount(id);
       await connect.executeForInput(updateReserviatonViewCountQuery.query, updateReserviatonViewCountQuery.params);
 
       res.json({
-        result: result.length === 0 ? { auth: 'deny' } : result[0]
+        result: result.length === 0 ? { auth: 'deny' } : result[0],
+        reservationSpaceList: reservationSpaceList
       })
     }else{
       res.json({
@@ -96,15 +105,40 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { title, space, room, name, password, content, startDate, endDate, status }: BProps = req.body;
+    const { title, space, name, password, content, isAllSpace, reservationList, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
+    let reservationResult;
 
-    const doReservationQuery = reservationQuery.doReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, status);
-    const result: any = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
+    if(reservationList.length > 0){
 
-    res.send({
-      result: result
-    })
+      // 예약현황 등록
+      const doReservationQuery = reservationQuery.doReservation(title, space, name, hashPassword, content, salt, status);
+      const doReservationResult: any = await connect.executeForInput(doReservationQuery.query, doReservationQuery.params);
+
+      // 예약현황 식별 아이디
+      const reservationId = doReservationResult.insertId;
+
+      // 전체 예약( 연희 = 14, 서교 = 15 )
+      if(isAllSpace){
+
+        const spaceId = space === 'yeonhui' ? 14 : 15;
+        reservationResult = await reservationDetail(reservationId, spaceId, reservationList[0].startDate, reservationList[0].endDate);
+      }else{
+
+        // 공간 상세예약
+        reservationList.map(async (value) => {
+          reservationResult = await reservationDetail(reservationId, value.id, value.startDate, value.endDate);
+        })
+      }
+
+      res.send({
+        result: doReservationResult
+      })
+    }else{
+      res.send({
+        message: 'fail'
+      })
+    }
   }catch(err){
     console.log(err);
     console.log('예약중 에러발생');
@@ -171,14 +205,14 @@ const modifyReservation = async(req:Request, res: Response, next: NextFunction) 
   try{
 
     // Parameter
-    const { id, space, room, title, name, password, content, startDate, endDate, status }: BProps = req.body;
+    const { id, space, room, title, name, password, content, reservationList, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
 
-    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, id);
-    const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
+    // const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, id);
+    // const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
 
     res.send({
-      result: result
+      // result: result
     })
   }catch(err){
     console.log(err);
@@ -197,6 +231,11 @@ const deleteReservation = async(req:Request, res: Response, next: NextFunction) 
     // Parameter
     const { id } = req.body;
 
+    // 상세예약 삭제
+    const deleteReservationDetailQuery = reservationQuery.deleteReservationDetail(id);
+    await connect.executeForInput(deleteReservationDetailQuery.query, deleteReservationDetailQuery.params);
+
+    // 예약목록 삭제
     const deleteReservationQuery = reservationQuery.deleteReservation(id);
     const result = await connect.executeForInput(deleteReservationQuery.query, deleteReservationQuery.params);
 
@@ -206,65 +245,20 @@ const deleteReservation = async(req:Request, res: Response, next: NextFunction) 
   }catch(err){
     console.log(err);
     console.log('예약정보 삭제중 에러발생');
+    next();
     return({
       err: err
     })
   }
 }
 
-const onFilterReservationInfo = (result: any) =>{
+// 상세예약 하기
+const reservationDetail = async(id: string, spaceId: string | number, startDate: string, endDate: string) =>{
 
-  // Date Object
-  let dayObj:string[] = [];
-
-  result.map(function(obj: any){
-
-    let startDate = new Date(obj.reservation_start_date);
-    let endDate = new Date(obj.reservation_end_date);
-    let endDateFlag = true;
-
-    while(true){
-
-      let year: string | number = startDate.getFullYear(); // 연도
-      let month: string | number = startDate.getMonth() + 1; // 월
-      let date: string | number = startDate.getDate(); // 일
-
-      // 날짜 객체 Format 수정
-      month = month < 10 ? "0" + month : month;
-      date = date < 10 ? "0" + date : date;
-
-      dayObj.push(
-        year+'-'+month+'-'+date
-      );
-
-      if(obj.reservation_end_date_time === "00:00:00"){
-
-        if(endDateFlag){
-          endDate.setDate(endDate.getDate()-1);
-          endDateFlag = false;
-        }
-
-        // 날짜가 작거나 같은경우
-        if( startDate.getTime() === endDate.getTime() ){
-          break;
-        }
-      }else{
-
-        // 날짜가 같은경우
-        if( startDate.getTime() === endDate.getTime() ){
-          break;
-        }
-      }
-
-      startDate.setDate(startDate.getDate()+1)
-    }
-  })
-
-  dayObj = dayObj.filter((target, index, obj)=>{
-    return obj.indexOf(target) === index;
-  })
-
-  return dayObj;
+  const doReservationDetailQuery = reservationQuery.doReservationDetail(id, spaceId, startDate, endDate);
+  const result = await connect.executeForInput(doReservationDetailQuery.query, doReservationDetailQuery.params);
+  
+  return result;
 }
 
 module.exports = {

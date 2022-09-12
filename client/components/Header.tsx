@@ -286,7 +286,7 @@ const LnbList = styled.li`
   border: 1px solid #d6cbbf;
   color: #000;
   display: none;
-  background-color: rgba(247, 232, 213, 0.45);
+  background-color: rgba(247, 232, 213, 0.7);
   border-top: 0;
   cursor: pointer;
 

@@ -12,6 +12,7 @@ export const pagination = (page: number, totalCount : number, pageSize : number)
 
   if(endPage > totalPage)
     endPage = totalPage; // 전체 페이지 숫자가 마지막 페이지보다 작으면, 전체 페이지 숫자를 마지막 페이지로
+
   let max = totalCount - ((page - 1) * pageSize);
 
   return{

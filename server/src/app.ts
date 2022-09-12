@@ -21,6 +21,7 @@ app.get('/', (req: Request, res: Response, next:NextFunction) => {
   res.send('홈페이지!');
 });
 
+app.use(`${fixPath}/schedule`, require('./schedule')); // 스케줄
 app.use(`${fixPath}/reservation`, require('./reservation')); // 예약하기
 app.use(`${fixPath}/util`, require('./util')); // etc
 

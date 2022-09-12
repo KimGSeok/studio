@@ -14,6 +14,7 @@ interface LProps{
   id: number;
   title: string;
   space: string;
+  floor: string;
   room: string;
   name: string;
   view: number;
@@ -34,22 +35,21 @@ const Calendar = ({ events }: ListProps) =>{
   // Hooks
   const [ isLoad, setIsLoad ] = useState(false);
   const [ isShowDetailSchedule, setIsShowDetailSchedule ] = useState(false); // 우측 모달
-  const [ date, setDate ] = useState(null);
   const [ reservationList, setReservationList ] = useState<LProps[]>();
 
   const onClickEventHandler = async(e: any) =>{
 
-    const date = e.event.startStr;
+    // Id
+    const id = e.event.id;
 
     // Fetching
-    const res = await fetch(`${API_URL}/reservation?status=complete&space=yeonhui&date=${date}`)
+    const res = await fetch(`${API_URL}/schedule/space/?space=${'yeonhui'}&id=${id}`)
     const data = await res.json();
 
     // Result
     setReservationList(data.result);
 
     setIsShowDetailSchedule(!isShowDetailSchedule);
-    setDate(date);
   }
 
   const onCloseModalHandler = (e: MouseEvent<HTMLImageElement>) => {
@@ -75,6 +75,7 @@ const Calendar = ({ events }: ListProps) =>{
           ]}
           events={events}
           eventClick={onClickEventHandler}
+          displayEventTime={false}
         /> : ''
       }
       {
@@ -82,7 +83,7 @@ const Calendar = ({ events }: ListProps) =>{
         <DetailScheduleWrap>
           <DetailSchedule>
             <ScheduleInfoWrap>
-              <ScheduleDate>{date} 예약현황</ScheduleDate>
+              <ScheduleDate>예약현황</ScheduleDate>
               <CloseBtn
                 src="/icons/close_black.svg"
                 width={26}
@@ -100,7 +101,7 @@ const Calendar = ({ events }: ListProps) =>{
               reservationList.map((value, index) => {
                 return(
                   <ScheduleDetailInfoWrap key={index}>
-                    <ScheduleDetailInfo>&#91; {value.room} &#93;</ScheduleDetailInfo>
+                    <ScheduleDetailInfo>&#91; {value.room === 'all' ? '전체' : `${value.floor}층 - ${value.room}`} &#93;</ScheduleDetailInfo>
                     <ScheduleDetailInfo>{value.start_date}</ScheduleDetailInfo>
                     <ScheduleDetailInfo>{value.end_date}</ScheduleDetailInfo>
                   </ScheduleDetailInfoWrap>

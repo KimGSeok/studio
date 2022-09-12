@@ -77,8 +77,6 @@ const getSpaceList = async(req: Request, res: Response, next: NextFunction) =>{
     // Parameter
     const { space } = req.query;
 
-    console.log(space);
-
     // Query
     const getSpaceListQuery = utilQuery.getSpaceList(space);
     const spaceList: any = await connect.executeForInput(getSpaceListQuery.query, getSpaceListQuery.params);

@@ -1,8 +1,20 @@
 import { GetServerSideProps } from 'next';
 import styled from '@emotion/styled';
 import Calendar from '../../components/Calendar';
+import { masking } from '../../modules/validation';
 
-interface LProps{
+interface ReservationDetailProps{
+  id: string | number;
+  name: string;
+  floor: string;
+  room: string;
+  reservation_start_date: string;
+  reservation_end_date: string;
+  reservation_start_date_time: string;
+  reservation_end_date_time: string;
+}
+
+interface LProps extends ReservationDetailProps{
   id: number;
   title: string;
   name: string;
@@ -21,11 +33,15 @@ const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://loc
 const Yeonhui = ({ data, dayObject }: ListProps) =>{
 
   let events: object[] = []; // Calendar Event Array
-  dayObject.map((obj: object) => {
+  data.map((obj: ReservationDetailProps) => {
+    
+    const location = obj.floor === 'all' ? '[ 전체 ] ': `[ ${obj.floor}층 - ${obj.room} ] `
     events.push({
-      title: '예약현황',
-      start: obj,
-      end: obj
+      id: obj.id,
+      title: location + masking(obj.name) + ' | ' + obj.reservation_start_date_time + '시 ~ ' + obj.reservation_end_date_time + '시',
+      start: obj.reservation_start_date,
+      end: obj.reservation_end_date,
+      overlap: true,
     })
   });
 
@@ -77,13 +93,13 @@ const CalendarWrap = styled.div(
 
 export const getServerSideProps:GetServerSideProps = async() =>{
   try{
-    const res = await fetch(`${API_URL}/reservation?status=complete&space=yeonhui`)
+    const res = await fetch(`${API_URL}/schedule?space=yeonhui`)
     const data = await res.json();
 
     return {
       props: {
         data: data.result,
-        dayObject: data.dayObject
+        dayObject: data.dayObj
       }
     }
   }catch(err){

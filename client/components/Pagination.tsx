@@ -86,12 +86,14 @@ const NNextArrow = styled.div(
 )
 const PagingLists = styled.ul(
   {
-    margin: '0 4px'
+    margin: '0 4px',
+    display: 'flex'
   }
 )
 const PagingList = styled.li(
   {
     fontSize: '1.2rem',
+    padding: '0 4px',
     cursor: 'pointer'
   }
 )

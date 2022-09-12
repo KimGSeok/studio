@@ -1,37 +1,54 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, MouseEvent, Dispatch, SetStateAction } from "react";
 import styled from '@emotion/styled';
+import moment from 'moment';
+import DatePicker from "../components/DatePicker";
 import Modal from '../components/Modal';
 
 const API_URL = process.env.NEXT_PUBLIC_NODE_ENV === 'development' ? 'http://localhost:3001/server' : 'http://www.maisondesiri.com/server';
 
-interface CheckBoxProps{
+interface DatePickerProps{
+  checkReservationList: any;
+  reservationSpaceList: any;
+  setCheckReservationList: Dispatch<SetStateAction<any>>;
+}
+
+interface CheckBoxProps extends DatePickerProps{
   space: string;
+  setIsAllSpace: Dispatch<SetStateAction<boolean>>;
 }
 
 interface SpaceProps{
   [key: string]: string;
 }
 
-const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
+const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservationSpaceList, setCheckReservationList }: CheckBoxProps) =>{
 
   // Hooks
-  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>([]);
+  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>([]); // 예약 목록
+  const [ checkSpaceId, setCheckSpaceId ] = useState<string>(); // 체크한 목록 ID
+  const [ checkSpaceList, setCheckSpaceList ] = useState<any[]>([]); // 체크된 공간의 목록
+  const [ isCheckSpaceHtml, setIsCheckSpaceHtml ] = useState<any[]>([]); // HTML Check여부 확인 목록
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
-  const [ checkedItem, setCheckedItem ] = useState<string[]>([]);
+  const [ modalTitle, setModalTitle ] = useState<string>();
+  const [ startDate, setStartDate ] = useState<any>(null); // 시작날짜
+  const [ startTime, setStartTime ] = useState<any>('00:00'); // 시작시간
+  const [ endDate, setEndDate ] = useState<any>(null); // 종료날짜
+  const [ endTime, setEndTime ] = useState<any>('01:00'); // 종료시간
+  const allArr: string[] = [];
 
   // 공간선택 onChange Handler
-  const onChangeSpaceHandler = (e: ChangeEvent<HTMLInputElement>, id: string) =>{
+  const onChangeSpaceHandler = (e: ChangeEvent<HTMLInputElement>, id: string, room: string) =>{
     e.stopPropagation();
 
     const isChecked = e.target.checked;
 
-    // 체크박스 선택 시
     if(isChecked){
-      setCheckedItem([...checkedItem, id]);
-    }
-    // 체크박스 선택 해제 시
-    else{
-      setCheckedItem(checkedItem.filter((el) => el !== id));
+      setIsOpen(true);
+      setModalTitle(room);
+      setCheckSpaceId(id);
+    }else{
+      setCheckSpaceList(isCheckSpaceHtml.filter((el) => el !== id));
+      setIsCheckSpaceHtml(isCheckSpaceHtml.filter((el) => el !== id));
     }
   }
 
@@ -41,21 +58,70 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
 
     const isChecked = e.target.checked;
 
-    // 전체 체크박스 선택 시
     if(isChecked){
-
-      const allArr:string[] = [];
-      reservationSpaceArr.forEach((el) => allArr.push(el.id));
-      setCheckedItem(allArr);
+      setIsOpen(true);
+      setModalTitle('전체 공간');
+      setIsAllSpace(true);
+      setCheckSpaceId('all');
     }
     // 전체 체크박스 선택 해제 시
     else{
-      setCheckedItem([]);
+      setCheckSpaceList([]);
+      setIsCheckSpaceHtml([]);
     }
   }
 
+  /* 날짜 선택하기 버튼 Click Handler */
+  const onClickCheckDateHandler = (e: MouseEvent<HTMLDivElement>) =>{
+
+    if(!startDate){
+      alert("시작날짜를 선택해주세요.")
+      return false;
+    }
+
+    if(!endDate){
+      alert("종료날짜를 선택해주세요.")
+      return false;
+    }
+
+    // 공간이 선택 됬을 때
+    if(checkSpaceId){
+
+      // 전체공간인 경우
+      if(checkSpaceId === 'all'){
+
+        reservationSpaceArr.forEach((el) => allArr.push(el.id));
+        setIsCheckSpaceHtml(allArr);
+        setCheckSpaceList([{
+          id: checkSpaceId,
+          startDate: moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`),
+          endDate: moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`)
+        }]);
+      }
+      // 개별공간
+      else{
+        setIsCheckSpaceHtml([...isCheckSpaceHtml, checkSpaceId]);
+        setCheckSpaceList([...checkSpaceList, {
+          id: checkSpaceId,
+          startDate: moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`),
+          endDate: moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`)
+        }]);
+      }
+    }
+
+    setIsOpen(false);
+  }
+
+  /* 공간 선택 시, 상위 Props setState */
+  useEffect(() => {
+    
+    setCheckReservationList(checkSpaceList);
+  },[checkSpaceList])
+
+
   /* 공간목록 조회 useEffect */
   useEffect(() => {
+
     const getSpaceList = async() =>{
       
       // Data Fetching
@@ -73,6 +139,27 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
     getSpaceList();
   },[space])
 
+  /* Check Space Arr */
+  useEffect(() => {
+
+    // Arr
+    let spaceIdArr = [];
+
+    if(reservationSpaceArr.length > 0){
+      if(reservationSpaceList.length === 1 && reservationSpaceList[0].space_id === '14'){
+        setIsAllSpace(true);
+        reservationSpaceArr.forEach((el) => allArr.push(el.id));
+        setIsCheckSpaceHtml(allArr);
+      }else{
+        for(let index = 0; index < reservationSpaceList.length; index++){
+          spaceIdArr.push(parseInt(reservationSpaceList[index].space_id));
+        }
+    
+        setIsCheckSpaceHtml(spaceIdArr);
+      }
+    }
+  }, [reservationSpaceArr])
+
   return(
     <SpaceCheckBoxWrap>
       {/* 전체대관 개발 */}
@@ -83,7 +170,7 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
             id={'all'}
             type='checkbox'
             onChange={(e) => onChangeAllSpaceHandler(e)}
-            checked={checkedItem.length === reservationSpaceArr.length ? true : false}
+            checked={isCheckSpaceHtml.length === reservationSpaceArr.length ? true : false}
           />
           <SpaceRoomElement htmlFor={'all'}>전체 공간</SpaceRoomElement>
         </SpaceRoomWrap>
@@ -99,8 +186,8 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
                   <SpaceCheckBoxElement
                     id={el.id}
                     type='checkbox'
-                    onChange={(e) => onChangeSpaceHandler(e, el.id)}
-                    checked={checkedItem.includes(el.id) ? true : false}
+                    onChange={(e) => onChangeSpaceHandler(e, el.id, el.room)}
+                    checked={isCheckSpaceHtml.indexOf(el.id) !== -1}
                   />
                   <SpaceRoomElement htmlFor={el.id}>{el.room}</SpaceRoomElement>
                 </SpaceRoomWrap>
@@ -121,8 +208,8 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
                   <SpaceCheckBoxElement
                     id={el.id}
                     type='checkbox'
-                    onChange={(e) => onChangeSpaceHandler(e, el.id)}
-                    checked={checkedItem.includes(el.id) ? true : false}
+                    onChange={(e) => onChangeSpaceHandler(e, el.id, el.room)}
+                    checked={isCheckSpaceHtml.indexOf(el.id) !== -1}
                   />
                   <SpaceRoomElement htmlFor={el.id}>{el.room}</SpaceRoomElement>
                 </SpaceRoomWrap>
@@ -143,8 +230,8 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
                   <SpaceCheckBoxElement
                     id={el.id}
                     type='checkbox'
-                    onChange={(e) => onChangeSpaceHandler(e, el.id)}
-                    checked={checkedItem.includes(el.id) ? true : false}
+                    onChange={(e) => onChangeSpaceHandler(e, el.id, el.room)}
+                    checked={isCheckSpaceHtml.indexOf(el.id) !== -1}
                   />
                   <SpaceRoomElement htmlFor={el.id}>{el.room}</SpaceRoomElement>
                 </SpaceRoomWrap>
@@ -165,8 +252,8 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
                   <SpaceCheckBoxElement
                     id={el.id}
                     type='checkbox'
-                    onChange={(e) => onChangeSpaceHandler(e, el.id)}
-                    checked={checkedItem.includes(el.id) ? true : false}
+                    onChange={(e) => onChangeSpaceHandler(e, el.id, el.room)}
+                    checked={isCheckSpaceHtml.indexOf(el.id) !== -1}
                   />
                   <SpaceRoomElement htmlFor={el.id}>{el.room}</SpaceRoomElement>
                 </SpaceRoomWrap>
@@ -179,11 +266,22 @@ const SpaceCheckBox = ({ space }: CheckBoxProps) =>{
       {
         isOpen ?
         <Modal
-          title={'예약시 입력하신 비밀번호를 입력해주세요.'}
-          subTitle={'작성자와 관리자만 열람하실 수 있습니다.'}
+          title={modalTitle + ' 의 예약시간을 설정해주세요.'}
+          subTitle={'선택한 공간에 한해서만 시간이 설정됩니다.'}
           children={
             <>
-              야호
+              <DatePicker
+                isOpen={isOpen}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
+              />
+              <SelectDatePickerBtn onClick={(e)=>onClickCheckDateHandler(e)}>날짜 선택하기</SelectDatePickerBtn>
             </>
           }
           isShow={isOpen}
@@ -245,6 +343,18 @@ const SpaceRoomElement = styled.label(
     padding: '8px 8px',
     textAlign: 'center',
     cursor: 'pointer'
+  }
+)
+const SelectDatePickerBtn = styled.div(
+  {
+    maxWidth: '120px',
+    padding: '6px 8px',
+    border: '1px solid #e6e6e6',
+    marginLeft: 'auto',
+    borderRadius: '4px',
+    textAlign: 'center',
+    fontWeight: '500',
+    cursor: 'pointer',
   }
 )
 

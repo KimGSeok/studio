@@ -1,4 +1,4 @@
-import { ReactNode, Dispatch, SetStateAction  }  from 'react';
+import { ReactNode, Dispatch, SetStateAction }  from 'react';
 import Header from './Header';
 import Footer from './Footer';
 

@@ -7,6 +7,7 @@ import { timeList } from '../modules/time';
 import { equalCheck } from '../modules/validation';
 
 interface DProps{
+  isOpen: boolean;
   startDate: any;
   setStartDate: Dispatch<SetStateAction<any>>;
   endDate: any;
@@ -17,7 +18,7 @@ interface DProps{
   setEndTime: Dispatch<SetStateAction<any>>;
 }
 
-const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, setStartTime, endTime, setEndTime }: DProps) =>{
+const DatePicker = ({ isOpen, startDate, setStartDate, endDate, setEndDate, startTime, setStartTime, endTime, setEndTime }: DProps) =>{
 
   // List State
   const [ startTimeList, setStartTimeList ] = useState(timeList); // 시작시간 목록
@@ -136,7 +137,6 @@ const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, s
   }
 
   useEffect(() => {
-
     if(!initCheck){
 
       // 시작날짜 24:00 제거
@@ -146,6 +146,23 @@ const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, s
       initCheck = true;
     }
   },[])
+
+  /* 모달 On Off */
+  useEffect(() => {
+
+    // 공간을 선택해서 모달이 열렸을 때
+    if(isOpen){
+      const arrStartTimeList = timeList.filter(el => (el != '24:00'));
+      setStartDate(null);
+      setStartTime(arrStartTimeList[0]);
+      setStartTimeList(arrStartTimeList);
+
+      const arrEndTimeList = timeList.filter(el => (parseInt(el) > 0));
+      setEndDate(null);
+      setEndTime(arrEndTimeList[0]);
+      setEndTimeList(arrEndTimeList);
+    }
+  },[isOpen])
 
   return(
     <DatePickerWrap>
@@ -158,7 +175,7 @@ const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, s
         closeOnSelect={true}
         isValidDate={isValidStartDateHandler}
         onChange={onChangeStartDateHandler}
-        initialValue={startDate}
+        initialValue={isOpen ? undefined : startDate}
       />
       <TimePicker
         onChange={(e) => onChangeStartTimeHandler(e)}
@@ -182,7 +199,7 @@ const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, s
         closeOnSelect={true}
         isValidDate={isValidEndDateHandler}
         onChange={onChangeEndDateHandler}
-        initialValue={endDate}
+        initialValue={isOpen ? undefined : endDate}
       />
       <TimePicker
         onChange={(e) => onChangeEndTimeHandler(e)}
@@ -203,15 +220,16 @@ const DatePicker = ({ startDate, setStartDate, endDate, setEndDate, startTime, s
 const DatePickerWrap = styled.div(
   {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: '8px 0 0 0'
   }
 )
 const DatePickerEl = styled(Datetime)({
+  width: '40%',
   '& > input':{
     position: 'relative',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     outline: '0',
-    border: '0',
+    border: '1px solid #e6e6e6',
     minHeight: '36px',
     padding: '0 8px',
     borderRadius: '4px',
@@ -226,9 +244,8 @@ const DatePickerEl = styled(Datetime)({
 const TimePicker = styled.select(
   {
     position: 'relative',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     outline: '0',
-    border: '0',
+    border: '1px solid #e6e6e6',
     minHeight: '36px',
     padding: '0 8px',
     borderRadius: '4px',
@@ -237,7 +254,7 @@ const TimePicker = styled.select(
 )
 const Tilde = styled.span(
   {
-    margin: '0 6px'
+    margin: '18px 6px'
   }
 )
 

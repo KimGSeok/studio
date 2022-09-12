@@ -41,14 +41,15 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
   const [ reservationId, setReservationId ] = useState<number>();
   const [ isOpen, setIsOpen ] = useState<boolean>(false);
   const [ isCertification, setIsCertification ] = useState<boolean>(false);
+  const [ listSeq, setListSeq ] = useState<number>(paging.max);
+  const [ listPaging, setListPaging ] = useState<any>(paging);
 
   // Ref
   const categoryRef = useRef<HTMLSelectElement>(null); // 검색 카테고리
   const keywordRef = useRef<HTMLInputElement>(null); // 검색어
   const passwordRef = useRef<HTMLInputElement>(null); // 비밀번호 확인
 
-  // Parameter
-  let isListSeq = paging.max;
+  let isListSeq = listSeq;
 
   /* 상세 페이지 */
   const goDetail = (id: number) =>{
@@ -93,15 +94,17 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
 
     // Fetching
     const res = await fetch(`${API_URL}/reservation?category=${category}&keyword=${keyword}&page=${page}`)
-    const { result } = await res.json();
+    const { result, paging } = await res.json();
 
+    setListSeq(paging.max);
+    setListPaging(paging);
     setIsReservationList(result);
   }
 
   return(
     <Main>
       <PageIntroWrap>
-        <SearchInfo>전체 검색결과는 &#91; <SearchCount>{paging.max}</SearchCount> &#93; 건 입니다.</SearchInfo>
+        <SearchInfo>전체 검색결과는 &#91; <SearchCount>{listPaging.totalCount}</SearchCount> &#93; 건 입니다.</SearchInfo>
         <SearchWrap>
           <SearchCondition ref={categoryRef}>
             <option value="all">전체</option>
@@ -165,7 +168,7 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
           </ReservationTbody>
         </ReservationTable>
         <Pagination
-          paging={paging}
+          paging={listPaging}
           search={search}
         />
       </PageContentWrap>
@@ -195,7 +198,7 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
 
 const Main = styled.div(
   {
-    padding: '80px 12% 40px 12%',
+    padding: '80px 12% 0 12%',
     height: 'calc(100vh - 220px)',
     background: 'rgba(237, 221, 202, 1)',
   }
@@ -228,7 +231,7 @@ const SearchCondition = styled.select(
   {
     position: 'relative',
     right: '0',
-    border: '1px solid #b3b3b3',
+    border: '1px solid #8a8a8a',
     minHeight: '32px',
     padding: '0 8px',
     fontSize: '1rem'
@@ -239,7 +242,7 @@ const SearchInput = styled.input(
     minWidth: '340px',
     minHeight: '32px',
     padding: '0 12px',
-    border: '1px solid #b3b3b3',
+    border: '1px solid #8a8a8a',
     borderLeft: '0',
     borderRight: '0',
     fontSize: '1rem',
@@ -251,9 +254,11 @@ const SearchInput = styled.input(
 const SearchBtn = styled.div(
   {
     minHeight: '32px',
-    border: '1px solid #b8b8b8',
-    padding: '5px 14px',
+    maxHeight: '32px',
+    padding: '3px 14px',
     fontSize: '1rem',
+    border: '1px solid #8a8a8a',
+    background: '#fff',
     cursor: 'pointer'
   }
 )
@@ -264,11 +269,13 @@ const WriteBtn = styled.div(
     minWidth: '80px',
     maxWidth: '100px',
     minHeight: '32px',
-    border: '1px solid #b8b8b8',
+    background: '#fff',
     padding: '6px 12px',
     fontSize: '1rem',
     textAlign: 'center',
-    borderRadius: '4px',
+    borderRadius: '25px',
+    fontWeight: '500',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
     cursor: 'pointer'
   }
 )
@@ -285,13 +292,13 @@ const ReservationTable = styled.table(
 )
 const ReservationThead = styled.thead(
   {
-    borderTop: '1px solid #e6e6e6',
-    borderBottom: '1px solid #e6e6e6',
+    borderTop: '1px solid #8a8a8a',
+    borderBottom: '1px solid #8a8a8a',
   }
 )
 const ReservationThrow = styled.tr(
   {
-    borderBottom: '1px solid #e6e6e6',
+    borderBottom: '1px solid #8a8a8a',
   }
 )
 const ReservationTbody = styled.tbody(
@@ -300,7 +307,7 @@ const ReservationTbody = styled.tbody(
 )
 const ReservationTrow = styled.tr(
   {
-    borderBottom: '1px solid #e6e6e6',
+    borderBottom: '1px solid #8a8a8a',
     ':hover':{
       backgroundColor: '#f4f8f8',
       cursor: 'pointer'
@@ -310,7 +317,8 @@ const ReservationTrow = styled.tr(
 const ReservationTheader = styled.th<THProps>(
   {
     padding: '8px 0',
-    fontSize: '1.1rem'
+    fontSize: '1.05rem',
+    textAlign: 'center'
   },
   props => ({
     width: props.width
@@ -319,7 +327,8 @@ const ReservationTheader = styled.th<THProps>(
 const ReservationTData = styled.td(
   {
     textAlign: 'center',
-    padding: '12px 8px'
+    padding: '8px',
+    fontSize: '0.95rem'
   }
 )
 const LockImg = styled(Image)(

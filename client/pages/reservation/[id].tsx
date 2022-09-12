@@ -7,9 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from "next/dynamic";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import moment from 'moment';
 import axios from 'axios';
-import DatePicker from "../../components/DatePicker";
 import SpaceCheckBox from "../../components/SpaceCheckBox";
 axios.defaults.withCredentials = true;
 
@@ -24,7 +22,12 @@ interface FProps{
 }
 
 interface EProps{
+  width? : string;
   height? : string;
+}
+
+interface SpaceInfoProps{
+  [key: string]: string;
 }
 
 interface DProps{
@@ -44,6 +47,7 @@ interface DProps{
 
 interface DetailProps{
   data: DProps;
+  reservationSpaceList: SpaceInfoProps[];
   cookie: string;
 }
 
@@ -52,7 +56,9 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
 
-const DetailReservation = ({ data, cookie }: DetailProps) =>{
+const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) =>{
+
+  console.log(reservationSpaceList);
 
   // Result
   const defaultText: string = `
@@ -74,16 +80,14 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
   // Parameter
   const id = data.id ? data.id : ''; // 예약 고유 아이디
   const name = data.name ? data.name : ''; // 성명
-  const room = data.room ? data.room : ''; // 공간
   const status = data.status ? data.status : ''; // 예약상태
+  let isAllSpaceCheck = false;
 
   // State
   const [ content, setContent ] = useState<string>(data.content ? data.content : defaultText); // 내용
   const [ space, setSpace ] = useState<string>(data.space ? data.space : 'yeonhui'); // 장소선택
-  const [ startDate, setStartDate ] = useState<any>(data.start_date ? data.start_date : null); // 시작날짜
-  const [ startTime, setStartTime ] = useState<any>(data.start_time ? data.start_time : '00:00'); // 시작시간
-  const [ endDate, setEndDate ] = useState<any>(data.end_date ? data.end_date : null); // 종료날짜
-  const [ endTime, setEndTime ] = useState<any>(data.end_time ? data.end_time : '01:00'); // 종료시간
+  const [ isAllSpace, setIsAllSpace ] = useState<boolean>(isAllSpaceCheck); // 전체예약 여부
+  const [ checkReservationList, setCheckReservationList ] = useState([]); // 선택한 공간
 
   /* Form Validation */
   const formValidation = yup.object().shape({
@@ -113,68 +117,70 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
     })
 
     const result = response.data.result;
-    if(result. affectedRows > 0){
+    if(result[0].affectedRows > 0 && result[1].affectedRows > 0){
       alert("예약상태 변경이 완료되었습니다.");
     }else{
       alert("예약상태 변경중 에러가 발생하였습니다.\n관리자에게 문의해주세요.");
     }
   }
 
-
   /* Form Submit */
   const onSubmit = async(formData:any) => {
 
-    // 시작날짜 Check
-    if(startDate === null){
-      alert("예약 시작날짜를 선택해주세요.");
-      return false;
-    }
+    console.log(checkReservationList);
 
-    // 종료날짜 Check
-    if(endDate === null){
-      alert("예약 종료날짜를 선택해주세요.");
-      return false;
-    }
+    // 공간선택
+    if(checkReservationList.length > 0){
+    
+      const confirm = window.confirm('예약을 진행하시겠습니까?');
+      if(confirm){
+  
+        // Set Data
+        let result;
+        formData.title = '예약합니다';
+        formData.content = content;
+        formData.isAllSpace = isAllSpace;
+        formData.reservationList = checkReservationList;
+        status === '' ? formData.status = 'apply' : formData.status = status;
+  
+        if(id === '')
+          result = (await axios.post(`${API_URL}/reservation`, formData, {
+            withCredentials: true 
+          })).data;
+        else{
+          formData.id = id;
+          result = (await axios.put(`${API_URL}/reservation`, formData, {
+            withCredentials: true 
+          })).data;
+        }
+  
+        // Result
+        const response = result.result;
+        console.log(result);
 
-    const confirm = window.confirm('예약을 진행하시겠습니까?');
-    if(confirm){
+        if(response.affectedRows > 0 && id === '') {
 
-      // Set Data
-      let result;
-      formData.title = '예약합니다';
-      formData.content = content;
-      formData.startDate = moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`);
-      formData.endDate = moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`);
-      status === '' ? formData.status = 'apply' : formData.status = status;
-      
-      if(id === '')
-        result = (await axios.post(`${API_URL}/reservation`, formData, {
-          withCredentials: true 
-        })).data;
-      else{
-        formData.id = id;
-        result = (await axios.put(`${API_URL}/reservation`, formData, {
-          withCredentials: true 
-        })).data;
+          alert('예약이 완료되었습니다.');
+          Router.push(
+            '/reservation'
+          )
+        }else if(response.affectedRows > 0 && id !== ''){
+
+          alert('예약이 수정되었습니다.');
+          Router.push(
+            '/reservation'
+          )
+        }else{
+
+          alert('예약에 실패하였습니다.\n관리자에게 문의해주세요.');
+          Router.push(
+            '/reservation'
+          )
+        }
       }
-
-      const response = result.result;
-      if(response.affectedRows > 0 && id === '') {
-        alert('예약이 완료되었습니다.');
-        Router.push(
-          '/reservation'
-        )
-      }else if(response.affectedRows > 0 && id !== ''){
-        alert('예약이 수정되었습니다.');
-        Router.push(
-          '/reservation'
-        )
-      }else{
-        alert('예약에 실패하였습니다.\n관리자에게 문의해주세요.');
-        Router.push(
-          '/reservation'
-        )
-      }
+    }else{
+      alert("공간을 선택해주세요.");
+      return false;
     }
   }
 
@@ -257,44 +263,40 @@ const DetailReservation = ({ data, cookie }: DetailProps) =>{
           <FormRow>
             <FormHead>공간선택<FormSign> *</FormSign></FormHead>
             <FormValidationData>
-              {/* <SpaceSelect
-                {...register("room")}
-                name="room"
-                defaultValue={room}
-              >
-                <option value="1F - Kitchen, Room A">1F - Kitchen, Room A</option>
-                <option value="1F - Room B, C">1F - Room B, C</option>
-                <option value="1F - Bathroom">1F - Bathroom</option>
-                <option value="2F - Living Room">2F - Living Room</option>
-                <option value="2F - Kitchen">2F - Kitchen</option>
-                <option value="2F - Room A">2F - Room A</option>
-                <option value="2F - Room B">2F - Room B</option>
-                <option value="2F - BathRoom">2F - BathRoom</option>
-                <option value="3F - Central Space">3F - Central Space</option>
-                <option value="3F - Room A">3F - Room A</option>
-                <option value="3F - Room B">3F - Room B</option>
-                <option value="3F - Room C">3F - Room C</option>
-                <option value="Garden - Terrace">Garden - Terrace</option>
-              </SpaceSelect> */}
               <SpaceCheckBox
                 space={space}
+                setIsAllSpace={setIsAllSpace}
+                checkReservationList={checkReservationList}
+                reservationSpaceList={reservationSpaceList}
+                setCheckReservationList={setCheckReservationList}
               />
             </FormValidationData>
-          </FormRow>
-          <FormRow>
-            <FormHead>날짜선택<FormSign> *</FormSign></FormHead>
-            <FormValidationData>
-              <DatePicker
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                startTime={startTime}
-                setStartTime={setStartTime}
-                endTime={endTime}
-                setEndTime={setEndTime}
-              />
-            </FormValidationData>
+            {
+              cookie != 'empty' && reservationSpaceList && reservationSpaceList.length > 0 ?
+              <FormValidationAdminData>
+                <AdminDataHeadWrap>
+                  <AdminDataHead width={'10%'}>층</AdminDataHead>
+                  <AdminDataHead width={'20%'}>공간</AdminDataHead>
+                  <AdminDataHead width={'35%'}>시작날짜</AdminDataHead>
+                  <AdminDataHead width={'35%'}>예약날짜</AdminDataHead>
+                </AdminDataHeadWrap>
+                {
+                  reservationSpaceList.map((value: any, index: any) => {
+                    return(
+                      <AdminDataWrap key={index}>
+                        <AdminDataBodyWrap>
+                          <AdminDataBody width={'10%'}>{value.floor}층</AdminDataBody>
+                          <AdminDataBody width={'20%'}>{value.room}</AdminDataBody>
+                          <AdminDataBody width={'35%'}>{value.start_date_format}</AdminDataBody>
+                          <AdminDataBody width={'35%'}>{value.end_date_format}</AdminDataBody>
+                        </AdminDataBodyWrap>
+                      </AdminDataWrap>
+                    )
+                  })
+                }
+              </FormValidationAdminData>
+              : ''
+            }
           </FormRow>
           <FormRow>
             <FormHead>성명<FormSign> *</FormSign></FormHead>
@@ -463,6 +465,54 @@ const FormValidationData = styled.div(
     width: '60%'
   }
 )
+const FormValidationAdminData = styled.div(
+  {
+    width: 'calc(26% - (2% + 4px))',
+    margin: '0 0 0 1%',
+    backgroundColor: '#fff',
+    border: '0',
+    borderRadius: '4px',
+    padding: '12px 18px',
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
+  }
+)
+const AdminDataWrap = styled.div(
+  {
+    fontSize: '0.9rem'
+  }
+)
+const AdminDataHeadWrap = styled.div(
+  {
+    display: 'flex'
+  }
+)
+const AdminDataHead = styled.div<EProps>(
+  {
+    textAlign: 'center',
+    fontWeight: '500'
+  },
+  props =>(
+    {
+      width: props.width ? props.width : '25%',
+    }
+  )
+)
+const AdminDataBodyWrap = styled.div(
+  {
+    display: 'flex',
+    margin: '6px 0'
+  }
+)
+const AdminDataBody = styled.div<EProps>(
+  {
+    textAlign: 'center',
+  },
+  props =>(
+    {
+      width: props.width ? props.width : '25%',
+    }
+  )
+)
 const FormEditor = styled.div(
   {
     width: 'calc(85% + 4px)',
@@ -572,6 +622,7 @@ export const getServerSideProps: GetServerSideProps = async(context) =>{
     return {
       props: {
         data: result.data.result,
+        reservationSpaceList: result.data.reservationSpaceList ? result.data.reservationSpaceList : '',
         cookie: cookie ? cookie : 'empty'
       }
     }

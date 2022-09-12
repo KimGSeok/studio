@@ -58,7 +58,7 @@ const ModalWrap = styled.div(
   {
     width: '100%',
     height: '100%',
-    position: 'absolute',
+    position: 'fixed',
     top: 0,
     left: 0,
     backgroundColor: 'rgba(0,0,0,0.3)',
@@ -67,7 +67,7 @@ const ModalWrap = styled.div(
 )
 const ModalEl = styled.div(
   {
-    maxWidth: '480px',
+    maxWidth: '700px',
     margin: '160px auto 80px',
     padding: '24px 16px',
     backgroundColor: '#FFF',

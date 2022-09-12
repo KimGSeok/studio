@@ -1,11 +1,10 @@
 /* 예약목록 조회 */
-const getReservationList = (keyword: string, category:string, status: string, space: string, date: string, begin: number, pageSize: number) =>{
+const getReservationList = (keyword: string, category:string, status: string, space: string, begin: number, pageSize: number) =>{
 
   // TODO 검색조건이 추가되면 변경
   const orderCondition = category === 'all' ? 'name LIKE ?' : 'name LIKE ?';
   const statusCondition = status ? `AND status = ?` : '';
   const spaceCondition = space ? `AND space = ?` : '';
-  const dateCondition = date ? 'AND start_date <= ? AND end_date >= ?' : '';
 
   const query = `
     SELECT SQL_CALC_FOUND_ROWS
@@ -33,32 +32,28 @@ const getReservationList = (keyword: string, category:string, status: string, sp
       ${orderCondition}
       ${statusCondition}
       ${spaceCondition}
-      ${dateCondition}
     ORDER BY
       id DESC
     LIMIT ?, ?;
 
     SELECT FOUND_ROWS() AS rowCount;
   `;
-  let params: any = [ keyword, status, space, date, date, begin, pageSize ];
+  let params: any = [ keyword, status, space, begin, pageSize ];
   params = params.filter(function(e: any){ return e === 0 || e });
   return { query, params };
 }
 
 /* 예약하기 */
-const doReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, reservationStatus: string) =>{
+const doReservation = (title: string, space:string, name: string, password: string, content: string, salt: string, reservationStatus: string) =>{
   const query = `
     INSERT INTO
       reservation
       (
         title,
         space,
-        room,
         name,
         password,
         content,
-        start_date,
-        end_date,
         salt,
         view,
         status,
@@ -73,9 +68,6 @@ const doReservation = (title: string, space:string, room: string, name: string, 
         ?,
         ?,
         ?,
-        ?,
-        ?,
-        ?,
         1,
         ?,
         NOW(),
@@ -83,7 +75,38 @@ const doReservation = (title: string, space:string, room: string, name: string, 
       )
   `;
 
-  let params = [ title, space, room, name, password, content, startDate, endDate, salt, reservationStatus ];
+  let params = [ title, space, name, password, content, salt, reservationStatus ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
+/* 공간 상세정보 예약하기 */
+const doReservationDetail = (reservationId: string, spaceId: string | number, startDate: string, endDate: string) =>{
+  const query = `
+    INSERT INTO
+      reservation_detail
+      (
+        reservation_id,
+        space_id,
+        start_date,
+        end_date,
+        status,
+        create_time,
+        recent_update_time
+      )
+      VALUES
+      (
+        ?,
+        ?,
+        ?,
+        ?,
+        'apply',
+        NOW(),
+        NOW()
+      )
+  `;
+
+  let params = [ reservationId, spaceId, startDate, endDate ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -100,10 +123,6 @@ const getReservationDetail = (reservationId: number) => {
       status,
       password,
       content,
-      DATE_FORMAT(start_date, '%Y-%m-%d') AS start_date,
-      DATE_FORMAT(start_date, '%H:00') AS start_time,
-      DATE_FORMAT(end_date, '%Y-%m-%d') AS end_date,
-      DATE_FORMAT(end_date, '%H:00') AS end_time,
       view,
       salt,
       DATE_FORMAT(create_time, '%Y-%m-%d %H:%m:%s') AS create_time,
@@ -112,6 +131,35 @@ const getReservationDetail = (reservationId: number) => {
       reservation
     WHERE
       id = ?
+  `;
+  let params: any = [ reservationId ];
+  params = params.filter(function(e: any){ return e === 0 || e });
+  return { query, params };
+}
+
+/* 예약공간 상세정보 조회 */
+const getReservationSpaceList = (reservationId: number) => {
+  const query = `
+    SELECT
+      RD.id,
+      RD.reservation_id,
+      RD.space_id,
+      SP.floor,
+      SP.room,
+      DATE_FORMAT(RD.start_date, '%Y-%m-%d %H:%i:%s') AS start_date_format,
+      DATE_FORMAT(RD.end_date, '%Y-%m-%d %H:%i:%s') AS end_date_format,
+      DATE_FORMAT(RD.start_date, '%Y-%m-%d') AS start_date,
+      DATE_FORMAT(RD.start_date, '%H:00') AS start_time,
+      DATE_FORMAT(RD.end_date, '%Y-%m-%d') AS end_date,
+      DATE_FORMAT(RD.end_date, '%H:00') AS end_time
+    FROM
+      reservation_detail AS RD 
+    LEFT JOIN
+      space AS SP
+    ON
+      RD.space_id = SP.id 
+    WHERE
+      RD.reservation_id = ?
   `;
   let params: any = [ reservationId ];
   params = params.filter(function(e: any){ return e === 0 || e });
@@ -141,9 +189,16 @@ const changeReservationStatus = (reservationStatus: string, id: number) =>{
     SET
       status = ?
     WHERE
-      id = ?
+      id = ?;
+
+    UPDATE
+      reservation_detail
+    SET
+      status = ?
+    WHERE
+      reservation_id = ?;
   `
-  let params = [ reservationStatus, id ];
+  let params = [ reservationStatus, id , reservationStatus, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }
@@ -172,7 +227,21 @@ const modifyReservation = (title: string, space:string, room: string, name: stri
   return { query, params };
 }
 
-/* 예약 삭제하기 */
+/* 상세예약 삭제하기 */
+const deleteReservationDetail = (id: number) =>{
+  const query = `
+    DELETE
+    FROM
+      reservation_detail
+    WHERE
+      reservation_id = ?
+  `
+  let params = [ id ];
+  params = params.filter(function(e){ return e });
+  return { query, params };
+}
+
+/* 예약목록 삭제하기 */
 const deleteReservation = (id: number) =>{
   const query = `
     DELETE
@@ -189,9 +258,12 @@ const deleteReservation = (id: number) =>{
 module.exports = {
   getReservationList,
   doReservation,
+  doReservationDetail,
   getReservationDetail,
+  getReservationSpaceList,
   updateReserviatonViewCount,
   changeReservationStatus,
   modifyReservation,
+  deleteReservationDetail,
   deleteReservation
 }
