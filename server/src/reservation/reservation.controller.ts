@@ -12,7 +12,7 @@ interface ReservationProps{
 }
 
 interface BProps {
-  id?: number;
+  id: number;
   title: string;
   space: string;
   isAllSpace: string;
@@ -105,9 +105,9 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
   try{
 
     // Parameter
-    const { title, space, name, password, content, isAllSpace, reservationList, status }: BProps = req.body;
+    const { title, space, name, password, content, reservationList, status }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
-    let reservationResult;
+    let reservationResult
 
     if(reservationList.length > 0){
 
@@ -118,18 +118,10 @@ const doReservation = async(req: Request, res: Response, next: NextFunction) =>{
       // 예약현황 식별 아이디
       const reservationId = doReservationResult.insertId;
 
-      // 전체 예약( 연희 = 14, 서교 = 15 )
-      if(isAllSpace){
-
-        const spaceId = space === 'yeonhui' ? 14 : 15;
-        reservationResult = await reservationDetail(reservationId, spaceId, reservationList[0].startDate, reservationList[0].endDate);
-      }else{
-
-        // 공간 상세예약
-        reservationList.map(async (value) => {
-          reservationResult = await reservationDetail(reservationId, value.id, value.startDate, value.endDate);
-        })
-      }
+      // 공간 상세예약
+      reservationList.map(async (value) => {
+        reservationResult = await reservationDetail(reservationId, value.id, value.startDate, value.endDate);
+      })
 
       res.send({
         result: doReservationResult
@@ -205,14 +197,36 @@ const modifyReservation = async(req:Request, res: Response, next: NextFunction) 
   try{
 
     // Parameter
-    const { id, space, room, title, name, password, content, reservationList, status }: BProps = req.body;
+    const { id, space, title, name, password, content, reservationList }: BProps = req.body;
     const { salt, hashPassword } = await hash(password);
+    let result;
 
-    // const modifyReservationQuery = reservationQuery.modifyReservation(title, space, room, name, hashPassword, content, startDate, endDate, salt, id);
-    // const result = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
+    // 예약 수정
+    const modifyReservationQuery = reservationQuery.modifyReservation(title, space, name, hashPassword, content, salt, id);
+    const modifyReservationResult: any = await connect.executeForInput(modifyReservationQuery.query, modifyReservationQuery.params);
+
+    // 상세예약 삭제
+    const deleteReservationDetailQuery = reservationQuery.deleteReservationDetail(id);
+    await connect.executeForInput(deleteReservationDetailQuery.query, deleteReservationDetailQuery.params);
+
+    // 상세예약 등록
+    if(modifyReservationResult.affectedRows > 0){
+
+      // 공간 상세예약
+      if(reservationList){
+        reservationList.map(async (value) => {
+          result = await reservationDetail(
+            id,
+            value.space_id ? value.space_id: value.id,
+            value.start_date_format ? value.start_date_format : value.startDate,
+            value.end_date_format ? value.end_date_format: value.endDate
+          );
+        })
+      }
+    }
 
     res.send({
-      // result: result
+      result: modifyReservationResult
     })
   }catch(err){
     console.log(err);
@@ -253,7 +267,7 @@ const deleteReservation = async(req:Request, res: Response, next: NextFunction) 
 }
 
 // 상세예약 하기
-const reservationDetail = async(id: string, spaceId: string | number, startDate: string, endDate: string) =>{
+const reservationDetail = async(id: string | number, spaceId: string | number, startDate: string, endDate: string) =>{
 
   const doReservationDetailQuery = reservationQuery.doReservationDetail(id, spaceId, startDate, endDate);
   const result = await connect.executeForInput(doReservationDetailQuery.query, doReservationDetailQuery.params);

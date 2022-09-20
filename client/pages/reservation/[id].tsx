@@ -58,8 +58,6 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 
 const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) =>{
 
-  console.log(reservationSpaceList);
-
   // Result
   const defaultText: string = `
     1.	업체명과 담당자 성함 : </br>
@@ -126,7 +124,7 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
 
   /* Form Submit */
   const onSubmit = async(formData:any) => {
-
+    
     console.log(checkReservationList);
 
     // 공간선택
@@ -139,6 +137,7 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
         let result;
         formData.title = '예약합니다';
         formData.content = content;
+        formData.space = space;
         formData.isAllSpace = isAllSpace;
         formData.reservationList = checkReservationList;
         status === '' ? formData.status = 'apply' : formData.status = status;
@@ -156,7 +155,6 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
   
         // Result
         const response = result.result;
-        console.log(result);
 
         if(response.affectedRows > 0 && id === '') {
 
@@ -265,6 +263,8 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
             <FormValidationData>
               <SpaceCheckBox
                 space={space}
+                reservationId={id}
+                isAllSpace={isAllSpace}
                 setIsAllSpace={setIsAllSpace}
                 checkReservationList={checkReservationList}
                 reservationSpaceList={reservationSpaceList}
@@ -275,20 +275,20 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
               cookie != 'empty' && reservationSpaceList && reservationSpaceList.length > 0 ?
               <FormValidationAdminData>
                 <AdminDataHeadWrap>
-                  <AdminDataHead width={'10%'}>층</AdminDataHead>
-                  <AdminDataHead width={'20%'}>공간</AdminDataHead>
-                  <AdminDataHead width={'35%'}>시작날짜</AdminDataHead>
-                  <AdminDataHead width={'35%'}>예약날짜</AdminDataHead>
+                  <AdminDataHead width={'15%'}>층</AdminDataHead>
+                  <AdminDataHead width={'25%'}>공간</AdminDataHead>
+                  <AdminDataHead width={'30%'}>시작날짜</AdminDataHead>
+                  <AdminDataHead width={'30%'}>예약날짜</AdminDataHead>
                 </AdminDataHeadWrap>
                 {
                   reservationSpaceList.map((value: any, index: any) => {
                     return(
                       <AdminDataWrap key={index}>
                         <AdminDataBodyWrap>
-                          <AdminDataBody width={'10%'}>{value.floor}층</AdminDataBody>
-                          <AdminDataBody width={'20%'}>{value.room}</AdminDataBody>
-                          <AdminDataBody width={'35%'}>{value.start_date_format}</AdminDataBody>
-                          <AdminDataBody width={'35%'}>{value.end_date_format}</AdminDataBody>
+                          <AdminDataBody width={'15%'}>{value.floor}층</AdminDataBody>
+                          <AdminDataBody width={'25%'}>{value.room}</AdminDataBody>
+                          <AdminDataBody width={'30%'}>{value.start_date_format}</AdminDataBody>
+                          <AdminDataBody width={'30%'}>{value.end_date_format}</AdminDataBody>
                         </AdminDataBodyWrap>
                       </AdminDataWrap>
                     )
@@ -445,7 +445,7 @@ const FormErrorMessage = styled.div(
 )
 const FormHead = styled.div<EProps>(
   {
-    width: 'calc(15% - 4px)',
+    width: 'calc(10% - 4px)',
     height: '36px',
     backgroundColor: '#ffffff',
     borderRadius: '6px',
@@ -467,18 +467,18 @@ const FormValidationData = styled.div(
 )
 const FormValidationAdminData = styled.div(
   {
-    width: 'calc(26% - (2% + 4px))',
+    width: 'calc(31% - (2% + 4px))',
     margin: '0 0 0 1%',
     backgroundColor: '#fff',
     border: '0',
     borderRadius: '4px',
-    padding: '12px 18px',
+    padding: '8px 12px',
     boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
   }
 )
 const AdminDataWrap = styled.div(
   {
-    fontSize: '0.9rem'
+    fontSize: '0.85rem'
   }
 )
 const AdminDataHeadWrap = styled.div(
@@ -515,7 +515,7 @@ const AdminDataBody = styled.div<EProps>(
 )
 const FormEditor = styled.div(
   {
-    width: 'calc(85% + 4px)',
+    width: 'calc(90% + 4px)',
     borderRadius: '6px',
     fontSize: '1.05rem',
     border: '0',

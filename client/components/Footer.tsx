@@ -29,7 +29,7 @@ const Footer = () =>{
 
 const FooterEl = styled.footer({
   height: '220px',
-  background: 'rgba(237, 221, 202, 1)',
+  background: 'rgba(230, 211, 188, 1)',
   padding: '30px 12%',
   lineHeight: '1.7rem',
   boxShadow: '0 1px 4px 1px rgb(5 5 5 / 20%)',

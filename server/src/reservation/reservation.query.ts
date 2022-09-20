@@ -204,25 +204,22 @@ const changeReservationStatus = (reservationStatus: string, id: number) =>{
 }
 
 /* 예약 수정하기 */
-const modifyReservation = (title: string, space:string, room: string, name: string, password: string, content: string, startDate: string, endDate: string, salt: string, id: number) =>{
+const modifyReservation = (title: string, space:string, name: string, password: string, content: string, salt: string, id: number) =>{
   const query = `
     UPDATE
       reservation
     SET
       title = ?,
       space = ?,
-      room = ?,
       name = ?,
       password = ?,
       content = ?,
-      start_date = ?,
-      end_date = ?,
       salt = ?,
       recent_update_time = NOW()
     WHERE
       id = ?
   `
-  let params = [ title, space, room, name, password, content, startDate, endDate, salt, id ];
+  let params = [ title, space, name, password, content, salt, id ];
   params = params.filter(function(e){ return e });
   return { query, params };
 }

@@ -53,7 +53,7 @@ const Header = ({ setIsShowSquare }: SProps) => {
 
   return(
     <HeaderEl
-      bgColor={pathname === '/' ? 'rgba(247, 232, 213, 0.45)' : 'rgba(237, 221, 202, 1)'}
+      bgColor={pathname === '/' ? 'rgba(247, 232, 213, 0.45)' : 'rgba(230, 211, 188, 1)'}
       boxShadow={pathname === '/' ? '' : '0 1px 5px 1px rgb(5 5 5 / 10%)'}
       color={pathname === '/' ? '#632e24' : '#000'}
     >

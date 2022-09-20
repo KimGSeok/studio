@@ -36,7 +36,7 @@ const Calendar = ({ events }: ListProps) =>{
   const [ isLoad, setIsLoad ] = useState(false);
   const [ isShowDetailSchedule, setIsShowDetailSchedule ] = useState(false); // 우측 모달
   const [ reservationList, setReservationList ] = useState<LProps[]>();
-
+  
   const onClickEventHandler = async(e: any) =>{
 
     // Id
@@ -119,7 +119,17 @@ const Calendar = ({ events }: ListProps) =>{
 const FullCalendarWrap = styled.div(
   {
     padding: '20px 0',
-    fontSize: '0.9rem'
+    fontSize: '0.9rem',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '8px 10px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: 'inherit'
+    }
   }
 )
 const DetailScheduleWrap = styled.div(

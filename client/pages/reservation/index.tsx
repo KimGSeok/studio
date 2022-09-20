@@ -255,7 +255,7 @@ const SearchBtn = styled.div(
   {
     minHeight: '32px',
     maxHeight: '32px',
-    padding: '3px 14px',
+    padding: '5px 14px',
     fontSize: '1rem',
     border: '1px solid #8a8a8a',
     background: '#fff',

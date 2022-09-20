@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 
 interface IImageProps{
-  width?: string;
+  width?: string | number;
   margin?: string;
 }
 
@@ -25,7 +25,7 @@ const Yeonhui:NextPage = () =>{
                 return(
                   <TabList
                     key={key}
-                    css={checkTabList === value ? css`background-color: #fff;` : ''}
+                    css={checkTabList === value ? css`background-color: #ffecd9;` : ''}
                     onClick={()=>setCheckTabList(value)}
                   >{value}</TabList>
                 )
@@ -51,6 +51,24 @@ const Yeonhui:NextPage = () =>{
                   height={12}
                   layout={'responsive'}
                 />
+              </ContentImageWrap>
+              <ContentImageWrap margin={'0 5px 0 0 !important'}>
+                <ImageArea width={'calc(50% - 5px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/1 Floor/Salon de siri33_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(24% - 10px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/1 Floor/Salon de siri34_L res.jpg'
+                    width={5}
+                    height={8}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
               </ContentImageWrap>
               <ContentTitle>Room B, C</ContentTitle>
               <ContentImageWrap>
@@ -81,6 +99,25 @@ const Yeonhui:NextPage = () =>{
                   height={12}
                   layout={'responsive'}
                 />
+              </ContentImageWrap>
+              <ContentTitle>1.5F Bathroom</ContentTitle>
+              <ContentImageWrap>
+                <ImageArea width={'calc(65% - 10px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/1 Floor/Salon de siri23_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 10px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/1 Floor/Salon de siri24_L res.jpg'
+                    width={8}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
               </ContentImageWrap>
             </> : ''
           }
@@ -156,19 +193,33 @@ const Yeonhui:NextPage = () =>{
                 </ImageArea>
               </ContentImageWrap>
               <ContentTitle>BathRoom</ContentTitle>
-              <ContentImageWrap>
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0215(저해상).jpg'
-                  width={16}
-                  height={14}
-                  layout={'responsive'}
-                />
-                <ContentImage
-                  src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0219(저해상).jpg'
-                  width={16}
-                  height={14}
-                  layout={'responsive'}
-                />
+              <ContentImageWrap
+                width={'calc(33%) !important'}
+              >
+                <ImageArea width={'calc(33% - 3px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0215(저해상).jpg'
+                    width={4}
+                    height={4.9}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 3px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0219(저해상).jpg'
+                    width={4}
+                    height={4.9}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 3px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0218(저해상).jpg'
+                    width={4}
+                    height={4.9}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
               </ContentImageWrap>
             </> : ''
           }
@@ -281,6 +332,27 @@ const Yeonhui:NextPage = () =>{
                   />
                 </ImageArea>
               </ContentImageWrap>
+              <ContentTitle>Bathroom</ContentTitle>
+              <ContentImageWrap
+                width={'calc(33%) !important'}
+              >
+                <ImageArea width={'40%'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0050(저해상).jpg'
+                    width={14}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'40%'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0051(저해상).jpg'
+                    width={14}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+              </ContentImageWrap>
               <ContentTitle>Room C</ContentTitle>
               <ContentImageWrap>
                 <ImageArea width={'calc(33% - 1px)'}>
@@ -308,38 +380,62 @@ const Yeonhui:NextPage = () =>{
                   />
                 </ImageArea>
               </ContentImageWrap>
+              <ContentTitle>Terrace</ContentTitle>
+              <ContentImageWrap>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri19_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri20_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+                <ImageArea width={'calc(33% - 1px)'}>
+                  <ContentImage
+                    src='/images/space/yeonhui/3 Floor/Salon de siri18_L res.jpg'
+                    width={16}
+                    height={12}
+                    layout={'responsive'}
+                  />
+                </ImageArea>
+              </ContentImageWrap>
             </> : ''
           }
           {/* 3층 */
             checkTabList === 'Garden' ? 
             <>
-              <ContentTitle>Terrace</ContentTitle>
+              <ContentTitle>Garden</ContentTitle>
               <ContentImageWrap>
                 <ImageArea width={'calc(33% - 1px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/3F Terrace/Salon de siri19_L res.jpg'
+                    src='/images/space/yeonhui/3F Terrace/220611_MasiondeSiri0143.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
-                    priority={true}
                   />
                 </ImageArea>
                 <ImageArea width={'calc(33% - 1px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/3F Terrace/Salon de siri20_L res.jpg'
+                    src='/images/space/yeonhui/3F Terrace/220611_MasiondeSiri0134.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
-                    priority={true}
                   />
                 </ImageArea>
                 <ImageArea width={'calc(33% - 1px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/3F Terrace/Salon de siri18_L res.jpg'
+                    src='/images/space/yeonhui/3F Terrace/220611_MasiondeSiri0146.jpg'
                     width={16}
                     height={12}
                     layout={'responsive'}
-                    priority={true}
                   />
                 </ImageArea>
               </ContentImageWrap>
@@ -394,7 +490,7 @@ const TabListWrap = styled.div(
 )
 const TabLists = styled.ul(
   {
-    backgroundColor: '#E7E6E6',
+    backgroundColor: '#fff9f0',
     padding: '10px 12px',
     borderRadius: '6px',
 
@@ -405,7 +501,7 @@ const TabLists = styled.ul(
 
     /* Phone */
     '@media screen and (max-width: 480px)': {
-      padding: '6px 8px',
+      padding: '6px 4px',
     }
   }
 )
@@ -457,6 +553,7 @@ const ContentImageWrap = styled.div<IImageProps>(
   props => ({
     '& > span': {
       width: props.width ? props.width : 'calc(50% - 5px) !important',
+      margin: props.margin ? props.margin : '',
       display: 'inline-block !important',
     },
   })
@@ -468,16 +565,16 @@ const ImageArea = styled.div<IImageProps>(
 
     /* Tablet */
     '@media screen and (max-width: 1024px)': {
-      width: '100% !important',
+      width: '100%',
       display: 'block',
-      margin: props.margin ? props.margin : '0 0 9px 0 !important'
+      margin: props.margin ? props.margin : '0 0 9px 0'
     },
 
     /* Phone */
     '@media screen and (max-width: 480px)': {
-      width: '100% !important',
+      width: '100%',
       display: 'block',
-      margin: props.margin ? props.margin : '0 0 9px 0 !important'
+      margin: props.margin ? props.margin : '0 0 9px 0'
     }
   })
 )

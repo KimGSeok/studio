@@ -13,7 +13,9 @@ interface DatePickerProps{
 }
 
 interface CheckBoxProps extends DatePickerProps{
+  reservationId: string | number;
   space: string;
+  isAllSpace: boolean;
   setIsAllSpace: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -21,10 +23,10 @@ interface SpaceProps{
   [key: string]: string;
 }
 
-const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservationSpaceList, setCheckReservationList }: CheckBoxProps) =>{
+const SpaceCheckBox = ({ reservationId, space, isAllSpace, setIsAllSpace, checkReservationList, reservationSpaceList, setCheckReservationList }: CheckBoxProps) =>{
 
   // Hooks
-  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>([]); // 예약 목록
+  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>([]); // 예약 공간목록
   const [ checkSpaceId, setCheckSpaceId ] = useState<string>(); // 체크한 목록 ID
   const [ checkSpaceList, setCheckSpaceList ] = useState<any[]>([]); // 체크된 공간의 목록
   const [ isCheckSpaceHtml, setIsCheckSpaceHtml ] = useState<any[]>([]); // HTML Check여부 확인 목록
@@ -47,7 +49,13 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
       setModalTitle(room);
       setCheckSpaceId(id);
     }else{
-      setCheckSpaceList(isCheckSpaceHtml.filter((el) => el !== id));
+
+      // 상세 페이지(수정)일 경우
+      if(reservationId){
+        setCheckSpaceList(checkReservationList.filter((el: any) => el.space_id != id));
+      }else{
+        setCheckSpaceList(checkReservationList.filter((el: any) => el.id !== id));
+      }
       setIsCheckSpaceHtml(isCheckSpaceHtml.filter((el) => el !== id));
     }
   }
@@ -59,9 +67,11 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
     const isChecked = e.target.checked;
 
     if(isChecked){
+
+      setIsAllSpace(true);
+
       setIsOpen(true);
       setModalTitle('전체 공간');
-      setIsAllSpace(true);
       setCheckSpaceId('all');
     }
     // 전체 체크박스 선택 해제 시
@@ -90,13 +100,21 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
       // 전체공간인 경우
       if(checkSpaceId === 'all'){
 
+        // 전체 공간 setState를 담을 Arr
+        let checkAllSpace: object[] = [];
+
         reservationSpaceArr.forEach((el) => allArr.push(el.id));
         setIsCheckSpaceHtml(allArr);
-        setCheckSpaceList([{
-          id: checkSpaceId,
-          startDate: moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`),
-          endDate: moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`)
-        }]);
+
+        reservationSpaceArr.map((value, index) => {
+          checkAllSpace.push({
+            id: value.id,
+            startDate: moment(startDate).format(`YYYY-MM-DD ${startTime}:ss`),
+            endDate: moment(endDate).format(`YYYY-MM-DD ${endTime}:ss`)
+          })
+        })
+
+        setCheckSpaceList(checkAllSpace);
       }
       // 개별공간
       else{
@@ -114,7 +132,7 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
 
   /* 공간 선택 시, 상위 Props setState */
   useEffect(() => {
-    
+
     setCheckReservationList(checkSpaceList);
   },[checkSpaceList])
 
@@ -139,16 +157,19 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
     getSpaceList();
   },[space])
 
-  /* Check Space Arr */
+  /* Init Check Space Arr */
   useEffect(() => {
 
     // Arr
     let spaceIdArr = [];
 
     if(reservationSpaceArr.length > 0){
+
+      // 전체예약
       if(reservationSpaceList.length === 1 && reservationSpaceList[0].space_id === '14'){
         setIsAllSpace(true);
         reservationSpaceArr.forEach((el) => allArr.push(el.id));
+
         setIsCheckSpaceHtml(allArr);
       }else{
         for(let index = 0; index < reservationSpaceList.length; index++){
@@ -157,6 +178,9 @@ const SpaceCheckBox = ({ space, setIsAllSpace, checkReservationList, reservation
     
         setIsCheckSpaceHtml(spaceIdArr);
       }
+
+      setCheckSpaceList(reservationSpaceList);
+      setCheckReservationList(reservationSpaceList);
     }
   }, [reservationSpaceArr])
 
