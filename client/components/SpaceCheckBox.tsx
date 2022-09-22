@@ -322,7 +322,17 @@ const SpaceCheckBoxWrap = styled.div(
     border: '0',
     borderRadius: '4px',
     padding: '12px 18px',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '12px 15px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '12px 12px',
+    }
   }
 )
 const SpaceWrap = styled.div(
@@ -333,7 +343,17 @@ const SpaceWrap = styled.div(
 const SpaceFloorWrap = styled.div(
   {
     fontSize: '1.2rem',
-    padding: '2px 6px'
+    padding: '2px 6px',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+    }
   }
 )
 const SpaceRoomWrap = styled.div(
@@ -344,6 +364,16 @@ const SpaceRoomWrap = styled.div(
     ':nth-of-type(odd)': {
       margin: '6px 12px'
     },
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: 'calc(20% - 12px)',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: 'calc(50% - 12px)',
+    }
   }
 )
 const SpaceCheckBoxElement = styled.input(
@@ -379,6 +409,16 @@ const SelectDatePickerBtn = styled.div(
     textAlign: 'center',
     fontWeight: '500',
     cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      marginTop: '12px'
+    }
   }
 )
 

@@ -125,8 +125,6 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
   /* Form Submit */
   const onSubmit = async(formData:any) => {
     
-    console.log(checkReservationList);
-
     // 공간선택
     if(checkReservationList.length > 0){
     
@@ -253,7 +251,7 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
                 onChange={(e)=>{setSpace(e.target.value)}}
               >
                 <option value="yeonhui">연희점</option>
-                <option value="seogyo">서교점</option>
+                {/* <option value="seogyo">서교점</option> */}
               </SpaceSelect>
               {errors?.name && <FormErrorMessage><FormSign>*</FormSign> {errors.name.message}</FormErrorMessage>}
             </FormValidationData>
@@ -388,13 +386,35 @@ const Main = styled.div(
   {
     padding: '80px 12% 40px 12%',
     background: 'rgba(237, 221, 202, 1)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '80px 9% 40px 9%',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '80px 6% 10px 6%',
+      height: 'auto'
+    }
   }
 )
 const PageIntroWrap = styled.div(
   {
     display: 'flex',
     margin: '0 0 18px 0',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      margin: '0 0 12px 0',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      margin: '0 0 8px 0',
+      display: 'grid'
+    }
   }
 )
 const PageIntro = styled.div(
@@ -402,7 +422,19 @@ const PageIntro = styled.div(
     fontWeight: '500',
     boxShadow: 'inset 0 -7px rgb(247 232 213 / 60%)',
     fontSize: '1.2rem',
-    display: 'inline-block'
+    display: 'inline-block',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+      wordBreak: 'keep-all',
+      margin: '0 0 9px 0'
+    }
   }
 )
 const ReservationStatusSelect = styled.select(
@@ -427,7 +459,18 @@ const FormRow = styled.div(
   {
     width: '100%',
     display: 'flex',
-    margin: '0 0 8px 0'
+    margin: '0 0 8px 0',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      margin: '0 0 7px 0',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      margin: '0 0 6px 0',
+      display: 'grid'
+    }
   }
 )
 const FormSign = styled.span(
@@ -452,7 +495,26 @@ const FormHead = styled.div<EProps>(
     padding: '8px 12px',
     fontSize: '1.05rem',
     margin: '0 8px 0 0',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: 'calc(20% - 4px)',
+      height: '36px',
+      padding: '8px 12px',
+      margin: '0 6px 0 0',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: 'calc(40% - 4px)',
+      height: '32px',
+      padding: '6px 8px 2px 2px',
+      margin: '0 4px 4px 0',
+      backgroundColor: 'inherit',
+      boxShadow: 'inherit',
+      fontWeight: '500'
+    }
   },
   props =>(
     {
@@ -462,7 +524,12 @@ const FormHead = styled.div<EProps>(
 )
 const FormValidationData = styled.div(
   {
-    width: '60%'
+    width: '60%',
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '100%',
+    }
   }
 )
 const FormValidationAdminData = styled.div(
@@ -473,7 +540,19 @@ const FormValidationAdminData = styled.div(
     border: '0',
     borderRadius: '4px',
     padding: '8px 12px',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '100%',
+      margin: '12px 0 0 0',
+      padding: '9px 6px',
+    }
   }
 )
 const AdminDataWrap = styled.div(
@@ -519,7 +598,17 @@ const FormEditor = styled.div(
     borderRadius: '6px',
     fontSize: '1.05rem',
     border: '0',
-    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)'
+    boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: 'calc(90% - 4px)',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: 'calc(100% - 4px)',
+    }
   }
 )
 const SpaceSelect = styled.select(
@@ -550,7 +639,17 @@ const FormInput = styled.input(
 const FormBtnWrap = styled.div(
   {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      margin: '12px 0 0 0'
+    }
   }
 )
 const ListBtn = styled.div(

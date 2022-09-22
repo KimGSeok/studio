@@ -57,7 +57,19 @@ const PprevArrow = styled.div(
     width: '30px',
     height: '30px',
     background: 'url(/icons/first_page_black.svg) no-repeat center center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '25px',
+      height: '25px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '18px',
+      height: '18px',
+    }
   }
 )
 const PrevArrow = styled.div(
@@ -65,7 +77,19 @@ const PrevArrow = styled.div(
     width: '30px',
     height: '30px',
     background: 'url(/icons/navigate_before_black.svg) no-repeat center center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '25px',
+      height: '25px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '18px',
+      height: '18px',
+    }
   }
 )
 const NextArrow = styled.div(
@@ -73,7 +97,19 @@ const NextArrow = styled.div(
     width: '30px',
     height: '30px',
     background: 'url(/icons/navigate_next_black.svg) no-repeat center center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '25px',
+      height: '25px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '18px',
+      height: '18px',
+    }
   }
 )
 const NNextArrow = styled.div(
@@ -81,7 +117,19 @@ const NNextArrow = styled.div(
     width: '30px',
     height: '30px',
     background: 'url(/icons/last_page_black.svg) no-repeat center center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '25px',
+      height: '25px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '18px',
+      height: '18px',
+    }
   }
 )
 const PagingLists = styled.ul(
@@ -94,7 +142,19 @@ const PagingList = styled.li(
   {
     fontSize: '1.2rem',
     padding: '0 4px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+      padding: '0 3px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+      padding: '0 2px',
+    }
   }
 )
 

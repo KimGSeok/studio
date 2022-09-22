@@ -123,7 +123,7 @@ const FullCalendarWrap = styled.div(
 
     /* Tablet */
     '@media screen and (max-width: 1024px)': {
-      padding: '8px 10px',
+      padding: '8px 0',
     },
 
     /* Phone */
@@ -155,7 +155,21 @@ const DetailSchedule = styled.div(
     borderTopLeftRadius: '8px',
     borderBottomLeftRadius: '8px',
     padding: '10px 24px 10px 24px',
-    overflowY: 'auto'
+    overflowY: 'auto',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '50%',
+      padding: '10px 18px 10px 18px',
+      fontSize: '1rem'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '90%',
+      padding: '10px 12px 10px 12px',
+      fontSize: '0.8rem'
+    }
   }
 )
 const ScheduleInfoWrap = styled.div(

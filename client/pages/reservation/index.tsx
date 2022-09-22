@@ -162,7 +162,7 @@ const Reservation = ({ data, paging, cookie }: ListProps) =>{
               })
               :
               <ReservationTrow>
-                <ReservationTData colSpan={5}>검색 결과가 없어요.</ReservationTData>
+                <ReservationTData css={css` display:revert !important; `}colSpan={5}>검색 결과가 없어요.</ReservationTData>
               </ReservationTrow>
             }
           </ReservationTbody>
@@ -201,6 +201,17 @@ const Main = styled.div(
     padding: '80px 12% 0 12%',
     height: 'calc(100vh - 220px)',
     background: 'rgba(237, 221, 202, 1)',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      padding: '80px 9% 40px 9%',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      padding: '80px 6% 10px 6%',
+      height: '75vh'
+    }
   }
 )
 const PageIntroWrap = styled.div(
@@ -208,12 +219,33 @@ const PageIntroWrap = styled.div(
     margin: '18px 0 12px 0',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      display: 'grid'
+    }
   }
 )
 const SearchInfo = styled.div(
   {
     fontSize: '1.2rem',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+      marginBottom: '8px'
+    }
   }
 )
 const SearchCount = styled.span(
@@ -234,7 +266,21 @@ const SearchCondition = styled.select(
     border: '1px solid #8a8a8a',
     minHeight: '32px',
     padding: '0 8px',
-    fontSize: '1rem'
+    fontSize: '1rem',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      minHeight: '30px',
+      fontSize: '0.9rem',
+      padding: '0 6px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      minHeight: '28px',
+      fontSize: '0.8rem',
+      padding: '0 4px',
+    }
   }
 )
 const SearchInput = styled.input(
@@ -248,6 +294,23 @@ const SearchInput = styled.input(
     fontSize: '1rem',
     ':focus, :active':{
       outline: '0',
+    },
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      minWidth: '280px',
+      minHeight: '30px',
+      fontSize: '0.9rem',
+      padding: '0 10px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      maxWidth: '170px',
+      minWidth: '160px',
+      minHeight: '28px',
+      fontSize: '0.8rem',
+      padding: '0 8px',
     }
   },
 )
@@ -259,7 +322,21 @@ const SearchBtn = styled.div(
     fontSize: '1rem',
     border: '1px solid #8a8a8a',
     background: '#fff',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      minHeight: '30px',
+      fontSize: '0.9rem',
+      padding: '5px 10px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      minHeight: '28px',
+      fontSize: '0.8rem',
+      padding: '5px 8px',
+    }
   }
 )
 const WriteBtn = styled.div(
@@ -276,7 +353,23 @@ const WriteBtn = styled.div(
     borderRadius: '25px',
     fontWeight: '500',
     boxShadow: '0 1.5px 1px 1px rgb(100 100 100 / 10%)',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      minHeight: '30px',
+      fontSize: '0.9rem',
+      padding: '6px 10px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      minWidth: '60px',
+      maxWidth: '80px',
+      minHeight: '28px',
+      fontSize: '0.8rem',
+      padding: '6px 8px',
+    }
   }
 )
 const PageContentWrap = styled.div(
@@ -294,6 +387,16 @@ const ReservationThead = styled.thead(
   {
     borderTop: '1px solid #8a8a8a',
     borderBottom: '1px solid #8a8a8a',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      display: 'none'
+    }
   }
 )
 const ReservationThrow = styled.tr(
@@ -303,6 +406,10 @@ const ReservationThrow = styled.tr(
 )
 const ReservationTbody = styled.tbody(
   {
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      borderTop: '1px solid #8a8a8a'
+    }
   }
 )
 const ReservationTrow = styled.tr(
@@ -318,22 +425,69 @@ const ReservationTheader = styled.th<THProps>(
   {
     padding: '8px 0',
     fontSize: '1.05rem',
-    textAlign: 'center'
+    textAlign: 'center',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '0.9rem',
+      lineHeight: '34px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '0.7rem',
+    }
   },
   props => ({
-    width: props.width
+    width: props.width,
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: props.width,
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: `calc(${props.width} - 10px)`,
+    }
   })
 )
 const ReservationTData = styled.td(
   {
     textAlign: 'center',
     padding: '8px',
-    fontSize: '0.95rem'
+    fontSize: '0.95rem',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '0.9rem',
+      padding: '6px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+      padding: '8px',
+
+      '&:nth-of-type(1), &:nth-of-type(5)':{
+        display: 'none'
+      },
+    }
   }
 )
 const LockImg = styled(Image)(
   {
-    cursor: 'pointer'
+    cursor: 'pointer',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      width: '16px !important'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      width: '16px !important'
+    }
   }
 )
 const NewList = styled.span(

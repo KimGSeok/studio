@@ -72,7 +72,7 @@ const Main = styled.div(
 
     /* Phone */
     '@media screen and (max-width: 480px)': {
-      padding: '80px 6% 40px 6%',
+      padding: '80px 6% 10px 6%',
     }
   }
 )

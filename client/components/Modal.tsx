@@ -62,7 +62,7 @@ const ModalWrap = styled.div(
     top: 0,
     left: 0,
     backgroundColor: 'rgba(0,0,0,0.3)',
-    zIndex: '99'
+    zIndex: '99',
   }
 )
 const ModalEl = styled.div(
@@ -71,7 +71,19 @@ const ModalEl = styled.div(
     margin: '160px auto 80px',
     padding: '24px 16px',
     backgroundColor: '#FFF',
-    borderRadius: '6px'
+    borderRadius: '6px',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      margin: '140px auto 80px',
+      padding: '20px 14px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      margin: '120px 20px 80px',
+      padding: '18px 12px',
+    }
   }
 )
 const TitleWrap = styled.div(
@@ -79,7 +91,17 @@ const TitleWrap = styled.div(
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: '6px'
+    marginBottom: '6px',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      marginBottom: '5px',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      marginBottom: '4px',
+    }
   }
 )
 const CloseBtn = styled(Image)(
@@ -90,10 +112,30 @@ const CloseBtn = styled(Image)(
 const Title = styled.div(
   {
     fontSize: '1.2rem',
-    fontWeight: '600'
+    fontWeight: '600',
+
+    /* Tablet */
+    '@media screen and (max-width: 1024px)': {
+      fontSize: '1.1rem',
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      fontSize: '1rem',
+    }
   }
 )
-const SubTitle = styled.div({})
+const SubTitle = styled.div({
+  /* Tablet */
+  '@media screen and (max-width: 1024px)': {
+    fontSize: '1rem',
+  },
+
+  /* Phone */
+  '@media screen and (max-width: 480px)': {
+    fontSize: '0.9rem',
+  } 
+})
 const Content = styled.div(
   {
 

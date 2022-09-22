@@ -81,6 +81,49 @@ export const globalStyles = (
       .fc-theme-standard td, .fc-theme-standard th{
         border: 1px solid #d6cbbf;
       }
+
+      /* Tablet */
+      @media screen and (max-width: 1024px){
+
+        .fc .fc-toolbar-title{
+          font-size: 1.4rem;
+        }
+
+        .fc .fc-button-primary{
+          font-size: 1rem;
+        }
+
+        .fc .fc-button-group{
+          font-size: 0.5rem;
+        }
+      };
+
+      /* Phone */
+      @media screen and (max-width: 480px){
+
+        .fc .fc-toolbar-title{
+          font-size: 1.2rem;
+        }
+
+        .fc .fc-button-primary{
+          font-size: 0.7rem;
+        }
+
+        .fc .fc-button-group{
+          font-size: 0.2rem;
+        }
+
+        .fc-icon-chevron-left:before, .fc-icon-chevron-right:before{
+          position: relative;
+          top: -4px;
+          left: -4px;
+        }
+
+        .fc .fc-view-harness {
+          height: 40vh !important;
+          font-size: 0.7rem;
+        }
+      };
     `}
   />
 )
