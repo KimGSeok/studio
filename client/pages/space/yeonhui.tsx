@@ -198,7 +198,7 @@ const Yeonhui:NextPage = () =>{
               >
                 <ImageArea width={'calc(33% - 3px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0215(저해상).jpg'
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0215.jpg'
                     width={4}
                     height={4.9}
                     layout={'responsive'}
@@ -206,7 +206,7 @@ const Yeonhui:NextPage = () =>{
                 </ImageArea>
                 <ImageArea width={'calc(33% - 3px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0219(저해상).jpg'
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0219.jpg'
                     width={4}
                     height={4.9}
                     layout={'responsive'}
@@ -214,7 +214,7 @@ const Yeonhui:NextPage = () =>{
                 </ImageArea>
                 <ImageArea width={'calc(33% - 3px)'}>
                   <ContentImage
-                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0218(저해상).jpg'
+                    src='/images/space/yeonhui/2 Floor/220611_MasiondeSiri0218.jpg'
                     width={4}
                     height={4.9}
                     layout={'responsive'}
@@ -338,7 +338,7 @@ const Yeonhui:NextPage = () =>{
               >
                 <ImageArea width={'40%'}>
                   <ContentImage
-                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0050(저해상).jpg'
+                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0050.jpg'
                     width={14}
                     height={12}
                     layout={'responsive'}
@@ -346,7 +346,7 @@ const Yeonhui:NextPage = () =>{
                 </ImageArea>
                 <ImageArea width={'40%'}>
                   <ContentImage
-                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0051(저해상).jpg'
+                    src='/images/space/yeonhui/3 Floor/220611_MasiondeSiri0051.jpg'
                     width={14}
                     height={12}
                     layout={'responsive'}
