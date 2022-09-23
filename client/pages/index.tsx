@@ -114,6 +114,13 @@ const Main = styled.div`
     position: relative;
     left: -50%;
   }
+
+  @media screen and (max-width: 480px){
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    left: 0%;
+  }
 `
 const SliderImage = styled(Image)`
 `

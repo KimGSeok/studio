@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, useEffect, MouseEvent, Dispatch, SetStateAction } from "react";
 import styled from '@emotion/styled';
 import moment from 'moment';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 import DatePicker from "../components/DatePicker";
 import Modal from '../components/Modal';
 
@@ -15,7 +17,7 @@ interface DatePickerProps{
 interface CheckBoxProps extends DatePickerProps{
   reservationId: string | number;
   space: string;
-  isAllSpace: boolean;
+  studioSpace: any;
   setIsAllSpace: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -23,10 +25,10 @@ interface SpaceProps{
   [key: string]: string;
 }
 
-const SpaceCheckBox = ({ reservationId, space, isAllSpace, setIsAllSpace, checkReservationList, reservationSpaceList, setCheckReservationList }: CheckBoxProps) =>{
+const SpaceCheckBox = ({ reservationId, space, studioSpace, setIsAllSpace, checkReservationList, reservationSpaceList, setCheckReservationList }: CheckBoxProps) =>{
 
   // Hooks
-  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>([]); // 예약 공간목록
+  const [ reservationSpaceArr, setReservationSpaceArr ] = useState<SpaceProps[]>(studioSpace); // 예약 공간목록
   const [ checkSpaceId, setCheckSpaceId ] = useState<string>(); // 체크한 목록 ID
   const [ checkSpaceList, setCheckSpaceList ] = useState<any[]>([]); // 체크된 공간의 목록
   const [ isCheckSpaceHtml, setIsCheckSpaceHtml ] = useState<any[]>([]); // HTML Check여부 확인 목록
@@ -130,6 +132,28 @@ const SpaceCheckBox = ({ reservationId, space, isAllSpace, setIsAllSpace, checkR
     setIsOpen(false);
   }
 
+  /* 예약공간 조회 */
+  const getSpaceList = async() =>{
+      
+    // Data Fetching
+    // const res = await fetch(`${API_URL}/util/getSpaceList/?space=${space}`)
+    // const data = await res.json();
+
+    const url = `${API_URL}/util/getSpaceList/?space=${space}`;
+    const result = await axios.get(url,{
+      withCredentials: true
+    });
+
+    console.log(result);
+
+    if(result.data.status === 200){
+
+      setReservationSpaceArr(result.data.result);
+    }else{
+      alert("공간목록 조회에 실패하였습니다.\n관리자에게 문의해주세요.");
+    }
+  }
+
   /* 공간 선택 시, 상위 Props setState */
   useEffect(() => {
 
@@ -139,20 +163,6 @@ const SpaceCheckBox = ({ reservationId, space, isAllSpace, setIsAllSpace, checkR
 
   /* 공간목록 조회 useEffect */
   useEffect(() => {
-
-    const getSpaceList = async() =>{
-      
-      // Data Fetching
-      const res = await fetch(`${API_URL}/util/getSpaceList/?space=${space}`)
-      const data = await res.json();
-
-      if(data.status === 200){
-
-        setReservationSpaceArr(data.result);
-      }else{
-        alert("공간목록 조회에 실패하였습니다.\n관리자에게 문의해주세요.");
-      }
-    }
 
     getSpaceList();
   },[space])

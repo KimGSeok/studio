@@ -101,6 +101,10 @@ export const globalStyles = (
       /* Phone */
       @media screen and (max-width: 480px){
 
+        .swiper{
+          height: 100vh;
+        }
+
         .fc .fc-toolbar-title{
           font-size: 1.2rem;
         }

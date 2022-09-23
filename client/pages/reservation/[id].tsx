@@ -47,6 +47,7 @@ interface DProps{
 
 interface DetailProps{
   data: DProps;
+  studioSpace: any;
   reservationSpaceList: SpaceInfoProps[];
   cookie: string;
 }
@@ -56,7 +57,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
 
-const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) =>{
+const DetailReservation = ({ data, studioSpace, reservationSpaceList, cookie }: DetailProps) =>{
 
   // Result
   const defaultText: string = `
@@ -207,6 +208,9 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
   }
 
   useEffect(() => {
+
+    alert('예약 시스템은 삼성인터넷이 아닌\n크롬브라우저를 이용해주세요.');
+
     const result = data.auth;
     if(result === 'deny'){
       alert("접근할 수 없는 페이지입니다.");
@@ -261,8 +265,8 @@ const DetailReservation = ({ data, reservationSpaceList, cookie }: DetailProps) 
             <FormValidationData>
               <SpaceCheckBox
                 space={space}
+                studioSpace={studioSpace}
                 reservationId={id}
-                isAllSpace={isAllSpace}
                 setIsAllSpace={setIsAllSpace}
                 checkReservationList={checkReservationList}
                 reservationSpaceList={reservationSpaceList}
@@ -718,9 +722,14 @@ export const getServerSideProps: GetServerSideProps = async(context) =>{
     const url = `${API_URL}/reservation/${id}`;
     const result = await axios.get(url);
 
+    // Data Fetching
+    const res = await fetch(`${API_URL}/util/getSpaceList/?space=yeonhui`)
+    const data = await res.json();
+
     return {
       props: {
         data: result.data.result,
+        studioSpace: data.result,
         reservationSpaceList: result.data.reservationSpaceList ? result.data.reservationSpaceList : '',
         cookie: cookie ? cookie : 'empty'
       }
