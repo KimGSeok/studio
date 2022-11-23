@@ -62,10 +62,20 @@ const Home = () =>{
               layout={'fill'}
               priority={true}
             />
+            <SliderMobileImage
+              src="/images/home/mobile_main_1.jpg"
+              layout={'fill'}
+              priority={true}
+            />
           </SwiperSlide>
           <SwiperSlide>
             <SliderImage
               src="/images/home/Salon de siri13_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+            <SliderMobileImage
+              src="/images/home/mobile_main_2.jpg"
               layout={'fill'}
               priority={true}
             />
@@ -76,10 +86,20 @@ const Home = () =>{
               layout={'fill'}
               priority={true}
             />
+            <SliderMobileImage
+              src="/images/home/mobile_main_3.jpg"
+              layout={'fill'}
+              priority={true}
+            />
           </SwiperSlide>
           <SwiperSlide>
             <SliderImage
               src="/images/home/Salon de siri30_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+            <SliderMobileImage
+              src="/images/home/mobile_main_4.jpg"
               layout={'fill'}
               priority={true}
             />
@@ -90,10 +110,20 @@ const Home = () =>{
               layout={'fill'}
               priority={true}
             />
+            <SliderMobileImage
+              src="/images/home/mobile_main_5.jpg"
+              layout={'fill'}
+              priority={true}
+            />
           </SwiperSlide>
           <SwiperSlide>
             <SliderImage
               src="/images/home/Salon de siri36_L res.jpg"
+              layout={'fill'}
+              priority={true}
+            />
+            <SliderMobileImage
+              src="/images/home/mobile_main_6.jpg"
               layout={'fill'}
               priority={true}
             />
@@ -122,8 +152,37 @@ const Main = styled.div`
     left: 0%;
   }
 `
-const SliderImage = styled(Image)`
-`
+const SliderImage = styled(Image)(
+  {
+    display: 'block !important',
+
+    /* Tablet */
+    '@media screen and (max-width: 1366px)': {
+      display: 'none !important'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      display: 'none !important'
+    }
+  }
+);
+const SliderMobileImage = styled(Image)(
+  {
+    display: 'none !important',
+
+    /* Tablet */
+    '@media screen and (max-width: 1366px)': {
+      display: 'block !important'
+    },
+
+    /* Phone */
+    '@media screen and (max-width: 480px)': {
+      display: 'block !important'
+    }
+  }
+);
+
 const Square1 = styled.div`
   width: 30%;
   padding: 20px 0;

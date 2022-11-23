@@ -64,7 +64,12 @@ const Header = ({ setIsShowSquare }: SProps) => {
               onMouseEnter={(e) => (logoHoverEventHandler(e))}
               onMouseLeave={(e) => (logoHoverEventHandler(e))}
             >
-              Maison de Siri
+              <LogoImage
+                src="/logo/g10.svg"
+                width={160}
+                height={46}
+                priority={true}
+              />
             </Logo>
           </Link>
           <GnbListWrap left={isShowMobileNav ? '0' : '100vw'}>
@@ -204,6 +209,9 @@ const Logo = styled.div`
   transition: 0.2s;
   cursor: pointer;
 `
+const LogoImage = styled(Image)({
+  
+})
 const GnbListWrap = styled.div<MProps>(
   {
     transition: 'all .5s',
